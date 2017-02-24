@@ -121,7 +121,7 @@ public class RoleController extends Controller {
             if (role != null) {
                 renderJson(toJsonSingle(role));
             } else {
-                renderJson(RenderUtils.CODE_REPEAT);
+                renderJson(RenderUtils.CODE_EMPTY);
             }
         } catch (Exception e) {
             renderError(500);

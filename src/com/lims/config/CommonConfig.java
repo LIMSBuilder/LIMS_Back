@@ -6,6 +6,7 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import com.lims.model.Department;
 import com.lims.model.Role;
+import com.lims.model.User;
 
 /**
  * 主程序入口，Config配置类
@@ -42,7 +43,8 @@ public class CommonConfig extends JFinalConfig {
         ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
         me.add(arp);
         arp.addMapping("db_department", Department.class);
-        arp.addMapping("db_role",Role.class);
+        arp.addMapping("db_role", Role.class);
+        arp.addMapping("db_user", User.class);
         //addMap增加数据库树形
 
     }
