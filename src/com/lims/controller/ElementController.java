@@ -152,23 +152,16 @@ public class ElementController extends Controller {
         }
     }
 
-    // public void getTemplate() {
-    //     try {
-//            int id = getParaToInt("id");
-//            Element element = Element.elementDao.findById(id);
-//            Map result = new HashMap();
-//            result.put("path", element.get("path"));
-//            renderJson(result);
-    //    } catch (Exception e) {
-    //renderError(500);
-    //  }
-
-    //}
-
     public void deleteTemplate() {
         try {
-            //  int id=getParaToInt("id");
-            // Boolean result=Element.elementDao.findById(id).set()
+            int id = getParaToInt("id");
+            Element element = Element.elementDao.findById(id);
+            if (element != null) {
+                Boolean result = element.set("path", "").update();
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
 
         } catch (Exception e) {
             renderError(500);

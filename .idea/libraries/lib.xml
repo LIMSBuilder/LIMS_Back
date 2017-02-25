@@ -2,10 +2,10 @@
   <library name="lib">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/jsp-api.jar!/" />
-      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/" />
-      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/servlet-api.jar!/" />
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/c3p0-0.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/" />
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/log4j-1.2.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/servlet-api.jar!/" />
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/cos-26Dec2008.jar!/" />
       <root url="jar://$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-5.1.18-bin.jar!/" />
     </CLASSES>
