@@ -126,4 +126,31 @@ public class UserController extends Controller {
             renderError(500);
         }
     }
+
+    public void delete() {
+        try {
+            int id = getParaToInt("id");
+            boolean result = User.userDao.deleteById(id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+     public void change(){
+         try {
+             int id = getParaToInt("id");
+             String nick =getPara("nick");
+             String password=getPara("password");
+             String name = getPara("name");
+             int roleId = getParaToInt("roleId");
+             String cardId=getPara("cardId");
+             User user=User.userDao.findById(id);
+             boolean result = user.set("id",id).set("nick",nick).set("password",password).set("name",name).set("roleId",roleId).set("cardId",cardId).update();
+             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+         } catch (Exception e) {
+             renderError(500);
+         }
+     }
+
 }
