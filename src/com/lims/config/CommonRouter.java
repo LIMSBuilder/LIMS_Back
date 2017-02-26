@@ -14,7 +14,8 @@ public class CommonRouter extends Routes {
         add("/api/role", RoleController.class);
         add("/api/user", UserController.class);
         add("/api/element", ElementController.class);
-        add ("api/file", FileController.class);
-        add("/api/frequency",FrequencyController.class);
+        add("api/file", FileController.class);
+        add("/api/frequency", FrequencyController.class);
+        add("/api/type", TypeController.class);
     }
 }
