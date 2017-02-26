@@ -50,11 +50,11 @@ public class FrequencyController extends Controller {
     public Map toJson(List<Frequency> entityList) {
         Map<String, Object> json = new HashMap<>();
         try {
-            List result = new ArrayList();
+            List results = new ArrayList();
             for (Frequency monitor_frequency : entityList) {
-                result.add(toJsonSingle(monitor_frequency));
+                results.add(toJsonSingle(monitor_frequency));
             }
-            json.put("results", result);
+            json.put("results", results);
         } catch (Exception e) {
             renderError(500);
         }
@@ -64,11 +64,11 @@ public class FrequencyController extends Controller {
 
     public Map toJsonSingle(Frequency monitor_frequency) {
         Map<String, Object> frequency = new HashMap<>();
-        frequency.put("id", frequency.get("id"));
-        frequency.put("count", frequency.get("count"));
-        frequency.put("times", frequency.get("times"));
-        frequency.put("unit", frequency.get("unit"));
-        frequency.put("notice", frequency.get("notice"));
+        frequency.put("id", monitor_frequency.get("id"));
+        frequency.put("count", monitor_frequency.get("count"));
+        frequency.put("times", monitor_frequency.get("times"));
+        frequency.put("unit", monitor_frequency.get("unit"));
+        frequency.put("notice", monitor_frequency.get("notice"));
         return frequency;
     }
 
@@ -78,10 +78,14 @@ public class FrequencyController extends Controller {
             int times = getParaToInt("times");
             String unit = getPara("unit");
             int notice = getParaToInt("notice");
-            Frequency frequency = new Frequency();
-            boolean result = frequency.set("count", count).set("times", times).set("unit", unit).set("notice", notice).save();
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-
+            if(Frequency.frequencyDao.find("select * from `db_frequency` where count='" + count + "'and  times='" +times+"' and unit='"+unit+"'").size() !=0){
+             renderJson(RenderUtils.CODE_REPEAT);
+            }
+            else {
+                Frequency frequency = new Frequency();
+                boolean result = frequency.set("count", count).set("times", times).set("unit", unit).set("notice", notice).save();
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            }
         } catch (Exception e) {
             renderError(500);
         }
@@ -139,7 +143,7 @@ public class FrequencyController extends Controller {
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
-        } catch (Exception e) {
+        } catch (Exception e) { 
             renderError(500);
         }
     }
