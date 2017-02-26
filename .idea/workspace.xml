@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/controller/TypeController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/Type.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonRouter.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonRouter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonConfig.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonRouter.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonRouter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TypeController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TypeController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TypeController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TypeController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" afterPath="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" afterPath="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/TypeController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/TypeController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,8 +34,8 @@
       <file leaf-file-name="TypeController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TypeController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="362">
-              <caret line="124" column="0" lean-forward="true" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+            <state relative-caret-position="48">
+              <caret line="121" column="22" lean-forward="true" selection-start-line="121" selection-start-column="22" selection-end-line="121" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3361#3828#0" expanded="true" />
@@ -727,12 +722,12 @@
       <updated>1487944582133</updated>
       <workItem from="1487944585466" duration="2440000" />
       <workItem from="1488074715355" duration="5129000" />
-      <workItem from="1488084593413" duration="1980000" />
+      <workItem from="1488084593413" duration="3063000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9549000" />
+    <option name="totallyTimeSpent" value="10632000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="1023" extended-state="0" />
@@ -959,8 +954,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TypeController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="124" column="0" lean-forward="true" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+        <state relative-caret-position="48">
+          <caret line="121" column="22" lean-forward="true" selection-start-line="121" selection-start-column="22" selection-end-line="121" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3361#3828#0" expanded="true" />

@@ -137,4 +137,12 @@ public class TypeController extends Controller {
         }
     }
 
+    public void total() {
+        try {
+            renderJson(toJson(Type.typeDao.find("SELECT * FROM `db_type`")));
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }
