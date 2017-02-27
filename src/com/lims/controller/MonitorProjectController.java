@@ -2,6 +2,7 @@ package com.lims.controller;
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Page;
+import com.lims.model.Element;
 import com.lims.model.MonitorProject;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
@@ -157,7 +158,7 @@ public class MonitorProjectController extends Controller {
         try {
             int department_id = getParaToInt("department_id");
             if (department_id != 0) {
-                List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT * FRON `db_monitor_project`" + department_id);
+                List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT * FROM `db_monitor_project` where  department_id = " + department_id);
                 renderJson(toJson(monitorProjectList));
             } else {
                 renderJson(RenderUtils.CODE_REPEAT);
@@ -171,9 +172,21 @@ public class MonitorProjectController extends Controller {
         try {
             int element_id = getParaToInt("element_id");
             if (element_id != 0) {
-                List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT * FRON `db_monitor_project`" + element_id);
+                List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT * FROM `db_monitor_project` where element_id =" + element_id);
+                renderJson(toJson(monitorProjectList));
             } else {
                 renderJson(RenderUtils.CODE_REPEAT);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void findElementList() {
+        try {
+            List<Element> elementList = Element.elementDao.find("SELECT * FROM `db_element`");
+            for (Element element : elementList) {
+                //List<MonitorProject> projectList = MonitorProject.monitorProjectdao.find("SELECT * FROM `db_monitor_project` WHERE ")
             }
         } catch (Exception e) {
             renderError(500);
