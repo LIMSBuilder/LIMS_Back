@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class FileController extends Controller {
     /**
-     * 文件上传
+     * 文件上传功能
      */
     public void upload() {
         try {
