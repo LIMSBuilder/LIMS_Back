@@ -35,6 +35,6 @@ public class FileController extends Controller {
      * 测试功能，勿删
      */
     public void test() {
-        renderJson(RenderUtils.CODE_NOTEMPTY);
+        renderJson(RenderUtils.CODE_UNIQUE);
     }
 }
