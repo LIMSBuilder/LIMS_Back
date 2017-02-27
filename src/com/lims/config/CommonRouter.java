@@ -18,5 +18,6 @@ public class CommonRouter extends Routes {
         add("/api/frequency", FrequencyController.class);
         add("/api/type", TypeController.class);
         add("/api/customer", CustomerController.class);
+        add("/api/project",MonitorProjectController.class);
     }
 }

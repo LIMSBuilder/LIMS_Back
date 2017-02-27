@@ -3,12 +3,15 @@ package com.lims.controller;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.Role;
 import com.lims.model.User;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -136,21 +139,68 @@ public class UserController extends Controller {
             renderError(500);
         }
     }
-     public void change(){
-         try {
-             int id = getParaToInt("id");
-             String nick =getPara("nick");
-             String password=getPara("password");
-             String name = getPara("name");
-             int roleId = getParaToInt("roleId");
-             String cardId=getPara("cardId");
-             User user=User.userDao.findById(id);
-             boolean result = user.set("id",id).set("nick",nick).set("password",password).set("name",name).set("roleId",roleId).set("cardId",cardId).update();
-             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
-         } catch (Exception e) {
-             renderError(500);
-         }
-     }
+
+    public void change() {
+        try {
+            int id = getParaToInt("id");
+            String nick = getPara("nick");
+            String password = getPara("password");
+            String name = getPara("name");
+            int roleId = getParaToInt("roleId");
+            String cardId = getPara("cardId");
+            User user = User.userDao.findById(id);
+            boolean result = user.set("id", id).set("nick", nick).set("password", password).set("name", name).set("roleId", roleId).set("cardId", cardId).update();
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void reset() {
+        try {
+            int id = getParaToInt("id");
+            User user = User.userDao.findById(id);
+            if (user != null) {
+                Prop p = PropKit.use("default.properties");
+                user.set("password", ParaUtils.EncoderByMd5(p.get("init_password")));
+                renderJson(user.update() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else renderJson(RenderUtils.CODE_EMPTY);
+
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 操作多条记录用Db.tx进行包裹，要么全成功，否则失败
+     */
+    public void resetAll() {
+        try {
+            Prop p = PropKit.use("default.properties");
+            final String password = ParaUtils.EncoderByMd5(p.get("init_password"));
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Integer[] selected = getParaValuesToInt("selected[]");
+                    Boolean result = true;
+                    for (int i = 0; i < selected.length; i++) {
+                        int id = selected[i];
+                        User user = User.userDao.findById(id);
+                        user.set("password", password);
+                        result = result && user.update();
+                        if (!result) break;
+                    }
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
 
 }

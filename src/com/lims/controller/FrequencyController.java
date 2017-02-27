@@ -64,11 +64,22 @@ public class FrequencyController extends Controller {
 
     public Map toJsonSingle(Frequency monitor_frequency) {
         Map<String, Object> frequency = new HashMap<>();
+        Map<String, Object> total = new HashMap<>();
         frequency.put("id", monitor_frequency.get("id"));
         frequency.put("count", monitor_frequency.get("count"));
         frequency.put("times", monitor_frequency.get("times"));
         frequency.put("unit", monitor_frequency.get("unit"));
         frequency.put("notice", monitor_frequency.get("notice"));
+        String value = " ";
+        if (monitor_frequency.get("unit").equals("one")) {
+            value = "仅" + monitor_frequency.get("count") + "次";
+        } else {
+            String unit = Frequency.UnitMap.get(monitor_frequency.get("unit")).toString();
+            value = monitor_frequency.get("count") + "次/" + monitor_frequency.get("times") + unit;
+
+        }
+
+        frequency.put("total", value);
         return frequency;
     }
 
@@ -78,10 +89,9 @@ public class FrequencyController extends Controller {
             int times = getParaToInt("times");
             String unit = getPara("unit");
             int notice = getParaToInt("notice");
-            if(Frequency.frequencyDao.find("select * from `db_frequency` where count='" + count + "'and  times='" +times+"' and unit='"+unit+"'").size() !=0){
-             renderJson(RenderUtils.CODE_REPEAT);
-            }
-            else {
+            if (Frequency.frequencyDao.find("select * from `db_frequency` where count='" + count + "'and  times='" + times + "' and unit='" + unit + "'").size() != 0) {
+                renderJson(RenderUtils.CODE_REPEAT);
+            } else {
                 Frequency frequency = new Frequency();
                 boolean result = frequency.set("count", count).set("times", times).set("unit", unit).set("notice", notice).save();
                 renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
@@ -143,7 +153,7 @@ public class FrequencyController extends Controller {
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
-        } catch (Exception e) { 
+        } catch (Exception e) {
             renderError(500);
         }
     }

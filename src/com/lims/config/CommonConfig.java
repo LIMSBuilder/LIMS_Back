@@ -47,6 +47,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_frequency", Frequency.class);
         arp.addMapping("db_type", Type.class);
         arp.addMapping("db_customer", Customer.class);
+        arp.addMapping("db_monitor_project",MonitorProject.class);
         //addMap增加数据库树形
 
     }
