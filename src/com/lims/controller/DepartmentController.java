@@ -101,20 +101,7 @@ public class DepartmentController extends Controller {
 
     }
 
-    /**
-     * 删除部门信息
-     **/
-    public void delete() {
-        try {
-            int id = getParaToInt("id");
-            Boolean result = Department.departmentdao.deleteById(id);
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
-        } catch (Exception e) {
-            renderError(500);
-        }
-
-    }
 
     /**
      * 改变部门信息
@@ -158,6 +145,20 @@ public class DepartmentController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+    }
+    /**
+     * 删除部门信息
+     **/
+    public void delete() {
+        try {
+            int id = getParaToInt("id");
+            Boolean result = Department.departmentdao.deleteById(id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+
     }
 
     /**
