@@ -30,4 +30,8 @@ public class FileController extends Controller {
             renderError(500);
         }
     }
+
+    public void test() {
+        renderJson(RenderUtils.CODE_SUCCESS);
+    }
 }
