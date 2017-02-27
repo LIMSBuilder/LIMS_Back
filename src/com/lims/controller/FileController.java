@@ -15,6 +15,9 @@ import java.util.Map;
  * Created by caiwenhong on 2017/2/25.
  */
 public class FileController extends Controller {
+    /**
+     * 文件上传
+     */
     public void upload() {
         try {
             UploadFile uploadFile = getFile();
