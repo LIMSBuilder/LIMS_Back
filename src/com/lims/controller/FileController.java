@@ -31,7 +31,10 @@ public class FileController extends Controller {
         }
     }
 
+    /**
+     * 测试功能，勿删
+     */
     public void test() {
-        renderJson(RenderUtils.CODE_SUCCESS);
+        renderJson(RenderUtils.CODE_NOTEMPTY);
     }
 }
