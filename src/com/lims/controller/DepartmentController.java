@@ -1,11 +1,14 @@
 package com.lims.controller;
 
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.Department;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -88,7 +91,7 @@ public class DepartmentController extends Controller {
         try {
 
             String name = getPara("name");
-            if (Department.departmentdao.find("select * from `db_department` where name='" + name + "'").size() != 0) {
+            if (Department.departmentdao.find("SELECT * FROM `db_department` WHERE name='" + name + "'").size() != 0) {
                 renderJson(RenderUtils.CODE_REPEAT);
             } else {
                 Department department = new Department();
@@ -102,7 +105,6 @@ public class DepartmentController extends Controller {
     }
 
 
-
     /**
      * 改变部门信息
      */
@@ -111,7 +113,7 @@ public class DepartmentController extends Controller {
             int id = getParaToInt("id");
             String name = getPara("name");
             Department department = Department.departmentdao.findById(id);
-            boolean result = department.set("id", id).set("name", name).update();
+            boolean result = department.set("name", name).update();
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
@@ -140,12 +142,13 @@ public class DepartmentController extends Controller {
      */
     public void total() {
         try {
-            List<Department> departmentList = Department.departmentdao.find("select * from `db_department`");
+            List<Department> departmentList = Department.departmentdao.find("SELECT * FROM `db_department`");
             renderJson(toJson(departmentList));
         } catch (Exception e) {
             renderError(500);
         }
     }
+
     /**
      * 删除部门信息
      **/
@@ -154,7 +157,6 @@ public class DepartmentController extends Controller {
             int id = getParaToInt("id");
             Boolean result = Department.departmentdao.deleteById(id);
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-
         } catch (Exception e) {
             renderError(500);
         }
@@ -162,17 +164,23 @@ public class DepartmentController extends Controller {
     }
 
     /**
-     * 全删除
+     * 批量删除
      */
     public void deleteAll() {
         try {
-            Integer[] selected = getParaValuesToInt("selected[]");
-            Boolean result = true;
-            for (int i = 0; i < selected.length; i++) {
-                int id = selected[i];
-                result = result && Department.departmentdao.deleteById(id);
-                if (!result) break;
-            }
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Integer[] selected = getParaValuesToInt("selected[]");
+                    Boolean result = true;
+                    for (int i = 0; i < selected.length; i++) {
+                        int id = selected[i];
+                        result = result && Department.departmentdao.deleteById(id);
+                        if (!result) break;
+                    }
+                    return result;
+                }
+            });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
