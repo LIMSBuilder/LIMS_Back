@@ -142,6 +142,7 @@ public class DepartmentController extends Controller {
      */
     public void total() {
         try {
+
             List<Department> departmentList = Department.departmentdao.find("SELECT * FROM `db_department`");
             renderJson(toJson(departmentList));
         } catch (Exception e) {
