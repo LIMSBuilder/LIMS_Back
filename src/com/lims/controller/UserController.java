@@ -202,5 +202,13 @@ public class UserController extends Controller {
         }
 
     }
+    public  void total(){
+        try {
+            renderJson(toJson(User.userDao.find("select * from `db_user`")));
+
+        }catch (Exception e){
+            renderError(500);
+        }
+    }
 
 }
