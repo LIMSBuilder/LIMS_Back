@@ -2,26 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/BaseController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/BaseModel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/CommonModel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/BaseController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/BaseModel.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/CommonModel.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/DepartmentController$1.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/DepartmentController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/DepartmentController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/DepartmentController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/FileController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/FileController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/FrequencyController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/FrequencyController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/MonitorProjectController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/MonitorProjectController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/DepartmentController$1.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/DepartmentController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/DepartmentController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/DepartmentController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/FileController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/FileController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/FrequencyController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/FrequencyController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/MonitorProjectController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/MonitorProjectController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/FrequencyController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/FrequencyController.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/MonitorProjectController.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/MonitorProjectController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/MonitorProjectController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Frequency.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Frequency.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -40,8 +22,8 @@
       <file leaf-file-name="MonitorProjectController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/MonitorProjectController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="218" column="23" lean-forward="false" selection-start-line="218" selection-start-column="16" selection-end-line="218" selection-end-column="23" />
+            <state relative-caret-position="2597">
+              <caret line="244" column="36" lean-forward="false" selection-start-line="244" selection-start-column="26" selection-end-line="244" selection-end-column="36" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -766,12 +748,12 @@
       <workItem from="1487944585466" duration="2440000" />
       <workItem from="1488074715355" duration="5129000" />
       <workItem from="1488084593413" duration="12029000" />
-      <workItem from="1488206577449" duration="12760000" />
+      <workItem from="1488206577449" duration="14172000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32358000" />
+    <option name="totallyTimeSpent" value="33770000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -819,7 +801,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="29" />
+      <option name="time" value="30" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
@@ -833,6 +815,7 @@
         <watch expression="Frequency.UnitMap.get(monitor_frequency.get(&quot;unit&quot;))" language="JAVA" />
         <watch expression="monitor_frequency.get(&quot;unit&quot;))" language="JAVA" />
         <watch expression="monitor_frequency.get(&quot;unit&quot;)" language="JAVA" />
+        <watch expression="frequency" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
@@ -1183,8 +1166,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/MonitorProjectController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="218" column="23" lean-forward="false" selection-start-line="218" selection-start-column="16" selection-end-line="218" selection-end-column="23" />
+        <state relative-caret-position="2597">
+          <caret line="244" column="36" lean-forward="false" selection-start-line="244" selection-start-column="26" selection-end-line="244" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
