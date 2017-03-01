@@ -202,13 +202,35 @@ public class UserController extends Controller {
         }
 
     }
-    public  void total(){
-        try {
-            renderJson(toJson(User.userDao.find("select * from `db_user`")));
 
-        }catch (Exception e){
+    public void total() {
+        try {
+            renderJson(toJson1(User.userDao.find("select * from `db_user`")));
+
+        } catch (Exception e) {
             renderError(500);
         }
+    }
+
+    public Map toJson1(List<User> entityList) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            List results = new ArrayList();
+            for (User user : entityList) {
+                results.add(toJsonSingle1(user));
+            }
+           json.put("results",results);
+        } catch (Exception e) {
+            renderError(500);
+        }
+        return json;
+    }
+
+    public Map toJsonSingle1(User user) {
+        Map<String, Object> user1 = new HashMap<>();
+        user1.put("id", user.getInt("id"));
+        user1.put("name", user.get("name"));
+        return user1;
     }
 
 }
