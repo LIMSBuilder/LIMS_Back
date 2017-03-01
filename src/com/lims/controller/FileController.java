@@ -1,14 +1,9 @@
 package com.lims.controller;
 
 import com.jfinal.core.Controller;
-import com.jfinal.kit.FileKit;
 import com.jfinal.upload.UploadFile;
 import com.lims.utils.RenderUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -29,12 +24,5 @@ public class FileController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
-    }
-
-    /**
-     * 测试功能，勿删
-     */
-    public void test() {
-        renderJson(RenderUtils.CODE_UNIQUE);
     }
 }

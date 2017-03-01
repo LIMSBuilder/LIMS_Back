@@ -3,6 +3,7 @@ package com.lims.controller;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.Element;
+import com.lims.model.Frequency;
 import com.lims.model.MonitorProject;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
@@ -184,9 +185,70 @@ public class MonitorProjectController extends Controller {
 
     public void findElementList() {
         try {
+            List result = new ArrayList();
             List<Element> elementList = Element.elementDao.find("SELECT * FROM `db_element`");
             for (Element element : elementList) {
-                //List<MonitorProject> projectList = MonitorProject.monitorProjectdao.find("SELECT * FROM `db_monitor_project` WHERE ")
+                List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT * FROM `db_monitor_project` WHERE element_id=" + element.get("id"));
+                result.add(toElementJson(element, monitorProjectList));
+            }
+            Map temp = new HashMap();
+            temp.put("results", result);
+            renderJson(temp);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public Map toElementJson(Element element, List<MonitorProject> projectList) {
+        Map result = new HashMap();
+        for (String key : element._getAttrNames()) {
+            result.put(key, element.get(key));
+        }
+        result.put("project", toJsonList(projectList));
+        return result;
+    }
+
+    public List toJsonList(List<MonitorProject> projectList) {
+        List result = new ArrayList();
+        for (MonitorProject project : projectList) {
+            result.add(toJsonSingle(project));
+        }
+        return result;
+    }
+
+    public void details() {
+        try {
+            Integer[] projectIds = getParaValuesToInt("project[]");
+            Element element = Element.elementDao.findById(getPara("element"));
+            Frequency frequency = Frequency.frequencyDao.findById(getPara("frequency"));
+            if (frequency != null && element != null && projectIds.length != 0) {
+                List<Map> projectList = new ArrayList<>();
+                for (int id : projectIds) {
+                    projectList.add(toJsonSingle(MonitorProject.monitorProjectdao.findById(id)));
+                }
+                String value = "";
+                if (frequency.get("unit").equals("one")) {
+                    value = "仅" + frequency.get("count") + "次";
+                } else {
+                    String unit = Frequency.UnitMap.get(frequency.get("unit")).toString();
+                    value = frequency.get("count") + "次/" + frequency.get("times") + unit;
+
+                }
+                Map fre = new HashMap();
+                fre.put("id", frequency.get("id"));
+                fre.put("total", value);
+                Map maps = new HashMap();
+                maps.put("point", getParaValues("point[]"));
+                maps.put("company", getPara("company"));
+                maps.put("project", projectList);
+                maps.put("element", element);
+                maps.put("is_package", getPara("is_package"));
+                maps.put("other", getPara("other"));
+                maps.put("frequency", fre);
+                maps.put("code", 200);
+                renderJson(maps);
+            } else {
+                renderJson(RenderUtils.CODE_ERROR);
             }
         } catch (Exception e) {
             renderError(500);

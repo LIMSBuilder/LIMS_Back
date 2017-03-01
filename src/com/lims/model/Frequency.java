@@ -14,10 +14,11 @@ public class Frequency extends Model<Frequency> {
         put("minute", "分钟");
         put("hour", "小时");
         put("day", "天");
-        put ("week","周");
-        put("month","月");
-        put ("quarter","季");
+        put("week", "周");
+        put("month", "月");
+        put("quarter", "季");
         put("year", "年");
 
     }};
+
 }

@@ -157,4 +157,13 @@ public class FrequencyController extends Controller {
             renderError(500);
         }
     }
+
+    public void total() {
+        try {
+            List<Frequency> frequencyList = Frequency.frequencyDao.find("SELECT * FROM `db_frequency`");
+            renderJson(toJson(frequencyList));
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }
