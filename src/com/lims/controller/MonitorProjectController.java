@@ -238,7 +238,7 @@ public class MonitorProjectController extends Controller {
                 fre.put("id", frequency.get("id"));
                 fre.put("total", value);
                 Map maps = new HashMap();
-                maps.put("point", getPara("point"));
+                maps.put("point", getParaValues("point[]"));
                 maps.put("company", getPara("company"));
                 maps.put("project", projectList);
                 maps.put("element", element);
