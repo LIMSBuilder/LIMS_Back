@@ -143,6 +143,8 @@ public class ElementController extends Controller {
         }
     }
 
+
+
     public void total() {
         try {
             List<Element> elementList = Element.elementDao.find("select * from `db_element`");
