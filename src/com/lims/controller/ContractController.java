@@ -1,19 +1,16 @@
 package com.lims.controller;
 
 import com.jfinal.core.Controller;
-import com.jfinal.kit.Prop;
-import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.Contract;
 
-import com.lims.model.Identify;
+import com.lims.model.Encode;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -21,9 +18,10 @@ import java.util.*;
  * Created by caiwenhong on 2017/2/28.
  */
 public class ContractController extends Controller {
-    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    SimpleDateFormat format_date=new SimpleDateFormat("MM/dd/yyyy");
-    SimpleDateFormat new_format_date=new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat format_date = new SimpleDateFormat("MM/dd/yyyy");
+    SimpleDateFormat new_format_date = new SimpleDateFormat("yyyy-MM-dd");
+
     public void create() {
         try {
             Boolean result = Db.tx(new IAtom() {
@@ -50,12 +48,12 @@ public class ContractController extends Controller {
                     String package_unit = getPara("package_unit");
                     //int in_room = getParaToInt("in_room");
                     int in_room = getParaToBoolean("in_room") ? 1 : 0;
-                    int secret = getParaToBoolean("secret")?1:0;
+                    int secret = getParaToBoolean("secret") ? 1 : 0;
                     String pay_way = getPara("paymentWay");
                     String finish_time = getPara("finish_time");
                     float payment = getParaToLong("way");
                     String other = getPara("other");
-                   // int process = getParaToInt("process");
+                    // int process = getParaToInt("process");
                     //int review_id = getParaToInt("review_id");
                     //String review_time = getPara("review_time");
                     String create_time = getPara("create_time");
@@ -104,30 +102,20 @@ public class ContractController extends Controller {
     }
 
     public String createIdentify() {
-        Prop p= PropKit.use("identify.properties");
-        String identify=p.get("contract_identify");
-        Date now=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String identify_value=sdf.format(now);
-        String pre=identify_value.split("-")[0];
-        String zero=identify_value.split("-")[1];
-        Identify identify = Identify.identifyDao.findFirst("SELECT * FROM `db_encode`");
-        int id_num= identify.getId();
-        DecimalFormat  df=new DecimalFormat(zero);
-        String id=df.format(id_num);
-        String identify1=pre +" - "+id;;
-        while (Identify.identifyDao.find("select * from `db_encode` where= identify'"+identify+"'").size()!=0){
-            id_num++;
-            id=df.format(id_num);
-            identify1=pre+"-"+id;
+        String identify = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        identify = sdf.format(new Date());
+        Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
+        if (encode == null) {
+            //数据库中没有第一条记录，则创建它
+            Encode entry = new Encode();
+            entry.set("contract_identify", 0).save();
+            identify += String.format("%04d", 1);
+        } else {
+            int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
+            encode.set("contract_identify", identify_Encode).update();
+            identify += String.format("%04d", identify_Encode);
         }
-        Boolean result=Identify.identifyDao.setId(id_num);
-        Map idMap=new HashMap();
-        idMap.put("identify1",identify1);
-        renderJson(result?idMap:RenderUtils.CODE_ERROR);
-        //从数据库中读取当前idengtify记录
-        //+1  return
-
         return identify;
     }
 
@@ -204,9 +192,9 @@ public class ContractController extends Controller {
         contract1.put("finish_time", contract.get("finish_time"));
         contract1.put("payment", contract.getFloat("payment"));
         contract1.put("other", contract.get("other"));
-       // contract1.put("process", contract.get("process"));
-       // contract1.put("review_id", contract.get("review_id"));
-       // contract1.put("review_time", contract.get("review_time"));
+        // contract1.put("process", contract.get("process"));
+        // contract1.put("review_id", contract.get("review_id"));
+        // contract1.put("review_time", contract.get("review_time"));
         contract1.put("create_time", contract.get("create_time"));
         return contract1;
     }
