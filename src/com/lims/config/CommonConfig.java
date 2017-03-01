@@ -51,6 +51,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_contract",Contract.class);
         arp.addMapping("db_contract_item",Contractitem.class);
         arp.addMapping("db_item_project",ItemProject.class);
+        arp.addMapping("db_encode",Encode.class);
         //addMap增加数据库树形
 
     }

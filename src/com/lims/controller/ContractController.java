@@ -6,7 +6,9 @@ import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.Contract;
 
+import com.lims.model.Contractitem;
 import com.lims.model.Encode;
+import com.lims.model.ItemProject;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
@@ -91,6 +93,31 @@ public class ContractController extends Controller {
                                 .set("other", other)
                                 .set("process", 1)
                                 .set("create_time", sdf.format(new Date())).save();
+
+                        int contract_id = contract.getInt("id");
+                        //Contractitem contractitem=Contractitem.contractitemdao.find("select * from `db_contract_item` where ")
+                        //1 items 如何获取？
+
+                        List<Object> objectList = new ArrayList<>();
+                        String[] items = getParaValues("item[]");
+                        for (String key : items) {
+                            System.out.printf(key);
+                        }
+//                        for (int i = 0; i < objectList.size(); i++) {
+//                            Contractitem entry = new Contractitem();
+//
+//                            entry.set("company",company);
+//
+//                            entry.set("contracnt_id", contract_id);
+//                            entry.save();
+//                            int item_id = entry.getInt("id");
+//                            List<Object> obj = objectList[i].get("project");
+//                            for(int j=0;j<obj.size();i++){
+//                                ItemProject ip = new ItemProject();
+//
+//                            }
+//
+//                        }
                     }
                     return result;
                 }
