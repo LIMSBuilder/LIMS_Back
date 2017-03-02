@@ -6,11 +6,8 @@ import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
-import com.lims.model.Contract;
+import com.lims.model.*;
 
-import com.lims.model.Contractitem;
-import com.lims.model.Encode;
-import com.lims.model.ItemProject;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
@@ -105,6 +102,7 @@ public class ContractController extends Controller {
         return identify;
     }
 
+
     public void list() {
         try {
             int rowCount = getParaToInt("rowCount");
@@ -150,40 +148,37 @@ public class ContractController extends Controller {
     }
 
 
-    public Map toJsonSingle(Contract contract) {
-        Map<String, Object> contract1 = new HashMap<>();
-        contract1.put("id", contract.getInt("id"));
-        contract1.put("identify", contract.get("identify"));
-        contract1.put("client_unit", contract.get("client_unit"));
-        contract1.put("client_code", contract.get("client_code"));
-        contract1.put("client_tel", contract.get("client_tel"));
-        contract1.put("client", contract.get("client"));
-        contract1.put("client_fax", contract.get("client_fax"));
-        contract1.put("client_address", contract.get("client_address"));
-        contract1.put("trustee_unit", contract.get("trustee_unit"));
-        contract1.put("trustee_code", contract.get("trustee_unit"));
-        contract1.put("trustee_tel", contract.get("trustee_tel"));
-        contract1.put("trustee", contract.getInt("trustee"));
-        contract1.put("trustee_fax", contract.get("trustee_fax"));
-        contract1.put("trustee_address", contract.get("trustee_address"));
-        contract1.put("project_name", contract.get("name"));
-        contract1.put("aim", contract.get("aim"));
-        contract1.put("type_id", contract.getInt("type_id"));
-        contract1.put("projectWay", contract.getInt("paojectWay"));
-        contract1.put("wayDesp", contract.get("wayDesp"));
-        contract1.put("package_unit", contract.get("package_unit"));
-        contract1.put("in_room", contract.getInt("in_room"));
-        contract1.put("secert", contract.getInt("secert"));
-        contract1.put("pay_way", contract.get("pay_way"));
-        contract1.put("finish_time", contract.get("finish_time"));
-        contract1.put("payment", contract.getFloat("payment"));
-        contract1.put("other", contract.get("other"));
-        // contract1.put("process", contract.get("process"));
-        // contract1.put("review_id", contract.get("review_id"));
-        // contract1.put("review_time", contract.get("review_time"));
-        contract1.put("create_time", contract.get("create_time"));
-        return contract1;
+    public Map toJsonSingle(Contract entry) {
+        Map temp = new HashMap();
+        for (String key : entry._getAttrNames()) {
+            switch (key) {
+                case "trustee":
+                    temp.put("trustee", User.userDao.findById(entry.get(key)).toSimpleJson());
+                    break;
+                case "type":
+                    temp.put("type", Type.typeDao.findById(entry.get(key)));
+                    break;
+                default:
+                    temp.put(key, entry.get(key));
+            }
+
+        }
+        return temp;
     }
+
+
+    public void getItems() {
+        try {
+            int id = getParaToInt("contract_id");
+            Contract contract = Contract.contractDao.findById(id);
+            if (contract != null) {
+                renderJson(contract.getItems());
+            } else renderJson(RenderUtils.CODE_SUCCESS);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 
     public void delete() {
         try {
