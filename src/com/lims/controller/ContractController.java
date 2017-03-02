@@ -117,6 +117,9 @@ public class ContractController extends Controller {
             for (int i = 0; i < keys.length; i++) {
                 String key = (String) keys[i];
                 Object value = condition.get(key);
+                if (key.equals("process")) {
+                    param += " AND " + key + " = " + value;
+                }
                 param += (" AND " + key + " like \"%" + value + "%\"");
             }
             Page<Contract> contractPage = Contract.contractDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_contract`" + param);

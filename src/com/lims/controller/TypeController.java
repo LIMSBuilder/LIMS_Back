@@ -4,6 +4,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
+import com.lims.model.Contract;
 import com.lims.model.Type;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
@@ -144,5 +145,37 @@ public class TypeController extends Controller {
             renderError(500);
         }
     }
+
+    public void contract_total() {
+        try {
+            renderJson(toJsonContract(Type.typeDao.find("SELECT * FROM `db_type`")));
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public Map toJsonContract(List<Type> entityList) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            List result = new ArrayList();
+            for (Type type : entityList) {
+                result.add(toJsonContractSingle(type));
+            }
+            json.put("results", result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+        return json;
+    }
+
+    public Map toJsonContractSingle(Type type) {
+        Map<String, Object> types = new HashMap<>();
+        types.put("id", type.getInt("id"));
+        types.put("name", type.get("name"));
+        types.put("identifier", type.get("identifier"));
+        types.put("contract_count", Contract.contractDao.find("SELECT * FROM `db_contract` WHERE type=" + type.get("id")).size());
+        return types;
+    }
+
 
 }
