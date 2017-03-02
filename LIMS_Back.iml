@@ -30,5 +30,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="jackson-annotations-2.2.1" level="project" />
+    <orderEntry type="library" name="comet4j-tomcat7" level="project" />
   </component>
 </module>

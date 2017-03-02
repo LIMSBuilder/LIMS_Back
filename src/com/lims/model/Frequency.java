@@ -21,4 +21,24 @@ public class Frequency extends Model<Frequency> {
 
     }};
 
+
+    public Map toJsonSingle() {
+        Map<String, Object> frequency = new HashMap<>();
+        frequency.put("id", this.get("id"));
+        frequency.put("count", this.get("count"));
+        frequency.put("times", this.get("times"));
+        frequency.put("unit", this.get("unit"));
+        frequency.put("notice", this.get("notice"));
+        String value = " ";
+        if (this.get("unit").equals("one")) {
+            value = "仅" + this.get("count") + "次";
+        } else {
+            String unit = Frequency.UnitMap.get(this.get("unit")).toString();
+            value = this.get("count") + "次/" + this.get("times") + unit;
+
+        }
+        frequency.put("total", value);
+        return frequency;
+    }
+
 }
