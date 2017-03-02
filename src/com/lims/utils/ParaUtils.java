@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +21,9 @@ import java.util.Map;
  * Created by qulongjun on 2016/10/26.
  */
 public class ParaUtils extends Controller {
+
+    public final static DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
     public final static Map flows = new HashMap() {{
         put("stop_task", -2);//中止任务书
         put("finish_task", -1);//结束任务
