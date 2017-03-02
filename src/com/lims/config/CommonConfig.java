@@ -40,6 +40,7 @@ public class CommonConfig extends JFinalConfig {
         //数据库插件
         ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
         me.add(arp);
+        arp.setShowSql(true);//这句话就是ShowSql
         arp.addMapping("db_department", Department.class);
         arp.addMapping("db_role", Role.class);
         arp.addMapping("db_user", User.class);
@@ -51,6 +52,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_contract",Contract.class);
         arp.addMapping("db_contract_item",Contractitem.class);
         arp.addMapping("db_item_project",ItemProject.class);
+        arp.addMapping("db_encode",Encode.class);
         //addMap增加数据库树形
 
     }

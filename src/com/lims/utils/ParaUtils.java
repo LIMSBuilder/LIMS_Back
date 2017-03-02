@@ -3,6 +3,7 @@ package com.lims.utils;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
+import org.junit.Test;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;

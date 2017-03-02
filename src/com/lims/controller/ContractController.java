@@ -1,12 +1,16 @@
 package com.lims.controller;
 
 import com.jfinal.core.Controller;
+import com.jfinal.json.Jackson;
+import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.Contract;
 
+import com.lims.model.Contractitem;
 import com.lims.model.Encode;
+import com.lims.model.ItemProject;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
@@ -19,78 +23,60 @@ import java.util.*;
  */
 public class ContractController extends Controller {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    SimpleDateFormat format_date = new SimpleDateFormat("MM/dd/yyyy");
-    SimpleDateFormat new_format_date = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat formate_date = new SimpleDateFormat("yyyy-MM-dd");
 
     public void create() {
         try {
             Boolean result = Db.tx(new IAtom() {
                 @Override
                 public boolean run() throws SQLException {
-                    String identify = createIdentify();
-                    String client_unit = getPara("client_unit");
-                    String client_code = getPara("client_code");
-                    String client_tel = getPara("client_tel");
-                    String client = getPara("client");
-                    String client_fax = getPara("client_fax");
-                    String client_address = getPara("client_address");
-                    String trustee_unit = getPara("trustee_unit");
-                    String trustee_code = getPara("trustee_code");
-                    String trustee_tel = getPara("trustee_tel");
-                    int trustee = getParaToInt("trustee");
-                    String trustee_fax = getPara("trustee_fax");
-                    String trustee_address = getPara("trustee_address");
-                    String project_name = getPara("name");
-                    String aim = getPara("aim");
-                    int type_id = getParaToInt("type");
-                    int projectWay = getParaToInt("way");
-                    String wayDesp = getPara("wayDesp");
-                    String package_unit = getPara("package_unit");
-                    //int in_room = getParaToInt("in_room");
-                    int in_room = getParaToBoolean("in_room") ? 1 : 0;
-                    int secret = getParaToBoolean("secret") ? 1 : 0;
-                    String pay_way = getPara("paymentWay");
-                    String finish_time = getPara("finish_time");
-                    float payment = getParaToLong("way");
-                    String other = getPara("other");
-                    // int process = getParaToInt("process");
-                    //int review_id = getParaToInt("review_id");
-                    //String review_time = getPara("review_time");
-                    String create_time = getPara("create_time");
-
+                    Map paraMaps = getParaMap();
+                    Contract contract = new Contract();
                     Boolean result = true;
-                    if (Contract.contractDao.find("SELECT * FROM `db_contract` WHERE  identify='" + identify + "'").size() != 0) {
-                        renderJson(RenderUtils.CODE_REPEAT);
-                    } else {
-                        Contract contract = new Contract();
-                        result = result && contract
-                                .set("identify", identify)
-                                .set("client_unit", client_unit)
-                                .set("client_code", client_code)
-                                .set("client_tel", client_tel)
-                                .set("client", client)
-                                .set("client_fax", client_fax)
-                                .set("client_address", client_address)
-                                .set("trustee_unit", trustee_unit)
-                                .set("trustee_code", trustee_code)
-                                .set("trustee_tel", trustee_tel)
-                                .set("trustee", trustee)
-                                .set("trustee_fax", trustee_fax)
-                                .set("trustee_address", trustee_address)
-                                .set("project_name", project_name)
-                                .set("aim", aim)
-                                .set("type_id", type_id)
-                                .set("projectWay", projectWay)
-                                .set("wayDesp", wayDesp)
-                                .set("package_unit", package_unit)
-                                .set("in_room", in_room)
-                                .set("secret", secret)
-                                .set("pay_way", pay_way)
-                                .set("finish_time", finish_time)
-                                .set("payment", payment)
-                                .set("other", other)
-                                .set("process", 1)
-                                .set("create_time", sdf.format(new Date())).save();
+                    System.out.println(paraMaps.get("item[]"));
+                    for (Object key : paraMaps.keySet()) {
+                        switch (key.toString()) {
+                            case "in_room":
+                                contract.set("in_room", ((String[]) paraMaps.get(key))[0].equals("true") ? 1 : 0);
+                                break;
+                            case "secret":
+                                contract.set("secret", ((String[]) paraMaps.get(key))[0].equals("true") ? 1 : 0);
+                                break;
+                            case "id":
+                                break;//不知道为什么会传一个id过来，待观察
+                            default:
+                                if (key.toString().indexOf("item") != -1) {
+                                    continue;
+                                }
+                                contract.set(key.toString(), ((String[]) paraMaps.get(key))[0]);
+                        }
+
+                    }
+                    contract.set("identify", createIdentify()).set("create_time", sdf.format(new Date())).set("process", 1);
+                    result = result && contract.save();
+                    String[] items = getParaValues("project_items[]");
+                    for (String item : items) {
+                        Map temp = Jackson.getJson().parse(item, Map.class);
+                        Contractitem contractitem = new Contractitem();
+                        List points = (ArrayList) temp.get("point");
+                        String point = "";
+                        for (int i = 0; i < points.size(); i++) {
+                            point += points.get(i);
+                            if (i != points.size() - 1) {
+                                point += ",";
+                            }
+                        }
+                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", point).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).save();
+                        if (!result) break;
+                        List<Map> projectList = (ArrayList) temp.get("project");
+                        for (int m = 0; m < projectList.size(); m++) {
+                            Map project = projectList.get(m);
+                            ItemProject entry = new ItemProject();
+                            entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
+                            result = result && entry.save();
+                            if (!result) break;
+                        }
+                        if (!result) break;
                     }
                     return result;
                 }
