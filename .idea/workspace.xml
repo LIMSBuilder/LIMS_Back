@@ -2,18 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/LoginController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/LoginController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/MessageSender.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/MessageSender.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/ParaUtils$1.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/ParaUtils$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/ParaUtils.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/ParaUtils.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/MessageSender.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/MessageSender.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/ParaUtils$1.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/ParaUtils$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/ParaUtils.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/ParaUtils.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/messageTemplate.properties" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/messageTemplate.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/messageTemplate.properties" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/messageTemplate.properties" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/UserController$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/UserController.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/UserController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/UserController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Role.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Role.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/utils/ParaUtils.java" afterPath="$PROJECT_DIR$/src/com/lims/utils/ParaUtils.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,31 +23,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Notice.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/model/Notice.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" column="33" lean-forward="false" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/UserController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="63" column="14" lean-forward="true" selection-start-line="63" selection-start-column="14" selection-end-line="63" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LoginController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="43" column="91" lean-forward="false" selection-start-line="43" selection-start-column="91" selection-end-line="43" selection-end-column="91" />
+            <state relative-caret-position="306">
+              <caret line="79" column="47" lean-forward="false" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -61,24 +35,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CommonConfig.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonConfig.java">
+      <file leaf-file-name="UserController.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/UserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="55" column="50" lean-forward="false" selection-start-line="55" selection-start-column="50" selection-end-line="55" selection-end-column="50" />
+            <state relative-caret-position="3933">
+              <caret line="294" column="62" lean-forward="false" selection-start-line="294" selection-start-column="62" selection-end-line="294" selection-end-column="62" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NoticeController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/NoticeController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -86,51 +48,22 @@
       <file leaf-file-name="ParaUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ParaUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+            <state relative-caret-position="406">
+              <caret line="229" column="51" lean-forward="false" selection-start-line="229" selection-start-column="51" selection-end-line="229" selection-end-column="51" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RenderUtils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/utils/RenderUtils.java">
+      <file leaf-file-name="Role.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/model/Role.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageSender.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/utils/MessageSender.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="58" column="5" lean-forward="false" selection-start-line="58" selection-start-column="5" selection-end-line="58" selection-end-column="5" />
+            <state relative-caret-position="285">
+              <caret line="17" column="21" lean-forward="false" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#291#292#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="User.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/model/User.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="messageTemplate.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/messageTemplate.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" column="16" lean-forward="false" selection-start-line="1" selection-start-column="16" selection-end-line="1" selection-end-column="16" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -172,7 +105,6 @@
         <option value="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/ItemProjectController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/ContractitemController.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/controller/UserController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Encode.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
@@ -180,9 +112,11 @@
         <option value="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/NoticeController.java" />
         <option value="$PROJECT_DIR$/src/messageTemplate.properties" />
-        <option value="$PROJECT_DIR$/src/com/lims/utils/ParaUtils.java" />
         <option value="$PROJECT_DIR$/src/com/lims/utils/MessageSender.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/model/Role.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/utils/ParaUtils.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/UserController.java" />
       </list>
     </option>
   </component>
@@ -331,50 +265,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lims" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controller" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LIMS_Back" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LIMS_Back" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lims" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LIMS_Back" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LIMS_Back" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="out" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -412,7 +302,7 @@
     <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
-    <property name="SearchEverywhereHistoryKey" value="User&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/UserController.java&#10;Log&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java" />
+    <property name="SearchEverywhereHistoryKey" value="Login&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java&#10;User&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/UserController.java&#10;Lo&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java&#10;Log&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java" />
   </component>
   <component name="RunManager" selected="Tomcat Server.Unnamed">
     <configuration default="false" name="MessageSender.testMsg" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -863,6 +753,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="" />
@@ -884,7 +777,7 @@
       <workItem from="1488288040953" duration="6250000" />
       <workItem from="1488328867011" duration="700000" />
       <workItem from="1488330583692" duration="4394000" />
-      <workItem from="1488456759695" duration="5322000" />
+      <workItem from="1488456759695" duration="11508000" />
     </task>
     <servers />
   </component>
@@ -921,11 +814,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57718000" />
+    <option name="totallyTimeSpent" value="63904000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -969,7 +862,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="25" />
+      <option name="time" value="31" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -978,16 +871,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/CustomerController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
@@ -1008,7 +891,7 @@
         <state relative-caret-position="1305">
           <caret line="87" column="4" lean-forward="false" selection-start-line="87" selection-start-column="4" selection-end-line="123" selection-end-column="5" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1062,7 +945,7 @@
         <state relative-caret-position="1026">
           <caret line="60" column="42" lean-forward="false" selection-start-line="60" selection-start-column="42" selection-end-line="60" selection-end-column="42" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1071,6 +954,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1128,6 +1012,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2175">
           <caret line="155" column="16" lean-forward="false" selection-start-line="155" selection-start-column="16" selection-end-line="155" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1196,7 +1081,7 @@
         <state relative-caret-position="776">
           <caret line="81" column="0" lean-forward="true" selection-start-line="75" selection-start-column="3" selection-end-line="81" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1213,6 +1098,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1229,7 +1115,7 @@
         <state relative-caret-position="2698">
           <caret line="145" column="5" lean-forward="false" selection-start-line="139" selection-start-column="0" selection-end-line="145" selection-end-column="5" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1239,7 +1125,7 @@
         <state relative-caret-position="2622">
           <caret line="138" column="93" lean-forward="false" selection-start-line="138" selection-start-column="93" selection-end-line="138" selection-end-column="93" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1249,7 +1135,7 @@
         <state relative-caret-position="2926">
           <caret line="154" column="1" lean-forward="false" selection-start-line="154" selection-start-column="1" selection-end-line="154" selection-end-column="1" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1259,7 +1145,7 @@
         <state relative-caret-position="2223">
           <caret line="117" column="51" lean-forward="false" selection-start-line="117" selection-start-column="51" selection-end-line="117" selection-end-column="51" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1277,7 +1163,7 @@
         <state relative-caret-position="791">
           <caret line="218" column="1" lean-forward="true" selection-start-line="218" selection-start-column="1" selection-end-line="218" selection-end-column="1" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1327,7 +1213,7 @@
         <state relative-caret-position="171">
           <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1344,14 +1230,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
           <caret line="1" column="16" lean-forward="false" selection-start-line="1" selection-start-column="16" selection-end-line="1" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ParaUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1374,21 +1252,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/UserController.java">
+    <entry file="file://$PROJECT_DIR$/src/com/lims/model/Role.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="63" column="14" lean-forward="true" selection-start-line="63" selection-start-column="14" selection-end-line="63" selection-end-column="14" />
-          <folding />
+        <state relative-caret-position="285">
+          <caret line="17" column="21" lean-forward="false" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#291#292#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="43" column="91" lean-forward="false" selection-start-line="43" selection-start-column="91" selection-end-line="43" selection-end-column="91" />
+        <state relative-caret-position="306">
+          <caret line="79" column="47" lean-forward="false" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ParaUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="229" column="51" lean-forward="false" selection-start-line="229" selection-start-column="51" selection-end-line="229" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/UserController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3933">
+          <caret line="294" column="62" lean-forward="false" selection-start-line="294" selection-start-column="62" selection-end-line="294" selection-end-column="62" />
+          <folding />
         </state>
       </provider>
     </entry>

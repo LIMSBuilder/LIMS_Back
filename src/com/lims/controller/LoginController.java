@@ -8,6 +8,7 @@ import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class LoginController extends Controller {
             List<User> userList = User.userDao.find("SELECT * FROM `db_user` WHERE nick='" + username + "'");
             if (userList.size() != 0) {
                 if (userList.get(0).get("password").equals(ParaUtils.EncoderByMd5(password))) {
+                    getSession().setAttribute("user", userList.get(0).get("id"));
                     renderJson(RenderUtils.CODE_SUCCESS);
                 } else {
                     renderJson(RenderUtils.CODE_ERROR);
@@ -64,6 +66,18 @@ public class LoginController extends Controller {
                     .set("password", ParaUtils.EncoderByMd5(getPara("password")))
                     .set("cardId", getPara("cardId"));
             renderJson(user.save() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    /**
+     * 获取登录用户的信息
+     */
+    public void getLogin() {
+        try {
+            renderJson(ParaUtils.getCurrentUserMap(getRequest()));
         } catch (Exception e) {
             renderError(500);
         }
