@@ -3,6 +3,8 @@ package com.lims.utils;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
+import com.lims.model.Role;
+import com.lims.model.User;
 import org.junit.Test;
 import sun.misc.BASE64Encoder;
 
@@ -207,10 +209,32 @@ public class ParaUtils extends Controller {
      *
      * @return
      */
-//    public static User getCurrentUser(HttpServletRequest request) {
-//        //User user = User.userDao.findById(1);
-//        User user = (User) request.getSession().getAttribute("user");
-//        return user;
-//    }
+    public static Map getCurrentUserMap(HttpServletRequest request) {
+        User user = User.userDao.findById(request.getSession().getAttribute("user"));
+        Map temp = new HashMap();
+        if (user != null) {
+            temp.put("id", user.get("id"));
+            temp.put("name", user.get("name"));
+            temp.put("nick", user.get("nick"));
+            if (user.get("roleId") != null) {
+                Map role = Role.roledao.findById(user.get("roleId")).toJSON();
+                temp.put("role", role);
+            }
+            temp.put("mail", user.get("mail"));
+            temp.put("address", user.get("address"));
+            temp.put("tel", user.get("tel"));
+            temp.put("desp", user.get("desp"));
+            temp.put("portrait", user.get("portrait"));
+            temp.put("rowCount", user.get("rowCount"));
+            temp.put("showWelcome", user.get("showWelcome"));
+            temp.put("isNotice", user.get("isNotice"));
+        }
+        return temp;
+    }
+
+    public static User getCurrentUser(HttpServletRequest request) {
+        User user = User.userDao.findById(request.getSession().getAttribute("user"));
+        return user;
+    }
 
 }

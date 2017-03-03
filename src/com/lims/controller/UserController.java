@@ -219,7 +219,7 @@ public class UserController extends Controller {
             for (User user : entityList) {
                 results.add(toJsonSingle1(user));
             }
-           json.put("results",results);
+            json.put("results", results);
         } catch (Exception e) {
             renderError(500);
         }
@@ -231,6 +231,73 @@ public class UserController extends Controller {
         user1.put("id", user.getInt("id"));
         user1.put("name", user.get("name"));
         return user1;
+    }
+
+    /**
+     * 变更密码
+     */
+    public void changePwd() {
+        try {
+            User user = ParaUtils.getCurrentUser(getRequest());
+            if (user != null) {
+                String oldPassword = getPara("password");
+                String newPassword = getPara("new_password");
+                if (user.get("password").equals(ParaUtils.EncoderByMd5(oldPassword))) {
+                    Boolean result = user.set("password", ParaUtils.EncoderByMd5(newPassword)).update();
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                } else renderJson(RenderUtils.CODE_REPEAT);
+            } else renderJson(RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 变更头像
+     */
+    public void changePortait() {
+        try {
+            User user = ParaUtils.getCurrentUser(getRequest());
+            if (user != null) {
+                String path = getPara("path");
+                Boolean result = user.set("portrait", path).update();
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else renderJson(RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void changeInfo() {
+        try {
+            User user = ParaUtils.getCurrentUser(getRequest());
+            if (user != null) {
+                user
+                        .set("name", getPara("name"))
+                        .set("tel", getPara("tel"))
+                        .set("mail", getPara("mail"))
+                        .set("address", getPara("address"))
+                        .set("desp", getPara("desp"));
+                renderJson(user.update() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else renderJson(RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void changeSetting() {
+        try {
+            User user = ParaUtils.getCurrentUser(getRequest());
+            if (user != null) {
+                user
+                        .set("isNotice", getPara("isNotice"))
+                        .set("showWelcome", getPara("showWelcome"))
+                        .set("rowCount", getPara("rowCount"));
+                renderJson(user.update() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else renderJson(RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 
 }
