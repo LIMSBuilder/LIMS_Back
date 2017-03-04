@@ -20,6 +20,7 @@ public class FileController extends Controller {
             String path = " /upload\\" + uploadFile.getFileName();
             System.out.println(path);
             result.put("path", path);
+            result.put("fileName", uploadFile.getOriginalFileName());
             renderJson(result);
         } catch (Exception e) {
             renderError(500);

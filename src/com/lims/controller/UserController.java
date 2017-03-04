@@ -6,6 +6,7 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
+import com.lims.model.Department;
 import com.lims.model.Role;
 import com.lims.model.User;
 import com.lims.utils.ParaUtils;
@@ -295,6 +296,29 @@ public class UserController extends Controller {
                         .set("rowCount", getPara("rowCount"));
                 renderJson(user.update() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             } else renderJson(RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void listByDepartment() {
+        try {
+            List<Department> departmentList = Department.departmentdao.find("SELECT * FROM `db_department`");
+            List<Map> result = new ArrayList<>();
+            for (Department department : departmentList) {
+                List<User> userList = User.userDao.find("SELECT u.* FROM `db_user` u,`db_role` r WHERE u.roleId=r.id AND r.department_id=" + department.get("id"));
+                if (userList.size() != 0) {
+                    Map dep = new HashMap();
+                    dep.put("id", department.get("id"));
+                    dep.put("name", department.get("name"));
+
+                    dep.put("user", toJson1(userList));
+                    result.add(dep);
+                } else continue;
+            }
+            Map temp = new HashMap();
+            temp.put("results", result);
+            renderJson(temp);
         } catch (Exception e) {
             renderError(500);
         }
