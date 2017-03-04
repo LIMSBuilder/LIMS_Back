@@ -22,6 +22,7 @@ public class CommonRouter extends Routes {
 
         add("/api/contract", ContractController.class);
 
+        add("/api/calendar", CalendarController.class);
 //        add("/api/contract_item", ContractitemController.class);
 //        add("/api/itemproject", ItemProjectController.class);
 
