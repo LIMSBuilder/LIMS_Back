@@ -6,6 +6,7 @@ import com.jfinal.kit.PropKit;
 import com.lims.model.Role;
 import com.lims.model.User;
 import org.junit.Test;
+import org.ocpsoft.prettytime.PrettyTime;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -24,7 +27,7 @@ import java.util.Map;
  */
 public class ParaUtils extends Controller {
 
-    public final static DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    public final static DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public final static Map flows = new HashMap() {{
         put("stop_task", -2);//中止任务书
@@ -235,6 +238,29 @@ public class ParaUtils extends Controller {
     public static User getCurrentUser(HttpServletRequest request) {
         User user = User.userDao.findById(request.getSession().getAttribute("user"));
         return user;
+    }
+
+    public static String getPrettyTime(Date date) {
+        PrettyTime prettyTime = new PrettyTime(Locale.CHINESE);
+        return prettyTime.format(date);
+    }
+
+    public static String getPrettyTime(String date) {
+        try {
+            PrettyTime prettyTime = new PrettyTime(Locale.CHINESE);
+            return prettyTime.format(ParaUtils.sdf.parse(date));
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+    }
+
+    public static String getPrettyTime(String date, DateFormat sdf) {
+        try {
+            PrettyTime prettyTime = new PrettyTime(Locale.CHINESE);
+            return prettyTime.format(sdf.parse(date));
+        } catch (Exception e) {
+            throw new Error(e);
+        }
     }
 
 }
