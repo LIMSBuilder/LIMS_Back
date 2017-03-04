@@ -54,6 +54,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_item_project", ItemProject.class);
         arp.addMapping("db_encode", Encode.class);
         arp.addMapping("db_notice", Notice.class);
+        arp.addMapping("db_calendar", Calendar.class);
         //addMap增加数据库树形
 
     }
