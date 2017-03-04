@@ -73,14 +73,31 @@ public class MailController extends Controller {
                 rowCount = ParaUtils.getRowCount();
             }
             User user = ParaUtils.getCurrentUser(getRequest());
-            String param = " where receiver_id=" + user.get("id") + " ";
+            String param = " where r.mail_id=m.id AND r.receiver_id=" + user.get("id") + " ";
             Object[] keys = condition.keySet().toArray();
             for (int i = 0; i < keys.length; i++) {
                 String key = (String) keys[i];
                 Object value = condition.get(key);
+                if (key.equals("title")) {
+                    param += (" AND m." + key + " like \"%" + value + "%\"");
+                    continue;
+                }
+                if (key.equals("type")) {
+                    switch (value.toString()) {
+                        case "inbox":
+                            param += (" AND r.state !=3 ");
+                            break;
+                        case "star":
+                            param += (" AND r.state =2 ");
+                        case "trash":
+                            param += (" AND r.state =3 ");
+                    }
+                    continue;
+                }
+
                 param += (" AND " + key + " like \"%" + value + "%\"");
             }
-            Page<Receiver> receiverPage = Receiver.receiverDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_receiver`" + param);
+            Page<Receiver> receiverPage = Receiver.receiverDao.paginate(currentPage, rowCount, "SELECT r.*", "FROM `db_receiver` r,`db_mail` m " + param);
             List<Receiver> receiverList = receiverPage.getList();
             Map results = toJson(receiverList);
             results.put("currentPage", currentPage);
@@ -112,11 +129,77 @@ public class MailController extends Controller {
 
     public Map toJsonSingle(Receiver receiver) {
         Map<String, Object> map = new HashMap<>();
+        map.put("id", receiver.get("id"));
         map.put("state", receiver.get("state"));
         map.put("read_time", receiver.get("read_time"));
         map.put("type", receiver.get("type"));
         map.put("mail", Mail.mailDao.findById(receiver.get("mail_id")).getMailInfo());
         return map;
+    }
+
+
+    public void changeState() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Integer[] selected = getParaValuesToInt("selected[]");
+                    Boolean result = true;
+                    for (int id : selected) {
+                        Receiver receiver = Receiver.receiverDao.findById(id);
+                        if (receiver != null) {
+                            result = result && receiver.set("state", getPara("state")).update();
+                        } else return false;
+                        if (!result) break;
+                    }
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void delete() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Integer[] selected = getParaValuesToInt("selected[]");
+                    Boolean result = true;
+                    for (int id : selected) {
+                        result = result && Receiver.receiverDao.deleteById(id);
+                        if (!result) break;
+                    }
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    public void findById() {
+        try {
+            int id = getParaToInt("id");
+            Receiver receiver = Receiver.receiverDao.findById(id);
+            User user = ParaUtils.getCurrentUser(getRequest());
+            if (receiver != null && receiver.get("receiver_id") == user.get("id")) {
+                Boolean result = true;
+                if (receiver.get("state") == 0) {
+                    result = receiver.set("read_time", ParaUtils.sdf.format(new Date())).set("state", 1).update();
+                }
+                Map temp = toJsonSingle(receiver);
+                temp.put("code", result ? 200 : 502);
+                renderJson(temp);
+            } else renderJson(RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 
 }
