@@ -34,6 +34,9 @@ public class MailController extends Controller {
                             .set("content", getPara("content"))
                             .set("create_time", ParaUtils.sdf.format(new Date()))
                             .set("send_id", ParaUtils.getCurrentUser(getRequest()).get("id"));
+                    if (getPara("reply") != null) {
+                        mail.set("reply", getPara("reply"));
+                    }
                     result = result && mail.save();
                     if (!result) return false;
                     Integer[] receiverList = getParaValuesToInt("receiver[]");
@@ -200,6 +203,39 @@ public class MailController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+    }
+
+
+    public void findMailById() {
+        try {
+            Mail mail = Mail.mailDao.findById(getPara("id"));
+            renderJson(mail.getMailInfo());
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    public void getMailTree() {
+        try {
+            int id = getParaToInt("id");//当前查看的Mail id
+            Mail mail = Mail.mailDao.findById(id);
+            renderJson(getTree(mail));
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public Map getTree(Mail parent) {
+        if (parent != null) {
+            Map result = new HashMap();
+            result.put("mail", parent.getMailInfo());
+            if (Mail.mailDao.findById(parent.get("reply")) != null) {
+                result.put("parent", parent.get("reply") == null ? getTree(null) : getTree(Mail.mailDao.findById(parent.get("reply"))));
+            }
+            return result;
+        }
+        return null;
     }
 
 }
