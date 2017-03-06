@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/UserController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/UserController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/controller/LogController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/Contract.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/Contract.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/Contract.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/Contract.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" afterPath="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Contract.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Contract.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,10 +26,10 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="LoginController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LoginController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
+            <state relative-caret-position="1178">
               <caret line="72" column="92" lean-forward="false" selection-start-line="72" selection-start-column="92" selection-end-line="72" selection-end-column="92" />
               <folding />
             </state>
@@ -47,26 +54,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ElementController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ElementController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ParaUtils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ParaUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2451">
-              <caret line="104" column="10" lean-forward="false" selection-start-line="104" selection-start-column="10" selection-end-line="104" selection-end-column="10" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -103,11 +90,43 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContractController.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ContractController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="216" column="13" lean-forward="true" selection-start-line="216" selection-start-column="13" selection-end-line="216" selection-end-column="13" />
+            <state relative-caret-position="399">
+              <caret line="130" column="136" lean-forward="false" selection-start-line="130" selection-start-column="136" selection-end-line="130" selection-end-column="136" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LogController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/LogController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="40">
+              <caret line="19" column="18" lean-forward="true" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommonRouter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonRouter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="325">
+              <caret line="30" column="29" lean-forward="false" selection-start-line="30" selection-start-column="29" selection-end-line="30" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Contract.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/model/Contract.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="21" column="9" lean-forward="false" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -121,16 +140,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="User.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/model/User.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="20" column="32" lean-forward="false" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -151,6 +160,7 @@
       <find>Receiver</find>
       <find>findMailById</find>
       <find>reg</find>
+      <find>getItems</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -173,7 +183,6 @@
         <option value="$PROJECT_DIR$/src/com/lims/controller/FrequencyController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/MonitorProject.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/MonitorProjectController.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/model/Contract.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/ElementController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Contract_item.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/Contract_itemController.java" />
@@ -190,7 +199,6 @@
         <option value="$PROJECT_DIR$/src/com/lims/model/Calendar.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/CalendarController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/FileController.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Receiver.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/MailFile.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Mail.java" />
@@ -199,9 +207,12 @@
         <option value="$PROJECT_DIR$/src/com/lims/controller/MailController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Default.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/UserController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/model/Contract.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/LogController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
       </list>
     </option>
   </component>
@@ -471,7 +482,7 @@
     <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
-    <property name="SearchEverywhereHistoryKey" value="Login&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java&#10;User&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/UserController.java&#10;Contra&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/ContractController.java&#10;Mai&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/MailController.java&#10;Para&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/utils/ParaUtils.java&#10;Lo&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java&#10;Log&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java" />
+    <property name="SearchEverywhereHistoryKey" value="Contrac&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/ContractController.java&#10;Login&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java&#10;User&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/UserController.java&#10;Contra&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/ContractController.java&#10;Mai&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/MailController.java&#10;Para&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/utils/ParaUtils.java&#10;Lo&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java&#10;Log&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/LoginController.java" />
     <property name="FullScreen" value="true" />
   </component>
   <component name="RecentsManager">
@@ -981,7 +992,7 @@
       <workItem from="1488328867011" duration="700000" />
       <workItem from="1488330583692" duration="4394000" />
       <workItem from="1488456759695" duration="11512000" />
-      <workItem from="1488588349128" duration="27997000" />
+      <workItem from="1488588349128" duration="30183000" />
     </task>
     <servers />
   </component>
@@ -1018,7 +1029,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="91905000" />
+    <option name="totallyTimeSpent" value="94091000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -1066,7 +1077,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="97" />
+      <option name="time" value="101" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
@@ -1084,6 +1095,9 @@
         <watch expression="&quot;FROM `db_receiver` r,`db_mail` m &quot; + param" language="JAVA" />
         <watch expression="mail" language="JAVA" />
         <watch expression="points.size()" language="JAVA" />
+        <watch expression="t" language="JAVA" />
+        <watch expression="item.get(&quot;contract_id&quot;)" language="JAVA" />
+        <watch expression="item.get(t)" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
@@ -1092,13 +1106,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/com/jfinal/core/JFinalFilter.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
-          <caret line="49" column="123" lean-forward="false" selection-start-line="49" selection-start-column="123" selection-end-line="49" selection-end-column="123" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/DepartmentController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1026">
@@ -1157,14 +1164,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="1" lean-forward="false" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/model/Contract.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="17" lean-forward="false" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1367,14 +1366,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonRouter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="25" column="39" lean-forward="false" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/model/Receiver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
@@ -1495,14 +1486,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="216" column="13" lean-forward="true" selection-start-line="216" selection-start-column="13" selection-end-line="216" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
@@ -1513,8 +1496,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
+        <state relative-caret-position="1178">
           <caret line="72" column="92" lean-forward="false" selection-start-line="72" selection-start-column="92" selection-end-line="72" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/model/Contract.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="21" column="9" lean-forward="false" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonRouter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="30" column="29" lean-forward="false" selection-start-line="30" selection-start-column="29" selection-end-line="30" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/LogController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="19" column="18" lean-forward="true" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="130" column="136" lean-forward="false" selection-start-line="130" selection-start-column="136" selection-end-line="130" selection-end-column="136" />
           <folding />
         </state>
       </provider>

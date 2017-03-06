@@ -21,11 +21,11 @@ public class Contract extends Model<Contract> {
             Map result = new HashMap();
             for (String t : item._getAttrNames()) {
                 if (t.equals("element")) {
-                    result.put("element", Element.elementDao.findById(item.get(t)));
+                    result.put("element", item.get(t) == null ? null : Element.elementDao.findById(item.get(t)));
                     continue;
                 }
                 if (t.equals("frequency")) {
-                    result.put("frequency", Frequency.frequencyDao.findById(item.get(t)).toJsonSingle());
+                    result.put("frequency", item.get(t) == null ? null : Frequency.frequencyDao.findById(item.get(t)).toJsonSingle());
                     continue;
                 }
                 result.put(t, item.get(t));

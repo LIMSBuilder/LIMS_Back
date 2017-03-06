@@ -125,10 +125,15 @@ public class ContractController extends Controller {
                 Object value = condition.get(key);
                 if (key.equals("process")) {
                     param += " AND " + key + " = " + value;
+                    continue;
+                }
+                if (key.equals("keyWords")) {
+                    param += (" AND ( identify ='" + value + "' OR name like \"%" + value + "%\" OR client_unit like \"%" + value + "%\")");
+                    continue;
                 }
                 param += (" AND " + key + " like \"%" + value + "%\"");
             }
-            Page<Contract> contractPage = Contract.contractDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_contract`" + param);
+            Page<Contract> contractPage = Contract.contractDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_contract`" + param + " ORDER BY create_time DESC");
             List<Contract> contractList = contractPage.getList();
             Map results = toJson(contractList);
             results.put("currentPage", currentPage);
