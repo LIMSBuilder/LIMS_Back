@@ -4,6 +4,8 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.render.Render;
 import com.lims.model.Mail;
 import com.lims.model.MailFile;
 import com.lims.model.Receiver;
@@ -92,8 +94,10 @@ public class MailController extends Controller {
                             break;
                         case "star":
                             param += (" AND r.state =2 ");
+                            break;
                         case "trash":
                             param += (" AND r.state =3 ");
+                            break;
                     }
                     continue;
                 }
@@ -238,4 +242,91 @@ public class MailController extends Controller {
         return null;
     }
 
+    public void outList() {
+        try {
+            int rowCount = getParaToInt("rowCount");
+            int currentPage = getParaToInt("currentPage");
+            String condition_temp = getPara("condition");
+            Map condition = ParaUtils.getSplitCondition(condition_temp);
+            if (rowCount == 0) {
+                rowCount = ParaUtils.getRowCount();
+            }
+            User user = ParaUtils.getCurrentUser(getRequest());
+            String param = " where send_id=" + user.get("id") + " AND type=0 ";
+            Object[] keys = condition.keySet().toArray();
+            for (int i = 0; i < keys.length; i++) {
+                String key = (String) keys[i];
+                Object value = condition.get(key);
+                param += (" AND " + key + " like \"%" + value + "%\"");
+            }
+            Page<Mail> mailPage = Mail.mailDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_mail` " + param);
+            List<Mail> mailList = mailPage.getList();
+            Map results = toJsonMail(mailList);
+            results.put("currentPage", currentPage);
+            results.put("rowCount", rowCount);
+            results.put("totalPage", mailPage.getTotalPage());
+            results.put("concdition", condition_temp);
+            renderJson(results);
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
+
+    public Map toJsonMail(List<Mail> entityList) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            List results = new ArrayList();
+            for (Mail mail : entityList) {
+                Map temp = mail.getMailInfo();
+                temp.put("receiver", Db.find("SELECT u.id,u.name,u.nick FROM `db_receiver` r,`db_user` u WHERE r.receiver_id = u.id AND r.mail_id=" + mail.get("id")));
+                results.add(temp);
+            }
+            json.put("results", results);
+        } catch (Exception e) {
+            renderError(500);
+        }
+        return json;
+    }
+
+    public void deleteMail() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Integer[] selected = getParaValuesToInt("selected[]");
+                    Boolean result = true;
+                    for (int id : selected) {
+                        Mail mail = Mail.mailDao.findById(id);
+                        if (mail != null) {
+                            result = result && mail.set("type", 1).update();
+                        } else result = false;
+                        if (!result) break;
+                    }
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void initMail() {
+        try {
+            User user = ParaUtils.getCurrentUser(getRequest());
+            List<Receiver> receiverList = Receiver.receiverDao.find("SELECT * FROM `db_receiver` WHERE receiver_id=" + user.get("id") + " AND state=0");
+            List<Record> recordList = Db.find("SELECT distinct(r.receiver_id) FROM db_mail m,db_receiver r WHERE m.send_id=7 AND r.mail_id=m.id ORDER BY m.create_time DESC  LIMIT 5");
+            List<Map> tempList = new ArrayList<>();
+            for (Record record : recordList) {
+                tempList.add(User.userDao.findById(record.get("receiver_id")).toSimpleJson());
+            }
+            Map temp = RenderUtils.codeFactory(200);
+            temp.put("count", receiverList.size());
+            temp.put("related", tempList);
+            renderJson(temp);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }
