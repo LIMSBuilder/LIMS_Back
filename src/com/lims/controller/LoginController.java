@@ -59,13 +59,19 @@ public class LoginController extends Controller {
      */
     public void register() {
         try {
-            User user = new User();
-            user
-                    .set("nick", getPara("nick"))
-                    .set("name", getPara("name"))
-                    .set("password", ParaUtils.EncoderByMd5(getPara("password")))
-                    .set("cardId", getPara("cardId"));
-            renderJson(user.save() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            String cardId = getPara("cardId");
+            String nick = getPara("nick");
+            if (User.userDao.find("SELECT * FROM `db_user` WHERE cardId='" + cardId + "' OR nick='" + nick + "'").size() != 0) {
+                renderJson(RenderUtils.CODE_REPEAT);
+            } else {
+                User user = new User();
+                user
+                        .set("nick", getPara("nick"))
+                        .set("name", getPara("name"))
+                        .set("password", ParaUtils.EncoderByMd5(getPara("password")))
+                        .set("cardId", getPara("cardId"));
+                renderJson(user.save() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            }
         } catch (Exception e) {
             renderError(500);
         }
