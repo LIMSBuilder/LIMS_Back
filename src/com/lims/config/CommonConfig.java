@@ -58,6 +58,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_mail", Mail.class);
         arp.addMapping("db_mail_file", MailFile.class);
         arp.addMapping("db_receiver", Receiver.class);
+        arp.addMapping("db_default", Default.class);
         //addMap增加数据库树形
 
     }

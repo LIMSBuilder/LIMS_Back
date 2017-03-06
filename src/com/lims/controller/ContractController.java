@@ -49,7 +49,8 @@ public class ContractController extends Controller {
                         }
 
                     }
-                    contract.set("identify", createIdentify()).set("create_time", sdf.format(new Date())).set("process", 1);
+                    User user = ParaUtils.getCurrentUser(getRequest());
+                    contract.set("identify", createIdentify()).set("create_time", sdf.format(new Date())).set("creater", user.get("id")).set("process", 1);
                     result = result && contract.save();
                     String[] items = getParaValues("project_items[]");
                     for (String item : items) {
@@ -57,21 +58,26 @@ public class ContractController extends Controller {
                         Contractitem contractitem = new Contractitem();
                         List points = (ArrayList) temp.get("point");
                         String point = "";
-                        for (int i = 0; i < points.size(); i++) {
-                            point += points.get(i);
-                            if (i != points.size() - 1) {
-                                point += ",";
+                        if (points != null) {
+                            for (int i = 0; i < points.size(); i++) {
+                                point += points.get(i);
+                                if (i != points.size() - 1) {
+                                    point += ",";
+                                }
                             }
                         }
+
                         result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", point).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).save();
                         if (!result) break;
                         List<Map> projectList = (ArrayList) temp.get("project");
-                        for (int m = 0; m < projectList.size(); m++) {
-                            Map project = projectList.get(m);
-                            ItemProject entry = new ItemProject();
-                            entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
-                            result = result && entry.save();
-                            if (!result) break;
+                        if (projectList != null) {
+                            for (int m = 0; m < projectList.size(); m++) {
+                                Map project = projectList.get(m);
+                                ItemProject entry = new ItemProject();
+                                entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
+                                result = result && entry.save();
+                                if (!result) break;
+                            }
                         }
                         if (!result) break;
                     }
@@ -212,6 +218,47 @@ public class ContractController extends Controller {
             String identify = getPara("identify");
 
             Contract contract = Contract.contractDao.findFirst("select * from db_contracter where identify = '" + identify + "'");
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void defaultInfo() {
+        try {
+            Default defaultModel = Default.defaultDao.findFirst("SELECT * FROM `db_default`");
+            Boolean result = true;
+            if (defaultModel != null) {
+                //更新
+                defaultModel
+                        .set("trustee_unit", getPara("trustee_unit"))
+                        .set("trustee_address", getPara("trustee_address"))
+                        .set("trustee_tel", getPara("trustee_tel"))
+                        .set("trustee_code", getPara("trustee_code"))
+                        .set("trustee_fax", getPara("trustee_fax"));
+                result = result && defaultModel.update();
+            } else {
+                //创建新的Default
+                Default temp = new Default();
+                temp
+                        .set("trustee_unit", getPara("trustee_unit"))
+                        .set("trustee_address", getPara("trustee_address"))
+                        .set("trustee_tel", getPara("trustee_tel"))
+                        .set("trustee_code", getPara("trustee_code"))
+                        .set("trustee_fax", getPara("trustee_fax"));
+                result = result && temp.save();
+            }
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void fetchDefault() {
+        try {
+            Default defaultModel = Default.defaultDao.findFirst("SELECT * FROM `db_default`");
+            if (defaultModel != null) {
+                renderJson(defaultModel);
+            } else renderNull();
         } catch (Exception e) {
             renderError(500);
         }
