@@ -226,8 +226,8 @@ public class ContractController extends Controller {
                 renderJson(RenderUtils.CODE_EMPTY);
             }
         } catch (Exception e) {
+            renderError(500);
         }
-        renderError(500);
     }
 
     public void findByIdentify() {
@@ -279,5 +279,90 @@ public class ContractController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+    }
+
+
+    public void review() {
+        try {
+            if (getParaToInt("result") == 1) {
+                //审核通过
+                int id = getParaToInt("id");
+                Contract contract = Contract.contractDao.findById(id);
+                if (contract != null) {
+                    User user = ParaUtils.getCurrentUser(getRequest());
+                    Boolean result = contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("process", ProcessKit.getContractProcess("review")).update();
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                } else {
+                    renderJson(RenderUtils.CODE_EMPTY);
+                }
+            } else {
+                //审核拒绝
+                final Boolean result = Db.tx(new IAtom() {
+                    @Override
+                    public boolean run() throws SQLException {
+                        int id = getParaToInt("id");
+                        Contract contract = Contract.contractDao.findById(id);
+                        if (contract != null) {
+                            User user = ParaUtils.getCurrentUser(getRequest());
+                            ContractReview contractReview = new ContractReview();
+                            Boolean result = true;
+                            result = result && contractReview.set("contract_id", contract.get("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).save();
+                            if (!result) return false;
+                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("process", ProcessKit.getContractProcess("change")).update();
+                            return result;
+                        }
+                        return false;
+                    }
+                });
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 获取所有审核记录
+     * 包括通过的和拒绝的
+     */
+    public void getReviewList() {
+        try {
+            Contract contract = Contract.contractDao.findById(getPara("id"));
+            if (contract.getInt("process") != 1 && contract.get("reviewer") != null) {
+                //只要不是1就表示已经进入过流程了,判断reviewer是否存在防止中止的情况
+                List<ContractReview> contractReviewList = ContractReview.contractReviewDao.find("SELECT * FROM `db_contract_review` WHERE contract_id=" + contract.get("id"));
+                Map temp = toReviewJson(contractReviewList);
+                if (contract.getInt("process") > 1) {
+                    Map acept = new HashMap();
+                    acept.put("reviewer", User.userDao.findById(contract.get("reviewer")).toSimpleJson());
+                    acept.put("review_time", contract.get("review_time"));
+                    temp.put("accept", acept);
+                }
+                renderJson(temp);
+            } else
+                renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    public Map toReviewJson(List<ContractReview> contractReviewList) {
+        List temp = new ArrayList();
+        for (ContractReview contractReview : contractReviewList) {
+            temp.add(toReviewJsonSingle(contractReview));
+        }
+        Map result = new HashMap();
+        result.put("result", temp);
+        return result;
+    }
+
+    public Map toReviewJsonSingle(ContractReview contractReview) {
+        Map temp = new HashMap();
+        temp.put("id", contractReview.get("id"));
+        temp.put("msg", contractReview.get("reject_msg"));
+        temp.put("reviewer", User.userDao.findById(contractReview.get("reviewer")).toSimpleJson());
+        temp.put("review_time", contractReview.get("review_time"));
+        return temp;
     }
 }

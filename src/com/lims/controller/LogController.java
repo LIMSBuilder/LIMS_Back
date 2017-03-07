@@ -2,6 +2,7 @@ package com.lims.controller;
 
 import com.jfinal.core.Controller;
 import com.lims.model.Contract;
+import com.lims.model.ContractReview;
 import com.lims.model.User;
 
 import java.util.ArrayList;
@@ -25,12 +26,29 @@ public class LogController extends Controller {
                 process.put("log_time", contract.get("create_time"));
                 User user = User.userDao.findById(contract.get("creater"));
                 if (user != null) {
-                    process.put("log_msg", user.get("name") + "创建了合同");
+                    process.put("log_msg", user.get("name") + "【创建】合同");
                 } else {
                     process.put("log_msg", "某人创建了合同");
                 }
                 temp.add(process);
 
+                if (contract.get("review_id") != null) {
+                    //若review_id 不为null，即至少被审核拒绝过一次了
+                    List<ContractReview> contractReviewList = ContractReview.contractReviewDao.find("SELECT * FROM `db_contract_review` WHERE contract_id=" + contract.get("id"));
+                    for (ContractReview contractReview : contractReviewList) {
+                        Map reviewProcess = new HashMap();
+                        reviewProcess.put("log_msg", User.userDao.findById(contractReview.get("reviewer")).get("name") + "【审核拒绝】合同");
+                        reviewProcess.put("log_time", contractReview.get("review_time"));
+                        temp.add(reviewProcess);
+                    }
+                }
+                if (contract.get("process") != -1 && contract.get("process") != 1 && contract.get("reviewer") != null) {
+                    //若当前不在待修改或待审核状态，则说明当前审核通过
+                    Map reviewProcess = new HashMap();
+                    reviewProcess.put("log_msg", User.userDao.findById(contract.get("reviewer")).get("name") + "【审核通过】合同");
+                    reviewProcess.put("log_time", contract.get("review_time"));
+                    temp.add(reviewProcess);
+                }
 
                 renderJson(temp);
 
