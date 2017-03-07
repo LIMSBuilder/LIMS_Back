@@ -28,6 +28,7 @@ public class CommonRouter extends Routes {
 //        add("/api/itemproject", ItemProjectController.class);
 
         add("/api/login", LoginController.class);
+        add("/api/log", LogController.class);
     }
 }
 

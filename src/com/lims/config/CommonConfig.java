@@ -5,14 +5,21 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import com.lims.model.*;
+import com.lims.utils.MessageSender;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 主程序入口，Config配置类
  */
 public class CommonConfig extends JFinalConfig {
+    public static List<Object> userList = new ArrayList<Object>();
 
     @Override
     public void configConstant(Constants me) {
+
         //设置开发模式,如果设置为true,控制台会输出每次请求的Controller action和参数信息
         me.setDevMode(true);
         //设置视图模型
@@ -59,6 +66,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_mail_file", MailFile.class);
         arp.addMapping("db_receiver", Receiver.class);
         arp.addMapping("db_default", Default.class);
+        arp.addMapping("db_contract_review", ContractReview.class);
         //addMap增加数据库树形
 
     }
@@ -70,6 +78,6 @@ public class CommonConfig extends JFinalConfig {
 
     @Override
     public void configHandler(Handlers me) {
-
+        //me.add(new MessageSender());
     }
 }

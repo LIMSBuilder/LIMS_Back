@@ -26,7 +26,8 @@ public class UserController extends Controller {
     public void create() {
         try {
             String cardId = getPara("cardId");
-            if (User.userDao.find("SELECT * FROM `db_user` WHERE cardId='" + cardId + "'").size() != 0) {
+            String nick = getPara("nick");
+            if (User.userDao.find("SELECT * FROM `db_user` WHERE cardId='" + cardId + "' OR nick='" + nick + "'").size() != 0) {
                 renderJson(RenderUtils.CODE_REPEAT);
             } else {
                 Map result = getParaMap();
