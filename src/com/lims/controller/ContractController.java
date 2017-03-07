@@ -9,6 +9,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.*;
 
 import com.lims.utils.ParaUtils;
+import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
 
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Created by caiwenhong on 2017/2/28.
+ *
  */
 public class ContractController extends Controller {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -50,7 +51,7 @@ public class ContractController extends Controller {
 
                     }
                     User user = ParaUtils.getCurrentUser(getRequest());
-                    contract.set("identify", createIdentify()).set("create_time", sdf.format(new Date())).set("creater", user.get("id")).set("process", 1);
+                    contract.set("identify", createIdentify()).set("create_time", sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getContractProcess("create"));
                     result = result && contract.save();
                     String[] items = getParaValues("project_items[]");
                     for (String item : items) {
@@ -124,11 +125,22 @@ public class ContractController extends Controller {
                 String key = (String) keys[i];
                 Object value = condition.get(key);
                 if (key.equals("process")) {
-                    param += " AND " + key + " = " + value;
+                    switch (value.toString()) {
+                        case "after_receive":
+                            param += " AND (process > " + ProcessKit.getContractProcess("create") + ") ";
+                            break;
+                        default:
+                            param += " AND " + key + " = " + value;
+                    }
                     continue;
                 }
                 if (key.equals("keyWords")) {
                     param += (" AND ( identify ='" + value + "' OR name like \"%" + value + "%\" OR client_unit like \"%" + value + "%\")");
+                    continue;
+                }
+                if (key.equals("review_me")) {
+                    User user = ParaUtils.getCurrentUser(getRequest());
+                    param += " AND reviewer =" + user.get("id");
                     continue;
                 }
                 param += (" AND " + key + " like \"%" + value + "%\"");

@@ -3,14 +3,14 @@ package com.lims.controller;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
+import com.lims.config.CommonConfig;
 import com.lims.model.User;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 public class LoginController extends Controller {
     /**
@@ -24,7 +24,9 @@ public class LoginController extends Controller {
             if (userList.size() != 0) {
                 if (userList.get(0).get("password").equals(ParaUtils.EncoderByMd5(password))) {
                     getSession().setAttribute("user", userList.get(0).get("id"));
-                    renderJson(RenderUtils.CODE_SUCCESS);
+
+                    Boolean result = userList.get(0).set("lastLogin", ParaUtils.sdf.format(new Date())).update();
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                 } else {
                     renderJson(RenderUtils.CODE_ERROR);
                 }
@@ -87,5 +89,28 @@ public class LoginController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+    }
+
+    /**
+     * 退出登录
+     */
+    public void exitLogin() {
+        try {
+            User user = ParaUtils.getCurrentUser(getRequest());
+            getSession().removeAttribute("user");
+            renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    /**
+     * 获取所有登录信息
+     */
+    public void getLoginList() {
+        List<Object> userList = CommonConfig.userList;
+
+        renderJson(userList);
     }
 }

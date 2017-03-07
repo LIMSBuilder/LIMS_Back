@@ -1,5 +1,6 @@
 package com.lims.utils;
 
+import com.jfinal.handler.Handler;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
 import com.lims.model.Notice;
@@ -7,6 +8,8 @@ import com.lims.model.User;
 import com.sun.deploy.util.StringUtils;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +19,7 @@ import java.util.regex.Pattern;
 /**
  * 消息发送工具类
  */
-public class MessageSender {
+public class MessageSender extends Handler{
 
     /**
      * 新增消息方法
@@ -56,5 +59,10 @@ public class MessageSender {
             System.out.println(e.getStackTrace());
             return false;
         }
+    }
+
+    @Override
+    public void handle(String s, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, boolean[] booleans) {
+        System.out.println("执行了Handle");
     }
 }

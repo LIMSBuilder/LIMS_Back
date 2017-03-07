@@ -33,5 +33,6 @@
     <orderEntry type="library" name="jackson-annotations-2.2.1" level="project" />
     <orderEntry type="library" name="comet4j-tomcat7" level="project" />
     <orderEntry type="library" name="prettytime-3.2.5.Final" level="project" />
+    <orderEntry type="library" name="tomcat-websocket-api-7.0.47" level="project" />
   </component>
 </module>
