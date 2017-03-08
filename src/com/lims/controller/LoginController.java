@@ -110,7 +110,6 @@ public class LoginController extends Controller {
      */
     public void getLoginList() {
         List<Object> userList = CommonConfig.userList;
-
         renderJson(userList);
     }
 }
