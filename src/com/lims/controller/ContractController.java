@@ -365,4 +365,24 @@ public class ContractController extends Controller {
         temp.put("review_time", contractReview.get("review_time"));
         return temp;
     }
+
+
+    /**
+     * 获取当前共有多少条需审核记录
+     */
+    public void getWaitReviewCount() {
+        try {
+            List<Contract> contractList = Contract.contractDao.find("SELECT * FROM `db_contract` WHERE process=" + ProcessKit.getContractProcess("create"));
+            Map temp = new HashMap();
+            temp.put("count", contractList.size());
+            renderJson(temp);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    public void route() {
+        renderJsp("/index.jsp");
+    }
 }

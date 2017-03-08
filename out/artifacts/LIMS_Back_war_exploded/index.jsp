@@ -7,10 +7,27 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
-    <title>$Title$</title>
-    <script type="text/javascript" src="comet4j.js"></script>
-  </head>
-  <body>
-  </body>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <script type="text/javascript" src="ajax-pushlet-client.js"></script>
+    <script type="text/javascript">
+        PL._init();
+        //PL.setDebug(true);
+        PL.joinListen('/cuige/he');
+        function onData(event) {
+            console.log(event.get("mess"));
+//            alert(event.get("mess"));
+            // 离开
+            // PL.leave();
+        }
+    </script>
+</head>
+<body>
+<center>
+    <h1>
+        my first pushlet!
+    </h1>
+</center>
+</body>
 </html>

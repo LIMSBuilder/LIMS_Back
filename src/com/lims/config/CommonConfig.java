@@ -1,11 +1,13 @@
 package com.lims.config;
 
 import com.jfinal.config.*;
+import com.jfinal.ext.handler.UrlSkipHandler;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import com.lims.model.*;
 import com.lims.utils.MessageSender;
+import com.lims.utils.WebSocketHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,5 +81,7 @@ public class CommonConfig extends JFinalConfig {
     @Override
     public void configHandler(Handlers me) {
         //me.add(new MessageSender());
+        me.add(new UrlSkipHandler("^/websocket.ws", true));
+        me.add(new WebSocketHandler("^/websocket.ws"));
     }
 }

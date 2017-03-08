@@ -18,6 +18,7 @@ public class SessionController implements HttpSessionListener, HttpSessionAttrib
         String name = httpSessionBindingEvent.getName();
         if (name.equals("user")) {
             User user = User.userDao.findById(httpSessionBindingEvent.getValue());
+            //这里增加部门信息管理
             if (CommonConfig.userList.indexOf(user.toSimpleJson()) == -1) {
                 CommonConfig.userList.add(user.toSimpleJson());
             }
