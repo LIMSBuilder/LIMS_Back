@@ -1,5 +1,6 @@
 package com.lims.controller;
 
+import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
@@ -12,6 +13,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
+@Clear
 public class LoginController extends Controller {
     /**
      * 登录验证
@@ -111,5 +113,22 @@ public class LoginController extends Controller {
     public void getLoginList() {
         List<Object> userList = CommonConfig.userList;
         renderJson(userList);
+    }
+
+
+    /**
+     * 账号锁定之后恢复验证
+     */
+    public void checkPwd() {
+        try {
+            User user = ParaUtils.getCurrentUser(getRequest());
+            if (user != null) {
+                if (user.get("password").equals(ParaUtils.EncoderByMd5(getPara("password")))) {
+                    renderJson(RenderUtils.CODE_SUCCESS);
+                } else renderJson(RenderUtils.CODE_ERROR);
+            } else renderJson(RenderUtils.CODE_EMPTY);
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 }
