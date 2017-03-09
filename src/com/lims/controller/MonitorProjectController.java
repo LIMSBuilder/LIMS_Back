@@ -2,6 +2,7 @@ package com.lims.controller;
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Page;
+import com.lims.model.Department;
 import com.lims.model.Element;
 import com.lims.model.Frequency;
 import com.lims.model.MonitorProject;
@@ -70,6 +71,8 @@ public class MonitorProjectController extends Controller {
         project.put("desp", monitorProject.get("desp"));
         project.put("department_id", monitorProject.get("department_id"));
         project.put("element_id", monitorProject.get("element_id"));
+        project.put("department", monitorProject.get("department_id") == null ? null : Department.departmentdao.findById(monitorProject.get("department_id")));
+        project.put("element", monitorProject.get("element_id") == null ? null : Element.elementDao.findById(monitorProject.get("element_id")));
         return project;
     }
 

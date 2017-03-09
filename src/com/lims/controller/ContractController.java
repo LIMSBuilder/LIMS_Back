@@ -179,10 +179,10 @@ public class ContractController extends Controller {
         for (String key : entry._getAttrNames()) {
             switch (key) {
                 case "trustee":
-                    temp.put("trustee", User.userDao.findById(entry.get(key)).toSimpleJson());
+                    temp.put("trustee", entry.get(key) == null ? "" : User.userDao.findById(entry.get(key)).toSimpleJson());
                     break;
                 case "type":
-                    temp.put("type", Type.typeDao.findById(entry.get(key)));
+                    temp.put("type", entry.get(key) == null ? "" : Type.typeDao.findById(entry.get(key)));
                     break;
                 default:
                     temp.put(key, entry.get(key));
