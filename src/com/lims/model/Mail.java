@@ -25,4 +25,13 @@ public class Mail extends Model<Mail> {
         temp.put("path", mailFileList);
         return temp;
     }
+
+    public Map getSimpleMapInfo() {
+        Map temp = new HashMap();
+        temp.put("id", get("id"));
+        temp.put("title", get("title"));
+        temp.put("sender", User.userDao.findById(get("send_id")).toSimpleJson());
+        temp.put("create_desp", ParaUtils.getPrettyTime(get("create_time").toString()));
+        return temp;
+    }
 }
