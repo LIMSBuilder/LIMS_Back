@@ -5,6 +5,7 @@ import com.jfinal.ext.handler.UrlSkipHandler;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
+import com.lims.interceptor.LoginInterceptor;
 import com.lims.model.*;
 import com.lims.utils.MessageSender;
 import com.lims.utils.WebSocketHandler;
@@ -76,6 +77,7 @@ public class CommonConfig extends JFinalConfig {
     @Override
     public void configInterceptor(Interceptors me) {
 //        me.add(new AdminIntercept());
+        me.add(new LoginInterceptor());
     }
 
     @Override

@@ -329,4 +329,21 @@ public class MailController extends Controller {
             renderError(500);
         }
     }
+
+
+    public void getReceiverList() {
+        try {
+            int id = getParaToInt("id");
+            List<Receiver> receiverList = Receiver.receiverDao.find("SELECT * FROM `db_receiver` WHERE mail_id=" + id);
+            List temp = new ArrayList();
+            for (Receiver receiver : receiverList) {
+                temp.add(User.userDao.findById(receiver.get("receiver_id")).toSimpleJson());
+            }
+            Map result = new HashMap();
+            result.put("results", temp);
+            renderJson(result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }
