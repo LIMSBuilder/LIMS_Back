@@ -143,6 +143,30 @@ public class UserController extends Controller {
     }
 
 
+    /**
+     * 删除全部选中用户操作
+     */
+    public void deleteAll() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Integer[] selected = getParaValuesToInt("selected[]");
+                    Boolean result = true;
+                    for (int id : selected) {
+                        result = result && User.userDao.deleteById(id);
+                        if (!result) break;
+                    }
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
     public void change() {
         try {
             int id = getParaToInt("id");
