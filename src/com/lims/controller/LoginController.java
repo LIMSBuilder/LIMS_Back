@@ -2,6 +2,7 @@ package com.lims.controller;
 
 import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.LogKit;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
 import com.lims.config.CommonConfig;
@@ -20,6 +21,7 @@ public class LoginController extends Controller {
      */
     public void check() {
         try {
+            LogKit.info("测试log功能看看实现");
             String username = getPara("username");
             String password = getPara("password");
             List<User> userList = User.userDao.find("SELECT * FROM `db_user` WHERE nick='" + username + "'");

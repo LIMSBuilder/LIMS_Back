@@ -5,12 +5,15 @@ import com.jfinal.ext.handler.UrlSkipHandler;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
+import com.lims.interceptor.ExceptionIntoLogInterceptor;
 import com.lims.interceptor.LoginInterceptor;
 import com.lims.model.*;
 import com.lims.utils.MessageSender;
 import com.lims.utils.WebSocketHandler;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +25,8 @@ public class CommonConfig extends JFinalConfig {
 
     @Override
     public void configConstant(Constants me) {
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        System.setProperty("log_date", sdf.format(new Date()));
         //设置开发模式,如果设置为true,控制台会输出每次请求的Controller action和参数信息
         me.setDevMode(true);
         //设置视图模型
@@ -70,6 +74,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_receiver", Receiver.class);
         arp.addMapping("db_default", Default.class);
         arp.addMapping("db_contract_review", ContractReview.class);
+        arp.addMapping("db_task", Task.class);
         //addMap增加数据库树形
 
     }
@@ -78,6 +83,7 @@ public class CommonConfig extends JFinalConfig {
     public void configInterceptor(Interceptors me) {
 //        me.add(new AdminIntercept());
         me.add(new LoginInterceptor());
+        me.addGlobalActionInterceptor(new ExceptionIntoLogInterceptor());
     }
 
     @Override
@@ -85,5 +91,6 @@ public class CommonConfig extends JFinalConfig {
         //me.add(new MessageSender());
         me.add(new UrlSkipHandler("^/websocket.ws", true));
         me.add(new WebSocketHandler("^/websocket.ws"));
+
     }
 }
