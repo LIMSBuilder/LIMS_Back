@@ -26,7 +26,7 @@ public class CommonRouter extends Routes {
         add("/api/mail", MailController.class);
 //        add("/api/contract_item", ContractitemController.class);
 //        add("/api/itemproject", ItemProjectController.class);
-
+        add("/api/task", TaskController.class);
         add("/api/login", LoginController.class);
         add("/api/log", LogController.class);
     }
