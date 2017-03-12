@@ -199,7 +199,7 @@ public class ContractController extends Controller {
             Contract contract = Contract.contractDao.findById(id);
             if (contract != null) {
                 renderJson(contract.getItems());
-            } else renderJson(RenderUtils.CODE_SUCCESS);
+            } else renderJson(RenderUtils.CODE_EMPTY);
         } catch (Exception e) {
             renderError(500);
         }
