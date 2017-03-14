@@ -3,6 +3,7 @@ package com.lims.controller;
 import com.jfinal.core.Controller;
 import com.lims.model.Contract;
 import com.lims.model.ContractReview;
+import com.lims.model.Task;
 import com.lims.model.User;
 
 import java.util.ArrayList;
@@ -50,6 +51,32 @@ public class LogController extends Controller {
                     temp.add(reviewProcess);
                 }
 
+                renderJson(temp);
+
+            } else {
+                renderNull();
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void taskLog() {
+        try {
+            int id = getParaToInt("id");
+            Task task = Task.taskDao.findById(id);
+            List temp = new ArrayList();
+            if (task != null) {
+                //创建任务
+                Map process = new HashMap();
+                process.put("log_time", task.get("create_time"));
+                User user = User.userDao.findById(task.get("creater"));
+                if (user != null) {
+                    process.put("log_msg", user.get("name") + "【创建】任务书");
+                } else {
+                    process.put("log_msg", "某人创建了任务书");
+                }
+                temp.add(process);
                 renderJson(temp);
 
             } else {

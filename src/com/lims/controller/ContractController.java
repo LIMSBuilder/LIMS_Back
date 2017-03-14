@@ -3,6 +3,7 @@ package com.lims.controller;
 import com.jfinal.core.Controller;
 import com.jfinal.json.Jackson;
 import com.jfinal.kit.JsonKit;
+import com.jfinal.kit.LogKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
@@ -199,7 +200,7 @@ public class ContractController extends Controller {
             Contract contract = Contract.contractDao.findById(id);
             if (contract != null) {
                 renderJson(contract.getItems());
-            } else renderJson(RenderUtils.CODE_SUCCESS);
+            } else renderJson(RenderUtils.CODE_EMPTY);
         } catch (Exception e) {
             renderError(500);
         }
