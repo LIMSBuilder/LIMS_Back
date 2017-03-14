@@ -21,9 +21,6 @@ public class ProcessKit {
     //这是存放任务流程的控制参数
     public static Map TaskMap = new HashMap() {{
         this.put("create", 1);//创建合同完成
-        this.put("review", 2);//合同审核通过
-        this.put("change", -1);//审核未拒绝，待修改
-        this.put("stop", -2);//合同中止
     }};
 
     public static int getContractProcess(String processName) {
