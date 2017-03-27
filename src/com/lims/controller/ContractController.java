@@ -308,7 +308,6 @@ public class ContractController extends Controller {
                             result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("process", ProcessKit.getContractProcess("review")).set("review_id",contractReview.get("id")).update();
 
                         } else {
-                            //拒绝
                             result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("process", ProcessKit.getContractProcess("change")).set("review_id",contractReview.get("id")).update();
                         }
                         return result;
