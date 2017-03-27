@@ -285,38 +285,40 @@ public class ContractController extends Controller {
 
     public void review() {
         try {
-            if (getParaToInt("result") == 1) {
-                //审核通过
-                int id = getParaToInt("id");
-                Contract contract = Contract.contractDao.findById(id);
-                if (contract != null) {
-                    User user = ParaUtils.getCurrentUser(getRequest());
-                    Boolean result = contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("process", ProcessKit.getContractProcess("review")).update();
-                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-                } else {
-                    renderJson(RenderUtils.CODE_EMPTY);
-                }
-            } else {
-                //审核拒绝
-                final Boolean result = Db.tx(new IAtom() {
-                    @Override
-                    public boolean run() throws SQLException {
-                        int id = getParaToInt("id");
-                        Contract contract = Contract.contractDao.findById(id);
-                        if (contract != null) {
-                            User user = ParaUtils.getCurrentUser(getRequest());
-                            ContractReview contractReview = new ContractReview();
-                            Boolean result = true;
-                            result = result && contractReview.set("contract_id", contract.get("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).save();
-                            if (!result) return false;
-                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("process", ProcessKit.getContractProcess("change")).update();
-                            return result;
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+                    int same = getParaToInt("same");
+                    int contract1 = getParaToInt("contract");
+                    int guest = getParaToInt("guest");
+                    int pack = getParaToInt("package");
+                    int company = getParaToInt("company");
+                    int money = getParaToInt("money");
+                    int time = getParaToInt("time");
+                    Contract contract = Contract.contractDao.findById(id);
+                    if (contract != null) {
+                        User user = ParaUtils.getCurrentUser(getRequest());
+                        ContractReview contractReview = new ContractReview();
+                        Boolean result = true;
+                        result = result && contractReview.set("contract_id", contract.get("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("same", same).set("contract", contract1).set("guest", guest).set("package", pack).set("company", company).set("money", money).set("time", time).save();
+                        if (!result) return false;
+                        if (getParaToInt("result") == 1) {
+
+                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("process", ProcessKit.getContractProcess("review")).set("review_id",contractReview.get("id")).update();
+
+                        } else {
+                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("process", ProcessKit.getContractProcess("change")).set("review_id",contractReview.get("id")).update();
                         }
+                        return result;
+                    } else {
                         return false;
                     }
-                });
-                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-            }
+
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
         } catch (Exception e) {
             renderError(500);
         }
