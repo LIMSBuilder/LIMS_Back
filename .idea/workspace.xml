@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController$2.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController$2.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -60,8 +54,8 @@
       <file leaf-file-name="ContractController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="309" column="32" lean-forward="false" selection-start-line="309" selection-start-column="32" selection-end-line="309" selection-end-column="32" />
+            <state relative-caret-position="-411">
+              <caret line="334" column="35" lean-forward="true" selection-start-line="334" selection-start-column="35" selection-end-line="334" selection-end-column="35" />
               <folding>
                 <element signature="method#toJson#0;class#ContractController#0" expanded="false" />
               </folding>
@@ -1029,7 +1023,7 @@
       <workItem from="1490489191532" duration="4243000" />
       <workItem from="1490536093537" duration="5000" />
       <workItem from="1490577731147" duration="46000" />
-      <workItem from="1490577897376" duration="213000" />
+      <workItem from="1490577897376" duration="1275000" />
     </task>
     <servers />
   </component>
@@ -1066,7 +1060,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="161628000" />
+    <option name="totallyTimeSpent" value="162690000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -1512,8 +1506,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="309" column="32" lean-forward="false" selection-start-line="309" selection-start-column="32" selection-end-line="309" selection-end-column="32" />
+        <state relative-caret-position="-411">
+          <caret line="334" column="35" lean-forward="true" selection-start-line="334" selection-start-column="35" selection-end-line="334" selection-end-column="35" />
           <folding>
             <element signature="method#toJson#0;class#ContractController#0" expanded="false" />
           </folding>
