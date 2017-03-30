@@ -33,7 +33,8 @@ public class LogController extends Controller {
                 }
                 temp.add(process);
 
-                if (contract.get("review_id") != null) {
+                if (contract.get("review_id") != null && contract.get("process")== -1)
+                {
                     //若review_id 不为null，即至少被审核拒绝过一次了
                     List<ContractReview> contractReviewList = ContractReview.contractReviewDao.find("SELECT * FROM `db_contract_review` WHERE contract_id=" + contract.get("id"));
                     for (ContractReview contractReview : contractReviewList) {
