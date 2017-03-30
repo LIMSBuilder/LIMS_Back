@@ -29,7 +29,7 @@ public class Task extends Model<Task> {
                 }
                 result.put(t, item.get(t));
             }
-            List<ItemProject> projectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item.get("id"));
+         /**   List<ItemProject> projectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item.get("id"));
             List<Map> mapList = new ArrayList<>();
             for (ItemProject project : projectList) {
                 Map t = new HashMap();
@@ -38,10 +38,12 @@ public class Task extends Model<Task> {
                 t.put("item_id", project.get("item_id"));
                 mapList.add(t);
             }
-            result.put("project", mapList);
+            result.put("project", mapList);**/
             maps.add(result);
         }
         temp.put("items", maps);
         return temp;
     }
+
+
 }
