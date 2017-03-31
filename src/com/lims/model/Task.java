@@ -45,5 +45,4 @@ public class Task extends Model<Task> {
         return temp;
     }
 
-
 }
