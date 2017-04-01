@@ -103,7 +103,7 @@ public class LogController extends Controller {
     }
 
 
-    public void TaskLog() {
+    public void taskLog() {
         try {
             int id = getParaToInt("id");
              Task  task =Task.taskDao.findById(id);

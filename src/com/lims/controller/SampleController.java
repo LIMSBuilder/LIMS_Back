@@ -1,15 +1,16 @@
 package com.lims.controller;
 
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
-import com.lims.model.Encode;
-import com.lims.model.Sample;
-import com.lims.model.Task;
-import com.lims.model.Type;
+import com.lims.model.*;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
+import com.lims.utils.RenderUtils;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import java.util.Map;
  * Created by chenyangyang on 2017/3/29.
  */
 public class SampleController extends Controller {
-    /**  public void list() {
+      public void list() {
      try {
      int rowCount = getParaToInt("rowCount");
      int currentPage = getParaToInt("currentPage");
@@ -99,7 +100,7 @@ public class SampleController extends Controller {
 
      }
      return temp;
-     }**/
+     }
 
 
     /**
@@ -109,16 +110,18 @@ public class SampleController extends Controller {
      * self_identify:自送样  scene_identify:现场采样
      **/
 
-    public String createIdentify(int id) {
+    public static String createIdentify(int id, int flag, String prefix) {
         try {
             String identify = "";
             Task task = Task.taskDao.findById(id);
-            Type type = task.get("type");
-            String identifier = type.get("identifier");
-            identify += identifier.toUpperCase();//将数据库表中的type的identifer小写转大写
-
+            if (flag == 0) {
+                Type type = task.get("type");
+                String identifier = type.get("identifier");
+                identify += identifier.toUpperCase();//将数据库表中的type的identifer小写转大写
+            } else {
+                identify = prefix.toUpperCase();
+            }
             int sample_type = task.get("sample_type");
-
             Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
             if (encode == null) {
 //            数据库中没有第一条记录，则创建它
@@ -151,14 +154,41 @@ public class SampleController extends Controller {
 
     }
 
-    public  void countProcess(){
+    public void apply() {
         try {
-            Map result =new HashMap();
-
-        }catch (Exception e)
-        {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Boolean result = true;
+                    int task_id = getParaToInt("task_id");
+                    int item_id = getParaToInt("item_id");
+                    int prefix = getParaToInt("prefix");
+                    String prefix_text = getPara("prefix_text");
+                    prefix_text = prefix_text.toUpperCase();
+                    int count = getParaToInt("count");
+                    for (int i = 0; i > count; i++) {
+                        Sample sample = new Sample();
+                        result = result && sample.set("identify", createIdentify(task_id, prefix, prefix_text)).save();
+                    }
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
             renderError(500);
         }
     }
+/**
+ * 样品申请数量
+ * **/
+//    public  void countProcess(){
+//        try {
+//            Map result =new HashMap();
+//
+//        }catch (Exception e)
+//        {
+//            renderError(500);
+//        }
+//    }
 
 }

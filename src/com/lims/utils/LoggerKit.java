@@ -1,9 +1,6 @@
 package com.lims.utils;
 
-import com.lims.model.Contract;
-import com.lims.model.Log;
-import com.lims.model.Task;
-import com.lims.model.User;
+import com.lims.model.*;
 
 import java.util.Date;
 
@@ -35,6 +32,25 @@ public class LoggerKit {
             Boolean result = log.set("task_id", taskId).set("msg", msg).set("user_id", userId).set("create_time", ParaUtils.sdf.format(new Date())).save();
             return result;
         } else return false;
+    }
+
+    public static boolean addItemLog(int ItemId, String msg, int userId) {
+        ItemProject itemProject = ItemProject.itemprojectDao.findById(ItemId);
+        if (itemProject != null) {
+            Log log = new Log();
+            Boolean result = log.set("item_id", ItemId).set("msg", msg).set("user_id", userId).set("create_time", ParaUtils.sdf.format(new Date())).save();
+            return  result;
+        } else return false;
+    }
+
+    public static boolean addSampleLog(int sampleId,String msg, int userId){
+        Sample sample =Sample.sampleDao.findById(sampleId);
+        if(sample != null){
+            Log log = new Log();
+            Boolean result = log.set("sample_id",sampleId ).set("msg", msg).set("user_id", userId).set("create_time", ParaUtils.sdf.format(new Date())).save();
+            return  result;
+        }
+        else  return  false;
     }
 }
 
