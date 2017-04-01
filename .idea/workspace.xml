@@ -2,10 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/doc/test.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/doc/contract.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/doc/delivery.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/doc/qualitry.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/doc/record_review.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/doc/report_review.DOC" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/doc/sample.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/doc/task.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/doc/test.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/upload/2014112410316996.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/doc/test.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/doc/test.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/contract.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/delivery.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/qualitry.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/record_review.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/report_review.DOC" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/sample.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/task.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/test.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/lib/license.lic" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/lib/poserver_log.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/template/create_contract.jsp" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/template/create_contract.jsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/LogController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/LogController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/SampleController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/SampleController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/utils/LoggerKit.java" afterPath="$PROJECT_DIR$/src/com/lims/utils/LoggerKit.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/web.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/index.jsp" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/index.jsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/web/WEB-INF/web.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/index.jsp" afterPath="$PROJECT_DIR$/web/index.jsp" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -103,8 +131,8 @@
       <file leaf-file-name="TaskController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1395">
-              <caret line="421" column="34" lean-forward="false" selection-start-line="421" selection-start-column="34" selection-end-line="421" selection-end-column="34" />
+            <state relative-caret-position="345">
+              <caret line="350" column="33" lean-forward="false" selection-start-line="350" selection-start-column="33" selection-end-line="350" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -1208,7 +1236,7 @@
       <workItem from="1490937548771" duration="149000" />
       <workItem from="1490937750991" duration="139000" />
       <workItem from="1490938082025" duration="14260000" />
-      <workItem from="1491006866113" duration="884000" />
+      <workItem from="1491006866113" duration="992000" />
     </task>
     <servers />
   </component>
@@ -1245,11 +1273,11 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="264575000" />
+    <option name="totallyTimeSpent" value="264683000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1263,7 +1291,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3759036" sideWeight="0.49713877" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3759036" sideWeight="0.49713877" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891566" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1739,8 +1767,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1395">
-          <caret line="421" column="34" lean-forward="false" selection-start-line="421" selection-start-column="34" selection-end-line="421" selection-end-column="34" />
+        <state relative-caret-position="345">
+          <caret line="350" column="33" lean-forward="false" selection-start-line="350" selection-start-column="33" selection-end-line="350" selection-end-column="33" />
           <folding />
         </state>
       </provider>

@@ -540,4 +540,20 @@ public class ContractController extends Controller {
     public void route() {
         renderJsp("/index.jsp");
     }
+
+    /**
+     * 打印合同
+     */
+    public void createContract() {
+        try {
+            String id = getPara("id");
+            Contract contract = Contract.contractDao.findFirst("SELECT * FROM `db_contract` WHERE id=" + id);
+            if (contract != null) {
+                getRequest().setAttribute("contract", contract);
+                render("/template/create_contract.jsp");
+            } else renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }
