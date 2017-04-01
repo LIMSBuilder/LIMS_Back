@@ -6,6 +6,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.*;
+import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
@@ -75,6 +76,7 @@ public class TaskController extends Controller {
                         }
                         if (!result) break;
                     }
+                    LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                     return result;
                 }
             });
@@ -128,23 +130,23 @@ public class TaskController extends Controller {
         }
     }
 
-    public String createIdentify() {
-        String identify = "";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-        identify = sdf.format(new Date());
-        Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
-        if (encode == null) {
-            //数据库中没有第一条记录，则创建它
-            Encode entry = new Encode();
-            entry.set("contract_identify", 0).save();
-            identify += String.format("%04d", 1);
-        } else {
-            int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
-            encode.set("contract_identify", identify_Encode).update();
-            identify += String.format("%04d", identify_Encode);
-        }
-        return identify;
-    }
+//    public String createIdentify() {
+//        String identify = "";
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+//        identify = sdf.format(new Date());
+//        Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
+//        if (encode == null) {
+//            数据库中没有第一条记录，则创建它
+//            Encode entry = new Encode();
+//            entry.set("contract_identify", 0).save();
+//            identify += String.format("%04d", 1);
+//        } else {
+//            int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
+//            encode.set("contract_identify", identify_Encode).update();
+//            identify += String.format("%04d", identify_Encode);
+//        }
+//        return identify;
+//    }
 
 
     public void list() {
@@ -167,7 +169,14 @@ public class TaskController extends Controller {
                             param += " AND sample_type=1 AND process=" + ProcessKit.getTaskProcess("create") + " ";
                             break;
                         case "after_dispath":
-                            param += " AND sample_type=1 AND process!=" + ProcessKit.getTaskProcess("create") + " ";
+                          //  param += " AND sample_type=1 AND process!=" + ProcessKit.getTaskProcess("create") + " ";
+                            param += " AND sample_type=1 AND process != " + ProcessKit.getTaskProcess("create") + " AND process !=" + ProcessKit.getTaskProcess("stop") + " ";
+                            break;
+                        case "total_dispatch":
+                            param += "AND sample_type=1 AND process !="+ProcessKit.getTaskProcess("stop");
+                            break;
+                        case "apply_sample":
+                            param += " AND sample_type=1 AND process=" + ProcessKit.getTaskProcess("dispatch") + " ";
                             break;
                         default:
                             param += " AND " + key + " = " + value;
@@ -214,16 +223,24 @@ public class TaskController extends Controller {
 
     public Map toJsonSingle(Task entry) {
         Map temp = new HashMap();
-        for (String key : entry._getAttrNames()) {
-            switch (key) {
-                case "type":
-                    temp.put("type", Type.typeDao.findById(entry.get(key)));
-                    break;
-                default:
-                    temp.put(key, entry.get(key));
-            }
+//        for (String key : entry._getAttrNames()) {
+//            switch (key) {
+//                case "type":
+//                    temp.put("type", Type.typeDao.findById(entry.get(key)));
+//                    break;
+//                default:
+//                    temp.put(key, entry.get(key));
+//            }
+//
+//        }
+        temp.put("id", entry.get("id"));
+        temp.put("name", entry.get("name"));
+        temp.put("create_time", entry.get("create_time"));
+        temp.put("client_unit", entry.get("client_unit"));
+        temp.put("identify", entry.get("identify"));
+        temp.put("process", entry.get("process"));
+        temp.put("sample_type", entry.get("sample_type"));
 
-        }
         return temp;
     }
 
@@ -276,6 +293,7 @@ public class TaskController extends Controller {
                     if (!result) return false;
                     Task task = Task.taskDao.findById(task_id);
                     result = result && task.set("process", ProcessKit.TaskMap.get("dispatch")).update();
+                    LoggerKit.addTaskLog(task.getInt("id"), "派遣任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                     return result;
                 }
             });
@@ -308,14 +326,13 @@ public class TaskController extends Controller {
             renderError(500);
         }
     }
-    public void countTotal()
-    {
+
+    public void countTotal() {
         try {
-            Map  result=new HashMap();
-            result.put("total",Task.taskDao.find("select * from `db_task`").size());
+            Map result = new HashMap();
+            result.put("total", Task.taskDao.find("select * from `db_task`").size());
             renderJson(result);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             renderError(500);
         }
     }
@@ -342,5 +359,110 @@ public class TaskController extends Controller {
             renderError(500);
         }
     }
+
+    public void taskDetails()
+
+    {
+        try {
+            int id = getParaToInt("id");
+            Task task = Task.taskDao.findById(id);
+            if (task != null) {
+                renderJson(toTaskDetailJSON(task));
+            } else {
+                renderNull();
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public Map toTaskDetailJSON(Task entry) {
+        Map temp = new HashMap();
+        for (String key : entry._getAttrNames()) {
+            switch (key) {
+                case "trustee":
+                    temp.put("trustee", entry.get(key) == null ? "" : User.userDao.findById(entry.get(key)).toSimpleJson());
+                    break;
+                case "type":
+                    temp.put("type", entry.get(key) == null ? "" : Type.typeDao.findById(entry.get(key)));
+                    break;
+                default:
+                    temp.put(key, entry.get(key));
+            }
+        }
+        return temp;
+    }
+
+    public void stopTask() {
+        try {
+            boolean result = Db.tx(new IAtom() {
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+//                    int Result = getParaToInt("contract_result");
+                    Task task = Task.taskDao.findById(id);
+                    Boolean result = true;
+//                    Boolean contractResult = true;
+                    if (task != null) {
+                        result = task.set("process", -2).update();
+//                        Contract contract = Contract.contractDao.findFirst("select * from `db_contrat` where  id=" + task.get("contract_id"));
+//                        if (contract != null) {
+//                            switch (Result) {
+//                                case 0:
+//                                    contractResult = contract.set("process", ProcessKit.ContractMap.get("review")).update();
+//                                    break;
+//                                case 1:
+//                                    contractResult = contract.set("process", ProcessKit.ContractMap.get("stop")).update();
+//                                    break;
+//                                case 2:
+//                                    break;
+//                            }
+//                        }
+                    }
+                    LoggerKit.addTaskLog(task.getInt("id"), "中止了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void deleteTask() {
+        try {
+            int id = getParaToInt("id");
+            boolean result = Task.taskDao.deleteById(id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 任务编号生成
+     * <p>
+     * 年份+ - + 三位流水编号，如 2017-001  2017-002  以此类推
+     * <p>
+     * 需要考虑：年份更新需要自动更新当前年份，且将流水号恢复初始值1号
+     **/
+    public String createIdentify() {
+        String identify = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        identify = sdf.format(new Date());
+        Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
+        if (encode == null) {
+//            数据库中没有第一条记录，则创建它
+            Encode entry = new Encode();
+            entry.set("contract_identify", 1).set("self_identify", 0).set("scene_identify", 0).save();
+            identify = identify + "-" + String.format("%03d", 1);
+        } else {
+            int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
+            encode.set("contract_identify", identify_Encode).update();
+            identify = identify + "-" + String.format("%03d", identify_Encode);
+        }
+        return identify;
+    }
+
 
 }

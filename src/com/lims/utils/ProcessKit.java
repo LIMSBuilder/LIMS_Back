@@ -20,6 +20,7 @@ public class ProcessKit {
 
     //这是存放任务流程的控制参数
     public static Map TaskMap = new HashMap() {{
+        this.put("stop",-2);//已中止
         this.put("create", 1);//创建合同完成,未派遣
         this.put("dispatch", 2);//任务派遣完成
         //this.put("sample",3);

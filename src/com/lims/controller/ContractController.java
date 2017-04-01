@@ -4,11 +4,14 @@ import com.jfinal.core.Controller;
 import com.jfinal.json.Jackson;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.kit.LogKit;
+import com.jfinal.kit.Prop;
+import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.*;
 
+import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
@@ -70,7 +73,7 @@ public class ContractController extends Controller {
                             }
                         }
 
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", point).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).save();
+                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", point).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).set("frequency", ((Map) (temp.get("frequency"))).get("id")).save();
                         if (!result) break;
                         List<Map> projectList = (ArrayList) temp.get("project");
                         if (projectList != null) {
@@ -84,6 +87,8 @@ public class ContractController extends Controller {
                         }
                         if (!result) break;
                     }
+                    //{{user}}于{{create_time}}创建了合同
+                    LoggerKit.addContractLog(contract.getInt("id"), "创建了合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                     return result;
                 }
             });
@@ -93,20 +98,27 @@ public class ContractController extends Controller {
         }
     }
 
+    /**
+     * 合同编号生成
+     * <p>
+     * 年份+ - + 三位流水编号，如 2017-001  2017-002  以此类推
+     * <p>
+     * 需要考虑：年份更新需要自动更新当前年份，且将流水号恢复初始值1号
+     **/
     public String createIdentify() {
         String identify = "";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
         identify = sdf.format(new Date());
         Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
         if (encode == null) {
-            //数据库中没有第一条记录，则创建它
+//            数据库中没有第一条记录，则创建它
             Encode entry = new Encode();
-            entry.set("contract_identify", 0).save();
-            identify += String.format("%04d", 1);
+            entry.set("contract_identify", 1).set("self_identify", 0).set("scene_identify", 0).save();
+            identify = identify + "-" + String.format("%03d", 1);
         } else {
             int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
             encode.set("contract_identify", identify_Encode).update();
-            identify += String.format("%04d", identify_Encode);
+            identify = identify + "-" + String.format("%03d", identify_Encode);
         }
         return identify;
     }
@@ -129,7 +141,11 @@ public class ContractController extends Controller {
                 if (key.equals("process")) { //process=wait_change
                     switch (value.toString()) {
                         case "after_receive":
-                            param += " AND (process > " + ProcessKit.getContractProcess("create") + ") ";
+                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") ";
+                            break;
+                        case "review":
+                            param += "AND process != " + ProcessKit.getContractProcess("stop") + " AND process !=" + ProcessKit.getContractProcess("finish") + " ";
+
                             break;
                         default:
                             param += " AND " + key + " = " + value;
@@ -313,10 +329,11 @@ public class ContractController extends Controller {
                         result = result && contractReview.set("contract_id", contract.get("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("same", same).set("contract", contract1).set("guest", guest).set("package", pack).set("company", company).set("money", money).set("time", time).set("result", result1).save();
                         if (!result) return false;
                         if (getParaToInt("result") == 1) {
-
+                            LoggerKit.addContractLog(contract.getInt("id"), "审核通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                             result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("process", ProcessKit.getContractProcess("review")).set("review_id", contractReview.get("id")).update();
 
                         } else {
+                            LoggerKit.addContractLog(contract.getInt("id"), "审核拒绝", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                             result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("process", ProcessKit.getContractProcess("change")).set("review_id", contractReview.get("id")).update();
                         }
                         return result;
@@ -477,6 +494,48 @@ public class ContractController extends Controller {
             renderError(500);
         }
     }
+
+    public void deleteContract() {
+        try {
+            int id = getParaToInt("id");
+            Boolean result = Contract.contractDao.deleteById(id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void stopContract() {
+        try {
+
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+                    Contract contract = Contract.contractDao.findById(id);
+                    boolean result = true;
+                    boolean taskresult = true;
+                    if (contract != null) {
+                        result = contract.set("process", -2).update();
+                        Task task = Task.taskDao.findFirst("select * from `db_task` where contract_id =" + contract.get("id"));
+                        if (task != null) {
+                            taskresult = task.set("process", ProcessKit.TaskMap.get("stop")).update();
+                        }
+                    }
+                    LoggerKit.addContractLog(contract.getInt("id"), "中止了合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    return result && taskresult;
+                }
+            });
+
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (
+                Exception e)
+
+        {
+            renderError(500);
+        }
+    }
+
 
     public void route() {
         renderJsp("/index.jsp");
