@@ -1,70 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$3.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/ItemJoin.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/Sample.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/SampleProject.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/upload/蘑菇街美丽说2018届实习生招聘.docx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$3.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/ItemJoin.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/Sample.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/SampleProject.class" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.log" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/controller/SampleController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/ItemJoin.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/Sample.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/SampleProject.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonConfig.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonRouter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/ContractController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/LogController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TypeController$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TypeController.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/Contract.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/ItemProject.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/MonitorProject.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/Task.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/ProcessKit$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/ProcessKit$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/utils/ProcessKit.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonRouter.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonRouter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController$1.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController$2.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/ContractController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/LogController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/LogController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$1.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$2.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TypeController$1.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TypeController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TypeController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TypeController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/Contract.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/Contract.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/ItemProject.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/ItemProject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/MonitorProject.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/MonitorProject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/Task.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/Task.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/ProcessKit$2.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/ProcessKit$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/ProcessKit.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/utils/ProcessKit.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" afterPath="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" afterPath="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/LogController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/LogController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/TypeController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/TypeController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Contract.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Contract.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" afterPath="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/MonitorProject.java" afterPath="$PROJECT_DIR$/src/com/lims/model/MonitorProject.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Task.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Task.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" afterPath="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" />
-    </list>
+    <list default="true" id="599990a2-94c4-42d1-b92e-42255bf7de68" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -1081,7 +1018,7 @@
       <workItem from="1490363190618" duration="6138000" />
       <workItem from="1490671196503" duration="556000" />
       <workItem from="1490674347441" duration="17000" />
-      <workItem from="1490674391120" duration="5672000" />
+      <workItem from="1490674391120" duration="5854000" />
     </task>
     <servers />
   </component>
@@ -1118,7 +1055,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="168093000" />
+    <option name="totallyTimeSpent" value="168275000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
