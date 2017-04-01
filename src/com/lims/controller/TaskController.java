@@ -178,6 +178,7 @@ public class TaskController extends Controller {
                         case "apply_sample":
                             param += " AND sample_type=1 AND process=" + ProcessKit.getTaskProcess("dispatch") + " ";
                             break;
+
                         default:
                             param += " AND " + key + " = " + value;
                     }
@@ -463,6 +464,7 @@ public class TaskController extends Controller {
         }
         return identify;
     }
+
 
 
 }

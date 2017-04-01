@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.*;
+import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
@@ -21,87 +22,6 @@ import java.util.Map;
  * Created by chenyangyang on 2017/3/29.
  */
 public class SampleController extends Controller {
-      public void list() {
-     try {
-     int rowCount = getParaToInt("rowCount");
-     int currentPage = getParaToInt("currentPage");
-     String condition_temp = getPara("condition");
-     Map condition = ParaUtils.getSplitCondition(condition_temp);
-     if (rowCount == 0) {
-     rowCount = ParaUtils.getRowCount();
-     }
-     String param = " WHERE 1=1 ";
-     Object[] keys = condition.keySet().toArray();
-     for (int i = 0; i < keys.length; i++) {
-     String key = (String) keys[i];
-     Object value = condition.get(key);
-     if (key.equals("process")) {
-     switch (value.toString()) {
-     case "before_dispath":
-     param += " AND sample_type=1 AND process=" + ProcessKit.getTaskProcess("create") + " ";
-     break;
-     case "after_dispath":
-     param += " AND sample_type=1 AND process!=" + ProcessKit.getTaskProcess("create") + " ";
-     break;
-     case "apply_sample":
-     param +=" AND category=1 ";
-     default:
-     param += " AND " + key + " = " + value;
-     }
-     continue;
-     }
-     if (key.equals("keyWords")) {
-     param += (" AND ( identify ='" + value + "' OR name like \"%" + value + "%\" OR client_unit like \"%" + value + "%\")");
-     continue;
-     }
-     param += (" AND " + key + " like \"%" + value + "%\"");
-     }
-     Page<Sample> samplePage  = Sample.sampleDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_sample` " + param + " ORDER BY create_time DESC");
-     List<Sample> sampleList = samplePage.getList();
-
-
-     Map results = toJson(sampleList);
-     results.put("currentPage", currentPage);
-     results.put("totalPage", samplePage.getTotalPage());
-     results.put("rowCount", rowCount);
-     results.put("condition", condition_temp);
-     renderJson(results);
-
-     } catch (Exception e) {
-     renderError(500);
-     }
-     }
-
-     public Map toJson(List<Sample> entityList) {
-     Map<String, Object> json = new HashMap<>();
-     try {
-     List result = new ArrayList();
-     for (Sample sample : entityList) {
-     result.add(toJsonSingle(sample));
-     }
-     json.put("results", result);
-     } catch (Exception e) {
-     renderError(500);
-     }
-     return json;
-     }
-
-
-     public Map toJsonSingle(Sample entry) {
-     Map temp = new HashMap();
-     for (String key : entry._getAttrNames()) {
-     switch (key) {
-     case "type":
-     temp.put("type", Type.typeDao.findById(entry.get(key)));
-     break;
-     default:
-     temp.put(key, entry.get(key));
-     }
-
-     }
-     return temp;
-     }
-
 
     /**
      * 样品编号生成
@@ -166,10 +86,13 @@ public class SampleController extends Controller {
                     String prefix_text = getPara("prefix_text");
                     prefix_text = prefix_text.toUpperCase();
                     int count = getParaToInt("count");
+                    Sample sample = new Sample();
                     for (int i = 0; i > count; i++) {
-                        Sample sample = new Sample();
+
                         result = result && sample.set("identify", createIdentify(task_id, prefix, prefix_text)).save();
                     }
+                    LoggerKit.addContractLog(sample.getInt("id"), "申请编号", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+
                     return result;
                 }
             });
@@ -178,17 +101,65 @@ public class SampleController extends Controller {
             renderError(500);
         }
     }
-/**
- * 样品申请数量
- * **/
-//    public  void countProcess(){
-//        try {
-//            Map result =new HashMap();
-//
-//        }catch (Exception e)
-//        {
-//            renderError(500);
-//        }
-//    }
 
+    public Map toJsonSingle(Sample sample) {
+        Map<String, Object> types = new HashMap<>();
+        types.put("id", sample.getInt("id"));
+        types.put("identify", sample.get("identify"));
+        types.put("category", sample.get("category"));
+        types.put("name", sample.get("name"));
+        types.put("feature", sample.get("feature"));
+        types.put("isbalance", sample.get("isbalance"));
+        types.put("task_id", sample.get("task_id"));
+        types.put("item_id", sample.get("item_id"));
+        types.put("create_time", sample.get("create_time"));
+        types.put("creater", sample.get("creater"));
+        return types;
+    }
+
+    public void findByTask() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            Sample sample = new Sample();
+            if (task != null) {
+                renderJson(toJsonSingle(sample));
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void fingByItem() {
+        try {
+            int item_id = getParaToInt("item_id");
+            ItemProject itemProject = ItemProject.itemprojectDao.findById(item_id);
+            Sample sample = new Sample();
+            if (itemProject != null) {
+                renderJson(toJsonSingle(sample));
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 申请编号日志
+     ***/
+    public void applyLog() {
+        try {
+            int id = getParaToInt("id");
+            Sample sample =Sample.sampleDao.findById(id);
+            Map temp = new HashMap();
+            temp.put("log", Log.logDao.find("select * from `db_log`  where task_id =" + sample.get("id")+"orderby create_time  DESC" ));
+            renderJson(temp);
+        }catch (Exception e){
+            renderError(500);
+        }
+
+    }
 }
