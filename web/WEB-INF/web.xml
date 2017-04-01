@@ -17,6 +17,24 @@
         <url-pattern>/pushlet.srv</url-pattern>
     </servlet-mapping>
 
+
+
+    <listener>
+        <listener-class>com.lims.utils.SessionController</listener-class>
+    </listener>
+    <filter>
+        <filter-name>jfinal</filter-name>
+        <filter-class>com.jfinal.core.JFinalFilter</filter-class>
+        <init-param>
+            <param-name>configClass</param-name>
+            <param-value>com.lims.config.CommonConfig</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>jfinal</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>poserver</servlet-name>
         <servlet-class>com.zhuozhengsoft.pageoffice.poserver.Server</servlet-class>
@@ -46,19 +64,5 @@
         <url-pattern>/posetup.exe</url-pattern>
     </servlet-mapping>
 
-    <listener>
-        <listener-class>com.lims.utils.SessionController</listener-class>
-    </listener>
-    <filter>
-        <filter-name>jfinal</filter-name>
-        <filter-class>com.jfinal.core.JFinalFilter</filter-class>
-        <init-param>
-            <param-name>configClass</param-name>
-            <param-value>com.lims.config.CommonConfig</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>jfinal</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+
 </web-app>

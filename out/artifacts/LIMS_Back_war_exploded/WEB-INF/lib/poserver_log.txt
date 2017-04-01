@@ -1,0 +1,6 @@
+欢迎使用 PageOffice 产品
+PageOffice 注册信息：
+<span style="color:Red;">此产品尚未注册激活。</span>
+<p>如果您使用<strong>离线注册</strong>，<br>
+请把获取的 license 文件放到此处："/Users/qulongjun/Project/LIMS_Back/out/artifacts/LIMS_Back_war_exploded/WEB-INF/lib/" 。</p>
+PageOffice 运行信息：没有日志信息。
