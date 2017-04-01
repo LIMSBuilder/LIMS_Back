@@ -102,6 +102,20 @@ public class SampleController extends Controller {
         }
     }
 
+    public Map toJson(List<Sample> entityList) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            List result = new ArrayList();
+            for (Sample sample : entityList) {
+                result.add(toJsonSingle(sample));
+            }
+            json.put("results", result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+        return json;
+    }
+
     public Map toJsonSingle(Sample sample) {
         Map<String, Object> types = new HashMap<>();
         types.put("id", sample.getInt("id"));
@@ -121,9 +135,9 @@ public class SampleController extends Controller {
         try {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
-            Sample sample = new Sample();
             if (task != null) {
-                renderJson(toJsonSingle(sample));
+                List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where task_id =" +getPara(task_id));
+                Map results = toJson(sampleList);
             } else {
                 renderJson(RenderUtils.CODE_EMPTY);
             }
@@ -136,9 +150,9 @@ public class SampleController extends Controller {
         try {
             int item_id = getParaToInt("item_id");
             ItemProject itemProject = ItemProject.itemprojectDao.findById(item_id);
-            Sample sample = new Sample();
             if (itemProject != null) {
-                renderJson(toJsonSingle(sample));
+                List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where item_id =" +getPara(item_id));
+                Map results = toJson(sampleList);
             } else {
                 renderJson(RenderUtils.CODE_EMPTY);
             }
@@ -153,11 +167,11 @@ public class SampleController extends Controller {
     public void applyLog() {
         try {
             int id = getParaToInt("id");
-            Sample sample =Sample.sampleDao.findById(id);
+            Sample sample = Sample.sampleDao.findById(id);
             Map temp = new HashMap();
-            temp.put("log", Log.logDao.find("select * from `db_log`  where task_id =" + sample.get("id")+"orderby create_time  DESC" ));
+            temp.put("log", Log.logDao.find("select * from `db_log`  where task_id =" + sample.get("id") + "orderby create_time  DESC"));
             renderJson(temp);
-        }catch (Exception e){
+        } catch (Exception e) {
             renderError(500);
         }
 
