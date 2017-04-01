@@ -26,6 +26,12 @@ public class ProcessKit {
         //this.put("sample",3);
     }};
 
+    public  static Map ItenMap =new HashMap(){{
+        this.put("beforeApply",0);//样品号待申请
+        this.put("afterApply",1);//样品号已申请
+    }};
+
+
     public static int getContractProcess(String processName) {
         int process = (Integer) (ContractMap.get(processName) != null ? ContractMap.get(processName) : 0);
         return process;
