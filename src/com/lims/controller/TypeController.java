@@ -174,7 +174,7 @@ public class TypeController extends Controller {
         types.put("id", type.getInt("id"));
         types.put("name", type.get("name"));
         types.put("identifier", type.get("identifier"));
-        types.put("contract_count", Contract.contractDao.find("SELECT * FROM `db_contract` WHERE type=" + type.get("id")).size());
+//        types.put("contract_count", Contract.contractDao.find("SELECT * FROM `db_contract` WHERE type=" + type.get("id")).size());
         return types;
     }
 
@@ -206,7 +206,7 @@ public class TypeController extends Controller {
         types.put("id", type.getInt("id"));
         types.put("name", type.get("name"));
         types.put("identifier", type.get("identifier"));
-        types.put("contract_count", Task.taskDao.find("SELECT * FROM `db_task` WHERE type=" + type.get("id")).size());
+        //types.put("contract_count", Task.taskDao.find("SELECT * FROM `db_task` WHERE type=" + type.get("id")).size());
         return types;
     }
 

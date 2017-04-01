@@ -89,6 +89,7 @@ public class LoginController extends Controller {
      */
     public void getLogin() {
         try {
+
             renderJson(ParaUtils.getCurrentUserMap(getRequest()));
         } catch (Exception e) {
             renderError(500);

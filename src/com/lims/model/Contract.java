@@ -1,5 +1,6 @@
 package com.lims.model;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 import java.util.ArrayList;
@@ -30,6 +31,14 @@ public class Contract extends Model<Contract> {
                 }
                 result.put(t, item.get(t));
             }
+            result.put("charge", User.userDao.findById(item.get("charge_id")).toSimpleJson());
+            List<ItemJoin> itemJoinList = ItemJoin.itemJoinDao.find("SELECT * FROM `db_item_join_user` WHERE contract_item_id=" + item.get("id"));
+            List userList = new ArrayList();
+            for (ItemJoin itemJoin : itemJoinList) {
+                User user = User.userDao.findById(itemJoin.get("join_id"));
+                userList.add(user.toSimpleJson());
+            }
+            result.put("join", userList);
 //            List<ItemProject> projectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item.get("id"));
 //            List<Map> mapList = new ArrayList<>();
 //            for (ItemProject project : projectList) {
