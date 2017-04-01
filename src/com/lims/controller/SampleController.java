@@ -136,8 +136,9 @@ public class SampleController extends Controller {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
             if (task != null) {
-                List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where task_id =" +getPara(task_id));
+                List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where task_id =" + getPara(task_id));
                 Map results = toJson(sampleList);
+                renderJson(results);
             } else {
                 renderJson(RenderUtils.CODE_EMPTY);
             }
@@ -151,7 +152,7 @@ public class SampleController extends Controller {
             int item_id = getParaToInt("item_id");
             ItemProject itemProject = ItemProject.itemprojectDao.findById(item_id);
             if (itemProject != null) {
-                List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where item_id =" +getPara(item_id));
+                List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where item_id =" + getPara(item_id));
                 Map results = toJson(sampleList);
             } else {
                 renderJson(RenderUtils.CODE_EMPTY);
