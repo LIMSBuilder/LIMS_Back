@@ -9,6 +9,7 @@ import com.lims.model.*;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
+import org.junit.Test;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -213,35 +214,6 @@ public class TaskController extends Controller {
 
     public Map toJsonSingle(Task entry) {
         Map temp = new HashMap();
-//        if (entry.get("contract_id") != null) {
-//            //来自合同
-//            Contract contract = Contract.contractDao.findById(entry.get("contract_id"));
-//            if (contract != null) {
-//                temp.put("id", entry.get("id"));
-//                temp.put("contract_id", entry.get("contract_id"));
-//                temp.put("process", entry.get("process"));
-//                temp.put("create_time", entry.get("create_time"));
-//                temp.put("creater", User.userDao.findById(entry.get("creater")));
-//
-//                temp.put("type", Type.typeDao.findById(contract.get("type")));
-//                temp.put("identify", contract.get("identify"));
-//                temp.put("client_unit", contract.get("client_unit"));
-//                temp.put("client_code", contract.get("client_code"));
-//                temp.put("client_tel", contract.get("client_tel"));
-//                temp.put("client", contract.get("client"));
-//                temp.put("client_fax", contract.get("client_fax"));
-//                temp.put("client_address", contract.get("client_address"));
-//                temp.put("name", contract.get("name"));
-//                temp.put("aim", contract.get("aim"));
-//                temp.put("type", entry.get("type") == null ? "" : Type.typeDao.findById(entry.get("type")));
-//                temp.put("way", contract.get("way"));
-//                temp.put("wayDesp", contract.get("wayDesp"));
-//                temp.put("other", contract.get("other"));
-//            }
-//        } else {
-//            //来自自定义
-//
-//        }
         for (String key : entry._getAttrNames()) {
             switch (key) {
                 case "type":
@@ -274,4 +246,101 @@ public class TaskController extends Controller {
             renderError(500);
         }
     }
+
+    public void delivery() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    String jsons = getPara("result");//前端传数组过来
+                    String task_id = getPara("id");
+                    List<Map> temp = Jackson.getJson().parse(jsons, List.class);
+                    Boolean result = true;
+                    for (int i = 0; i < temp.size(); i++) {
+                        Map entry = temp.get(i);
+                        int item_id = (int) entry.get("id");
+                        int charge = (int) entry.get("charge");
+                        List<Integer> belongs = (ArrayList) entry.get("belongs");
+                        Contractitem contractitem = Contractitem.contractitemdao.findById(item_id);
+                        result = result && contractitem.set("charge_id", charge).update();
+                        if (!result) return false;
+                        for (int j = 0; j < belongs.size(); j++) {
+                            int user = belongs.get(j);
+                            ItemJoin itemJoin = new ItemJoin();
+                            itemJoin.set("contract_item_id", item_id);
+                            itemJoin.set("join_id", user);
+                            result = result && itemJoin.save();
+                            if (!result) break;
+                        }
+                    }
+                    if (!result) return false;
+                    Task task = Task.taskDao.findById(task_id);
+                    result = result && task.set("process", ProcessKit.TaskMap.get("dispatch")).update();
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void countProcess() {
+//        try {
+//            Map temp = ProcessKit.TaskMap;
+//            Map result = new HashMap();
+//            for (Object key : temp.keySet()) {
+//                int count = Task.taskDao.find("select * from `db_task` where process =" + temp.get(key) +  "'and  sample_type=1'" ).size();
+//                result.put(count, key);
+//            }
+//            result.put("total", Task.taskDao.find("select * from `db_task` where sample_type=1").size());
+//            renderJson(result);
+//        } catch (Exception e) {
+//            renderError(500);
+//        }
+        try {
+            int count = Task.taskDao.find("SELECT * FROM `db_task` WHERE process =" + ProcessKit.TaskMap.get("create") + " AND sample_type=1").size();
+            Map temp = new HashMap();
+            temp.put("create", count); //待任务派遣个数
+            renderJson(temp);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+    public void countTotal()
+    {
+        try {
+            Map  result=new HashMap();
+            result.put("total",Task.taskDao.find("select * from `db_task`").size());
+            renderJson(result);
+        }catch (Exception e)
+        {
+            renderError(500);
+        }
+    }
+
+    public void monitorItem() {
+        try {
+            int id = getParaToInt("id");
+            List temp = new ArrayList();
+            List<ItemProject> projectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + id);
+//            List<Map> mapList = new ArrayList<>();
+//            for (ItemProject project : projectList) {
+//                Map t = new HashMap();
+//                t.put("id", project.get("id"));
+//                t.put("project", MonitorProject.monitorProjectdao.findById(project.get("project_id")));
+//                t.put("item_id", project.get("item_id"));
+//                mapList.add(t);
+//            }
+//            result.put("project", mapList);
+            for (ItemProject itemProject : projectList) {
+                temp.add(itemProject.toJsonSingle());
+            }
+            renderJson(temp);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }

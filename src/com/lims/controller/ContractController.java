@@ -12,6 +12,7 @@ import com.lims.model.*;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
+import org.junit.Test;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -125,7 +126,7 @@ public class ContractController extends Controller {
             for (int i = 0; i < keys.length; i++) {
                 String key = (String) keys[i];
                 Object value = condition.get(key);
-                if (key.equals("process")) {
+                if (key.equals("process")) { //process=wait_change
                     switch (value.toString()) {
                         case "after_receive":
                             param += " AND (process > " + ProcessKit.getContractProcess("create") + ") ";
@@ -177,19 +178,26 @@ public class ContractController extends Controller {
 
     public Map toJsonSingle(Contract entry) {
         Map temp = new HashMap();
-        for (String key : entry._getAttrNames()) {
-            switch (key) {
-                case "trustee":
-                    temp.put("trustee", entry.get(key) == null ? "" : User.userDao.findById(entry.get(key)).toSimpleJson());
-                    break;
-                case "type":
-                    temp.put("type", entry.get(key) == null ? "" : Type.typeDao.findById(entry.get(key)));
-                    break;
-                default:
-                    temp.put(key, entry.get(key));
-            }
+        /**for (String key : entry._getAttrNames()) {
+         switch (key) {
+         case "trustee":
+         temp.put("trustee", entry.get(key) == null ? "" : User.userDao.findById(entry.get(key)).toSimpleJson());
+         break;
+         case "type":
+         temp.put("type", entry.get(key) == null ? "" : Type.typeDao.findById(entry.get(key)));
+         break;
+         default:
+         temp.put(key, entry.get(key));
+         }
 
-        }
+         }**/
+        temp.put("id", entry.get("id"));
+        temp.put("process", entry.get("process"));
+        temp.put("identify", entry.get("identify"));
+        temp.put("name", entry.get("name"));
+        temp.put("aim", entry.get("aim"));
+        temp.put("create_time", entry.get("create_time"));
+        temp.put("client_unit", entry.get("client_unit"));
         return temp;
     }
 
@@ -285,38 +293,41 @@ public class ContractController extends Controller {
 
     public void review() {
         try {
-            if (getParaToInt("result") == 1) {
-                //审核通过
-                int id = getParaToInt("id");
-                Contract contract = Contract.contractDao.findById(id);
-                if (contract != null) {
-                    User user = ParaUtils.getCurrentUser(getRequest());
-                    Boolean result = contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("process", ProcessKit.getContractProcess("review")).update();
-                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-                } else {
-                    renderJson(RenderUtils.CODE_EMPTY);
-                }
-            } else {
-                //审核拒绝
-                final Boolean result = Db.tx(new IAtom() {
-                    @Override
-                    public boolean run() throws SQLException {
-                        int id = getParaToInt("id");
-                        Contract contract = Contract.contractDao.findById(id);
-                        if (contract != null) {
-                            User user = ParaUtils.getCurrentUser(getRequest());
-                            ContractReview contractReview = new ContractReview();
-                            Boolean result = true;
-                            result = result && contractReview.set("contract_id", contract.get("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).save();
-                            if (!result) return false;
-                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("process", ProcessKit.getContractProcess("change")).update();
-                            return result;
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+                    int same = getParaToInt("same");
+                    int contract1 = getParaToInt("contract");
+                    int guest = getParaToInt("guest");
+                    int pack = getParaToInt("package");
+                    int company = getParaToInt("company");
+                    int money = getParaToInt("money");
+                    int time = getParaToInt("time");
+                    int result1 = getParaToInt("result");// 1-accept 0-reject
+                    Contract contract = Contract.contractDao.findById(id);
+                    if (contract != null) {
+                        User user = ParaUtils.getCurrentUser(getRequest());
+                        ContractReview contractReview = new ContractReview();
+                        Boolean result = true;
+                        result = result && contractReview.set("contract_id", contract.get("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("same", same).set("contract", contract1).set("guest", guest).set("package", pack).set("company", company).set("money", money).set("time", time).set("result", result1).save();
+                        if (!result) return false;
+                        if (getParaToInt("result") == 1) {
+
+                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("process", ProcessKit.getContractProcess("review")).set("review_id", contractReview.get("id")).update();
+
+                        } else {
+                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("process", ProcessKit.getContractProcess("change")).set("review_id", contractReview.get("id")).update();
                         }
+                        return result;
+                    } else {
                         return false;
                     }
-                });
-                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-            }
+
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
         } catch (Exception e) {
             renderError(500);
         }
@@ -364,6 +375,7 @@ public class ContractController extends Controller {
         temp.put("msg", contractReview.get("reject_msg"));
         temp.put("reviewer", User.userDao.findById(contractReview.get("reviewer")).toSimpleJson());
         temp.put("review_time", contractReview.get("review_time"));
+        temp.put("result", contractReview.get("result"));
         return temp;
     }
 
@@ -382,6 +394,89 @@ public class ContractController extends Controller {
         }
     }
 
+    /**
+     * 根据review_id获取review对象记录（单个）
+     */
+    public void reviewDetail() {
+        try {
+            ContractReview contractReview = ContractReview.contractReviewDao.findById(getPara("id"));
+            if (contractReview != null) {
+                renderJson(toReviewJsonSingle1(contractReview));
+            } else
+                renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public Map toReviewJsonSingle1(ContractReview contractReview) {
+        Map temp = new HashMap();
+        temp.put("id", contractReview.get("id"));
+        temp.put("msg", contractReview.get("reject_msg"));
+        temp.put("same", contractReview.get("same"));
+        temp.put("contract", contractReview.get("contract"));
+        temp.put("guest", contractReview.get("guest"));
+        temp.put("package", contractReview.get("package"));
+        temp.put("company", contractReview.get("company"));
+        temp.put("money", contractReview.get("money"));
+        temp.put("time", contractReview.get("time"));
+        temp.put("reviewer", User.userDao.findById(contractReview.get("reviewer")).toSimpleJson());
+        temp.put("review_time", contractReview.get("review_time"));
+        temp.put("result", contractReview.get("result"));
+        return temp;
+    }
+
+    /**
+     *
+     */
+    public void contractDetails() {
+        try {
+            Contract contract = Contract.contractDao.findById(getPara("id"));
+            if (contract != null) {
+                renderJson(toContractDetailJSON(contract));
+            } else
+                renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * @param entry
+     * @return
+     */
+    public Map toContractDetailJSON(Contract entry) {
+        Map temp = new HashMap();
+        for (String key : entry._getAttrNames()) {
+            switch (key) {
+                case "trustee":
+                    temp.put("trustee", entry.get(key) == null ? "" : User.userDao.findById(entry.get(key)).toSimpleJson());
+                    break;
+                case "type":
+                    temp.put("type", entry.get(key) == null ? "" : Type.typeDao.findById(entry.get(key)));
+                    break;
+                default:
+                    temp.put(key, entry.get(key));
+            }
+        }
+        return temp;
+    }
+
+    public void countProcess() {
+        try {
+            Map temp = ProcessKit.ContractMap;
+            Map result = new HashMap();
+            for (Object key : temp.keySet()) {
+                int count = Contract.contractDao.find("SELECT * FROM `db_contract` WHERE process=" + temp.get(key)).size();
+                result.put(key, count);
+            }
+            //total
+            result.put("total", Contract.contractDao.find("SELECT * FROM `db_contract`").size());
+            renderJson(result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 
     public void route() {
         renderJsp("/index.jsp");
