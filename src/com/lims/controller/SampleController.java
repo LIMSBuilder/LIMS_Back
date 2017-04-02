@@ -91,7 +91,7 @@ public class SampleController extends Controller {
 
                         result = result && sample.set("identify", createIdentify(task_id, prefix, prefix_text)).save();
                     }
-                    LoggerKit.addContractLog(sample.getInt("id"), "申请编号", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    LoggerKit.addSampleLog(sample.getInt("id"), "申请编号", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
 
                     return result;
                 }
