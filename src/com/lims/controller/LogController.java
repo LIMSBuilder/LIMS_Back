@@ -3,6 +3,7 @@ package com.lims.controller;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.lims.model.*;
+import com.lims.utils.RenderUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,28 +89,60 @@ public class LogController extends Controller {
      * }
      **/
     //未测试
+    /**
+     * 合同日志
+     * **/
     public void contractLog() {
         try {
-            int id = getParaToInt("id");
-            Contract contract = Contract.contractDao.findById(id);
-
-            Map temp = new HashMap();
-            temp.put("log", Log.logDao.find("select * from `db_log`  where contract_id =" + contract.get("id")+"orderby create_time  DESC" ));
-            renderJson(temp);
+            int contract_id = getParaToInt("contract_id");
+            Log log = Log.logDao.findById(contract_id);
+            if (log != null) {
+                List<Log> logList = Log.logDao.find("select * from `db_log`  where contract_id =" + log.get("contract_id") + "orderby create_time  DESC");
+                Map results = toJson(logList);
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
 
         } catch (Exception e) {
             renderError(500);
         }
     }
 
+    public Map toJson(List<Log> entityList) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            List result = new ArrayList();
+            for (Log log : entityList) {
+                result.add(toJsonSingle(log));
+            }
+            json.put("results", result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+        return json;
+    }
 
+    public Map toJsonSingle(Log log) {
+        Map<String, Object> types = new HashMap<>();
+        types.put("user_id", log.getInt("user_id"));
+        types.put("msg", log.get("msg"));
+        types.put("create_time", log.get("create_time"));
+        return types;
+    }
+
+    /**
+     * 任务日志
+     * ***/
     public void taskLog() {
         try {
-            int id = getParaToInt("id");
-             Task  task =Task.taskDao.findById(id);
-            Map temp = new HashMap();
-            temp.put("log", Log.logDao.find("select * from `db_log`  where task_id =" + task.get("id")+"orderby create_time  DESC" ));
-            renderJson(temp);
+            int task_id = getParaToInt("task_id");
+            Log log = Log.logDao.findById(task_id);
+            if (log != null) {
+                List<Log> logList = Log.logDao.find("select * from `db_log`  where task_id =" + log.get("task_id") + "orderby create_time  DESC");
+                Map results = toJson(logList);
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
 
         } catch (Exception e) {
             renderError(500);

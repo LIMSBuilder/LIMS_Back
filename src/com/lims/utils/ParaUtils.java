@@ -233,6 +233,7 @@ public class ParaUtils extends Controller {
             temp.put("isNotice", user.get("isNotice"));
             temp.put("cardId", user.get("cardId"));
             temp.put("password", user.get("password"));
+            temp.put("isInit",user.get("isInit"));
         }
         return temp;
     }
