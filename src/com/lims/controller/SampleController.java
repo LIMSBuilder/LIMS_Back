@@ -122,7 +122,7 @@ public class SampleController extends Controller {
         types.put("identify", sample.get("identify"));
         types.put("category", sample.get("category"));
         types.put("name", sample.get("name"));
-        types.put("feature", sample.get("feature"));
+        types.put("character", sample.get("character"));
         types.put("isbalance", sample.get("isbalance"));
         types.put("task_id", sample.get("task_id"));
         types.put("item_id", sample.get("item_id"));
@@ -163,18 +163,96 @@ public class SampleController extends Controller {
     }
 
     /**
-     * 申请编号日志
+     * 申请样品日志
      ***/
     public void applyLog() {
         try {
-            int id = getParaToInt("id");
-            Sample sample = Sample.sampleDao.findById(id);
-            Map temp = new HashMap();
-            temp.put("log", Log.logDao.find("select * from `db_log`  where task_id =" + sample.get("id") + "orderby create_time  DESC"));
-            renderJson(temp);
+            int item_id = getParaToInt("item_id");
+            Log log = Log.logDao.findById(item_id);
+            if (log != null) {
+                List<Log> logList = Log.logDao.find("select * from `db_log`  where item_id =" + log.get("item_id") + "orderby create_time  DESC");
+                Map results = toLogJson(logList);
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
         } catch (Exception e) {
             renderError(500);
         }
-
     }
+
+    public Map toLogJson(List<Log> entityList) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            List result = new ArrayList();
+            for (Log log : entityList) {
+                result.add(toLogJsonSingle(log));
+            }
+            json.put("results", result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+        return json;
+    }
+
+    public Map toLogJsonSingle(Log log) {
+        Map<String, Object> types = new HashMap<>();
+        types.put("user_id", log.getInt("user_id"));
+        types.put("msg", log.get("msg"));
+        types.put("create_time", log.get("create_time"));
+
+        return types;
+    }
+
+    /**
+     * 统计待申请的任务数
+     **/
+    public void countProcess() {
+        try {
+            User user = new User();
+            int count = Task.taskDao.find("SELECT DISTINCT t.*", "FROM `db_task` t,`db_contract_item` i,`db_contract` c,`db_item_join_user` u  WHERE ((i.task_id=t.id AND t.process=2 AND t.sample_type=1) OR (i.task_id is NULL AND t.identify=c.identify AND t.process=2 AND t.sample_type=1)) AND (i.charge_id=" + user.get("id") + " OR (i.id=u.contract_item_id AND u.join_id=" + user.get("id") + ") and  i.process = 0)").size();
+            Map temp = new HashMap();
+            temp.put("beforeApply", temp);
+            renderJson(temp);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 提供自送样样品信息保存接口
+     **/
+    public void selfCreate() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                String identify = createIdentify(task_id, getParaToInt("prefix"), getPara("prefix_text"));
+                Sample sample = new Sample();
+                sample.set("identify", identify).set("name", getPara("name")).set("character", getPara("character")).set("condition", getPara("condition")).set("process", ProcessKit.getSampleProcess("create"));
+                renderJson(sample.save() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else renderJson(RenderUtils.CODE_EMPTY);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    /**
+     * 获取当前task_id的所有Sample信息
+     **/
+    public void selfSampleList() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                List<Sample> sampleList = Sample.sampleDao.find("SELECT * FROM `db_sample` WHERE task_id =" + task_id);
+                Map results = toJson(sampleList);
+                renderJson(results);
+            } else renderJson(RenderUtils.CODE_EMPTY);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }
