@@ -11,10 +11,7 @@ import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.*;
 
-import com.lims.utils.LoggerKit;
-import com.lims.utils.ParaUtils;
-import com.lims.utils.ProcessKit;
-import com.lims.utils.RenderUtils;
+import com.lims.utils.*;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -542,7 +539,6 @@ public class ContractController extends Controller {
     }
 
     /**
-     *
      * 打印合同
      */
     public void createContract() {
@@ -557,14 +553,29 @@ public class ContractController extends Controller {
             renderError(500);
         }
     }
+
     /**
      * 导入表格数据
-     * **/
-    public  void  leadIn(){
+     **/
+    public void leadIn() {
         try {
             render("/template/leadingIn.jsp");
+        } catch (Exception e) {
+            renderError(500);
         }
-        catch (Exception  e){
+    }
+
+
+    public void readItemFile() {
+        try {
+            String path = getPara("path");
+            ExcelRead read = new ExcelRead();
+            List<Map> result = read.readExcel(path);
+            for (Map temp : result) {
+                System.out.println(temp);
+            }
+            renderNull();
+        } catch (Exception e) {
             renderError(500);
         }
     }

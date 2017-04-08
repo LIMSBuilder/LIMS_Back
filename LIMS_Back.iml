@@ -37,5 +37,6 @@
     <orderEntry type="library" name="pushlet" level="project" />
     <orderEntry type="library" name="pageoffice3" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.7.2" level="project" />
+    <orderEntry type="library" name="dom4j-1.6.1" level="project" />
   </component>
 </module>
