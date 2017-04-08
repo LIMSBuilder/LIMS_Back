@@ -64,7 +64,7 @@ public class ContractitemController extends Controller {
         Map<String, Object> item = new HashMap<>();
         item.put("id", contractitem.getInt("id"));
         item.put("company", contractitem.get("company"));
-        item.put("point", contractitem.get("point"));
+        item.put("point", contractitem.getInt("point"));
         item.put("contract_id", contractitem.get("contract_id"));
         item.put("other", contractitem.get("other"));
         item.put("is_package", contractitem.get("is_package"));
@@ -74,11 +74,12 @@ public class ContractitemController extends Controller {
     public void create() {
         try {
             String company = getPara("company");
-            String point = getPara("point");
+            int  point = getParaToInt("point");
             int contract_id = getParaToInt("contract_id");
             String other = getPara("other");
             int is_package = getParaToInt("is_package");
-            if (Contractitem.contractitemdao.find("select * from `db_frequency` where company='" + company + "'and  point='" + point + "' and contract_id='" + contract_id + "' and other= '" + other + "' and is_package='" + is_package + "'").size() != 0) {
+//            int isHand =getParaToInt("isHand");//0-手动填入 1-读取模板
+            if (Contractitem.contractitemdao.find("select * from `db_contract_item` where company='" + company + "'and  point='" + point + "' and contract_id='" + contract_id + "' and other= '" + other + "' and is_package='" + is_package + "'").size() != 0) {
                 renderJson(RenderUtils.CODE_REPEAT);
             } else {
                 Contractitem contractitem = new Contractitem();
@@ -105,7 +106,7 @@ public class ContractitemController extends Controller {
         try {
             int id = getParaToInt("id");
             String company = getPara("company");
-            String point = getPara("point");
+            int point = getParaToInt("point");
             int contract_id = getParaToInt("contract_id");
             String other = getPara("other");
             int is_package = getParaToInt("is_package");

@@ -62,18 +62,18 @@ public class ContractController extends Controller {
                     for (String item : items) {
                         Map temp = Jackson.getJson().parse(item, Map.class);
                         Contractitem contractitem = new Contractitem();
-                        List points = (ArrayList) temp.get("point");
-                        String point = "";
-                        if (points != null) {
-                            for (int i = 0; i < points.size(); i++) {
-                                point += points.get(i);
-                                if (i != points.size() - 1) {
-                                    point += ",";
-                                }
-                            }
-                        }
 
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", point).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).set("frequency", ((Map) (temp.get("frequency"))).get("id")).save();
+//                        List points = (ArrayList) temp.get("point");
+//                        String point = "";
+//                        if (points != null) {
+//                            for (int i = 0; i < points.size(); i++) {
+//                                point += points.get(i);
+//                                if (i != points.size() - 1) {
+//                                    point += ",";
+//                                }
+//                            }
+//                        }
+                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).set("frequency", ((Map) (temp.get("frequency"))).get("id")).save();
                         if (!result) break;
                         List<Map> projectList = (ArrayList) temp.get("project");
                         if (projectList != null) {
@@ -101,7 +101,7 @@ public class ContractController extends Controller {
     /**
      * 合同编号生成
      * <p>
-     * 年份+ - + 三位流水编号，如 2017-001  2017-002  以此类推
+     * 年份+ - + 4位流水编号，如 2017-001  2017-002  以此类推
      * <p>
      * 需要考虑：年份更新需要自动更新当前年份，且将流水号恢复初始值1号
      **/
@@ -114,11 +114,11 @@ public class ContractController extends Controller {
 //            数据库中没有第一条记录，则创建它
             Encode entry = new Encode();
             entry.set("contract_identify", 1).set("self_identify", 0).set("scene_identify", 0).save();
-            identify = identify + "-" + String.format("%03d", 1);
+            identify = identify + "-" + String.format("%04d", 1);
         } else {
             int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
             encode.set("contract_identify", identify_Encode).update();
-            identify = identify + "-" + String.format("%03d", identify_Encode);
+            identify = identify + "-" + String.format("%04d", identify_Encode);
         }
         return identify;
     }
@@ -542,6 +542,7 @@ public class ContractController extends Controller {
     }
 
     /**
+     *
      * 打印合同
      */
     public void createContract() {
@@ -553,6 +554,17 @@ public class ContractController extends Controller {
                 render("/template/create_contract.jsp");
             } else renderNull();
         } catch (Exception e) {
+            renderError(500);
+        }
+    }
+    /**
+     * 导入表格数据
+     * **/
+    public  void  leadIn(){
+        try {
+            render("/template/leadingIn.jsp");
+        }
+        catch (Exception  e){
             renderError(500);
         }
     }
