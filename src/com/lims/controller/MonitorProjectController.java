@@ -235,20 +235,19 @@ public class MonitorProjectController extends Controller {
                 } else {
                     String unit = Frequency.UnitMap.get(frequency.get("unit")).toString();
                     value = frequency.get("count") + "次/" + frequency.get("times") + unit;
-
                 }
                 Map fre = new HashMap();
                 fre.put("id", frequency.get("id"));
                 fre.put("total", value);
                 Map maps = new HashMap();
-                maps.put("point", getParaValues("point[]"));
-                maps.put("company", getPara("company"));
+                maps.put("point", getParaToInt("point"));
+//                maps.put("company", getPara("company"));
                 maps.put("project", projectList);
                 maps.put("element", element);
-                maps.put("is_package", getPara("is_package"));
+//                maps.put("is_package", getPara("is_package"));
                 maps.put("other", getPara("other"));
                 maps.put("frequency", fre);
-                maps.put("code", 200);
+//                maps.put("code", 200);
                 renderJson(maps);
             } else {
                 renderJson(RenderUtils.CODE_ERROR);
