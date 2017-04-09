@@ -167,19 +167,13 @@ public class SampleController extends Controller {
      ***/
     public void applyLog() {
         try {
-            int item_id = getParaToInt("item_id");
-            Log log = Log.logDao.findById(item_id);
-            if (log != null) {
-                List<Log> logList = Log.logDao.find("select * from `db_log`  where item_id =" + log.get("item_id") + "orderby create_time  DESC");
-                Map results = toLogJson(logList);
-            } else {
-                renderJson(RenderUtils.CODE_EMPTY);
-            }
+            int item_id = getParaToInt("id");
+        List<Log> logList= Log.logDao.find("select * from `db_log`  where item_id =" + item_id + "orderby create_time  DESC");
+            renderJson(toLogJson(logList));
         } catch (Exception e) {
             renderError(500);
         }
     }
-
     public Map toLogJson(List<Log> entityList) {
         Map<String, Object> json = new HashMap<>();
         try {

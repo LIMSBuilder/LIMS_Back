@@ -31,7 +31,7 @@ public class Contract extends Model<Contract> {
                 }
                 result.put(t, item.get(t));
             }
-            result.put("charge", User.userDao.findById(item.get("charge_id")).toSimpleJson());
+            result.put("charge", User.userDao.findById(item.get("charge_id")) == null ? null : User.userDao.findById(item.get("charge_id")).toSimpleJson());
             List<ItemJoin> itemJoinList = ItemJoin.itemJoinDao.find("SELECT * FROM `db_item_join_user` WHERE contract_item_id=" + item.get("id"));
             List userList = new ArrayList();
             for (ItemJoin itemJoin : itemJoinList) {

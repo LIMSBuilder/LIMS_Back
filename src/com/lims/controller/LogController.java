@@ -89,20 +89,15 @@ public class LogController extends Controller {
      * }
      **/
     //未测试
+
     /**
      * 合同日志
-     * **/
+     **/
     public void contractLog() {
         try {
-            int contract_id = getParaToInt("contract_id");
-            Log log = Log.logDao.findById(contract_id);
-            if (log != null) {
-                List<Log> logList = Log.logDao.find("select * from `db_log`  where contract_id =" + log.get("contract_id") + "orderby create_time  DESC");
-                Map results = toJson(logList);
-            } else {
-                renderJson(RenderUtils.CODE_EMPTY);
-            }
-
+            int contract_id = getParaToInt("id");
+            List<Log> logList = Log.logDao.find("select * from `db_log`  where contract_id = " + contract_id + " order by create_time  DESC");
+            renderJson(toJson(logList));
         } catch (Exception e) {
             renderError(500);
         }
@@ -124,7 +119,7 @@ public class LogController extends Controller {
 
     public Map toJsonSingle(Log log) {
         Map<String, Object> types = new HashMap<>();
-        types.put("user_id", log.getInt("user_id"));
+        types.put("user", User.userDao.findById(log.getInt("user_id")).toSimpleJson());
         types.put("msg", log.get("msg"));
         types.put("create_time", log.get("create_time"));
         return types;
@@ -132,17 +127,13 @@ public class LogController extends Controller {
 
     /**
      * 任务日志
-     * ***/
+     ***/
     public void taskLog() {
         try {
-            int task_id = getParaToInt("task_id");
-            Log log = Log.logDao.findById(task_id);
-            if (log != null) {
-                List<Log> logList = Log.logDao.find("select * from `db_log`  where task_id =" + log.get("task_id") + "orderby create_time  DESC");
-                Map results = toJson(logList);
-            } else {
-                renderJson(RenderUtils.CODE_EMPTY);
-            }
+            int task_id = getParaToInt("id");
+            List<Log> logList = Log.logDao.find("select * from `db_log`  where task_id = " + task_id + " order by create_time  DESC");
+            renderJson(toJson(logList));
+
 
         } catch (Exception e) {
             renderError(500);
