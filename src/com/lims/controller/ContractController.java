@@ -554,23 +554,13 @@ public class ContractController extends Controller {
         }
     }
 
-    /**
-     * 导入表格数据
-     **/
-    public void leadIn() {
-        try {
-            render("/template/leadingIn.jsp");
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
-
 
     public void readItemFile() {
         try {
             String path = getPara("path");
             ExcelRead read = new ExcelRead();
-            List<Map> result = read.readExcel(path);
+            String[] titles = {"id", "name", "age", "style"};
+            List<Map> result = read.readExcel(path, titles);
             for (Map temp : result) {
                 System.out.println(temp);
             }

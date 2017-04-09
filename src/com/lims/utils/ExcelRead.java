@@ -36,16 +36,16 @@ public class ExcelRead {
      * @return
      * @throws IOException
      */
-    public List<Map> readExcel(String path) throws IOException {
+    public List<Map> readExcel(String path, String[] titles) throws IOException {
         if (path == null || EMPTY.equals(path)) {
             return null;
         } else {
             String postfix = getPostfix(path);
             if (!EMPTY.equals(postfix)) {
                 if (OFFICE_EXCEL_2003_POSTFIX.equals(postfix)) {
-                    return readXls(path);
+                    return readXls(path, titles);
                 } else if (OFFICE_EXCEL_2010_POSTFIX.equals(postfix)) {
-                    return readXlsx(path);
+                    return readXlsx(path, titles);
                 }
             } else {
                 System.out.println(path + NOT_EXCEL_FILE);
@@ -61,7 +61,7 @@ public class ExcelRead {
      * @return
      * @throws IOException
      */
-    public List<Map> readXlsx(String path) throws IOException {
+    public List<Map> readXlsx(String path, String[] titles) throws IOException {
         System.out.println(PROCESSING + path);
         InputStream is = new FileInputStream(PathKit.getWebRootPath() + path.replace("\\", "/").trim());
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook(is);
@@ -81,7 +81,7 @@ public class ExcelRead {
                     result = new HashMap<>();
                     for (int i = xssfRow.getFirstCellNum(); i < xssfRow.getLastCellNum(); i++) {
                         XSSFCell value = xssfRow.getCell(i);
-                        result.put(i, value);
+                        result.put(titles[i], value);
                     }
                     System.out.println(result);
                     list.add(result);
@@ -98,9 +98,9 @@ public class ExcelRead {
      * @return
      * @throws IOException
      */
-    public List<Map> readXls(String path) throws IOException {
+    public List<Map> readXls(String path, String[] titles) throws IOException {
         System.out.println(PROCESSING + path);
-        InputStream is = new FileInputStream(PathKit.getWebRootPath().replace("\\", "/") + path.trim());
+        InputStream is = new FileInputStream(PathKit.getWebRootPath() + path.replace("\\", "/").trim());
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook(is);
         List<Map> list = new ArrayList<>();
         Map result = null;
@@ -115,11 +115,11 @@ public class ExcelRead {
             for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
                 HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
+                    result = new HashMap<>();
                     for (int i = hssfRow.getFirstCellNum(); i < hssfRow.getLastCellNum(); i++) {
                         HSSFCell value = hssfRow.getCell(i);
-                        result.put(i, value);
+                        result.put(titles[i], value);
                     }
-                    System.out.println(result);
                     list.add(result);
                 }
             }
