@@ -61,7 +61,7 @@ public class TaskController extends Controller {
 //                                }
 //                            }
 //                        }
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("task_id", task.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).save();
+                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("task_id", task.get("id")).set("other", temp.get("other")).save();
                         if (!result) break;
                         List<Map> projectList = (ArrayList) temp.get("project");
                         if (projectList != null) {
@@ -69,6 +69,7 @@ public class TaskController extends Controller {
                                 Map project = projectList.get(m);
                                 ItemProject entry = new ItemProject();
                                 entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
+                                entry.set("isPackage", project.get("isPackage") != null && project.get("isPackage") == true ? 1 : 0);
                                 result = result && entry.save();
                                 if (!result) break;
                             }
@@ -117,7 +118,7 @@ public class TaskController extends Controller {
                                 .set("wayDesp", contract.get("wayDesp"))
                                 .set("other", contract.get("other"))
                                 .save();
-                        result = result && contract.set("process", ProcessKit.getContractProcess("finish")).update();
+                        result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
                         return result;
                     } else
                         return false;
@@ -168,11 +169,11 @@ public class TaskController extends Controller {
                             param += " AND sample_type=1 AND process=" + ProcessKit.getTaskProcess("create") + " ";
                             break;
                         case "after_dispath":
-                          //  param += " AND sample_type=1 AND process!=" + ProcessKit.getTaskProcess("create") + " ";
+                            //  param += " AND sample_type=1 AND process!=" + ProcessKit.getTaskProcess("create") + " ";
                             param += " AND sample_type=1 AND process != " + ProcessKit.getTaskProcess("create") + " AND process !=" + ProcessKit.getTaskProcess("stop") + " ";
                             break;
                         case "total_dispatch":
-                            param += "AND sample_type=1 AND process !="+ProcessKit.getTaskProcess("stop");
+                            param += "AND sample_type=1 AND process !=" + ProcessKit.getTaskProcess("stop");
                             break;
                         case "apply_sample":
                             param += " AND sample_type=1 AND process=" + ProcessKit.getTaskProcess("dispatch") + " ";
@@ -442,7 +443,7 @@ public class TaskController extends Controller {
     /**
      * 任务编号生成
      * <p>
-     * 年份+ - + 三位流水编号，如 2017-001  2017-002  以此类推
+     * 年份+ - + 四位流水编号，如 2017-001  2017-002  以此类推
      * <p>
      * 需要考虑：年份更新需要自动更新当前年份，且将流水号恢复初始值1号
      **/
@@ -463,7 +464,6 @@ public class TaskController extends Controller {
         }
         return identify;
     }
-
 
 
 }

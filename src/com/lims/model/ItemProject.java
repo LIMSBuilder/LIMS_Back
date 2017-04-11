@@ -14,6 +14,11 @@ public class ItemProject extends Model<ItemProject> {
     public Map toJsonSingle() {
         Map temp = new HashMap();
         MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(this.get("project_id"));
-        return monitorProject.toJsonSingle();
+        for (String name : monitorProject._getAttrNames()) {
+            temp.put(name, monitorProject.get(name));
+        }
+        temp.put("isPackage", this.get("isPackage"));
+//        return monitorProject.toJsonSingle();
+        return temp;
     }
 }
