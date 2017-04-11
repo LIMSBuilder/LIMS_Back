@@ -70,7 +70,7 @@ public class ContractController extends Controller {
 //                                }
 //                            }
 //                        }
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).set("frequency", ((Map) (temp.get("frequency"))).get("id")).save();
+                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("frequency", ((Map) (temp.get("frequency"))).get("id")).save();
                         if (!result) break;
                         List<Map> projectList = (ArrayList) temp.get("project");
                         if (projectList != null) {
@@ -78,6 +78,7 @@ public class ContractController extends Controller {
                                 Map project = projectList.get(m);
                                 ItemProject entry = new ItemProject();
                                 entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
+                                entry.set("isPackage", project.get("isPackage") != null && project.get("isPackage") == true ? 1 : 0);
                                 result = result && entry.save();
                                 if (!result) break;
                             }
@@ -658,7 +659,8 @@ public class ContractController extends Controller {
                 Map freMap = new HashMap();
                 freMap.put("total", frequencyStr);
                 json.put("frequency", freMap);
-                json.put("other", "");
+                json.put("company", companyStr);
+                json.put("other", companyStr);
                 Element element = Element.elementDao.findFirst("SELECT * FROM `db_element` WHERE name='" + elementStr + "'");
                 if (element != null) {
                     json.put("element", element);
@@ -668,7 +670,7 @@ public class ContractController extends Controller {
                 for (String projectName : projectList) {
                     MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
                     if (project != null) {
-                        projectTemp.add(project.toJsonSingle());
+                        projectTemp.add(project);
                     }
                 }
                 json.put("project", projectTemp);
