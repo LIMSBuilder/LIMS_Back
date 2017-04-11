@@ -75,7 +75,7 @@ public class ExcelRead {
                 continue;
             }
             // Read the Row
-            for (int rowNum = 1; rowNum <= xssfSheet.getLastRowNum(); rowNum++) {
+            for (int rowNum = 2; rowNum <= xssfSheet.getLastRowNum(); rowNum++) {
                 XSSFRow xssfRow = xssfSheet.getRow(rowNum);
                 if (xssfRow != null) {
                     result = new HashMap<>();
@@ -112,7 +112,7 @@ public class ExcelRead {
                 continue;
             }
             // Read the Row
-            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+            for (int rowNum = 2; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
                 HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
                     result = new HashMap<>();

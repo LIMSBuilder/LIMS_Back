@@ -645,12 +645,36 @@ public class ContractController extends Controller {
         try {
             String path = getPara("path");
             ExcelRead read = new ExcelRead();
-            String[] titles = {"序号", "监测企业", "环境要素", "监测点", "监测项目", "监测频次"};
+            String[] titles = {"id", "company", "element", "pointList", "projectList", "frequency"};
             List<Map> result = read.readExcel(path, titles);
+            List returnBack = new ArrayList();
             for (Map temp : result) {
-                System.out.println(temp);
+                String companyStr = temp.get("company").toString();
+                String elementStr = temp.get("element").toString();
+                String[] pointList = temp.get("pointList").toString().split(" ");
+                String[] projectList = temp.get("projectList").toString().split(" ");
+                String frequencyStr = temp.get("frequency").toString();
+                Map json = new HashMap();
+                Map freMap = new HashMap();
+                freMap.put("total", frequencyStr);
+                json.put("frequency", freMap);
+                json.put("other", "");
+                Element element = Element.elementDao.findFirst("SELECT * FROM `db_element` WHERE name='" + elementStr + "'");
+                if (element != null) {
+                    json.put("element", element);
+                }
+                json.put("point", pointList.length);
+                List projectTemp = new ArrayList();
+                for (String projectName : projectList) {
+                    MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+                    if (project != null) {
+                        projectTemp.add(project.toJsonSingle());
+                    }
+                }
+                json.put("project", projectTemp);
+                returnBack.add(json);
             }
-            renderNull();
+            renderJson(returnBack);
         } catch (Exception e) {
             renderError(500);
         }
