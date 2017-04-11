@@ -133,8 +133,6 @@ public class LogController extends Controller {
             int task_id = getParaToInt("id");
             List<Log> logList = Log.logDao.find("select * from `db_log`  where task_id = " + task_id + " order by create_time  DESC");
             renderJson(toJson(logList));
-
-
         } catch (Exception e) {
             renderError(500);
         }

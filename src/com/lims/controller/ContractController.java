@@ -528,7 +528,7 @@ public class ContractController extends Controller {
     }
 
     /**
-     *
+     * 合同细节
      */
     public void contractDetails() {
         try {
@@ -579,6 +579,9 @@ public class ContractController extends Controller {
         }
     }
 
+    /***
+     * 删除合同
+     * */
     public void deleteContract() {
         try {
             int id = getParaToInt("id");
@@ -588,6 +591,10 @@ public class ContractController extends Controller {
             renderError(500);
         }
     }
+
+    /***
+     * 完成合同
+     * */
 
     public void stopContract() {
         try {
@@ -620,6 +627,30 @@ public class ContractController extends Controller {
         }
     }
 
+    /***
+     * 完成合同
+     * */
+    public void finishContract() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+                    Contract contract = Contract.contractDao.findById(id);
+                    Boolean result = true;
+                    if (contract != null && contract.getInt("process") == 2) {
+                        result = contract.set("process", 3).update();
+                    }
+                    LoggerKit.addContractLog(contract.getInt("id"), "完成合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 
     public void route() {
         renderJsp("/index.jsp");
@@ -641,7 +672,9 @@ public class ContractController extends Controller {
         }
     }
 
-
+    /***
+     * 读取EXCEL文件
+     * */
     public void readItemFile() {
         try {
             String path = getPara("path");
@@ -656,9 +689,13 @@ public class ContractController extends Controller {
                 String[] projectList = temp.get("projectList").toString().split(" ");
                 String frequencyStr = temp.get("frequency").toString();
                 Map json = new HashMap();
-                Map freMap = new HashMap();
-                freMap.put("total", frequencyStr);
-                json.put("frequency", freMap);
+//                Map freMap = new HashMap();
+//                freMap.put("total", frequencyStr);
+//                json.put("frequency", freMap);
+                Frequency frequency=Frequency.frequencyDao.findFirst("SELECT * FROM `db_frequency` WHERE total='" + frequencyStr + "'");
+                if(frequency!=null){
+                    json.put("frequency", frequency.toJsonSingle());
+                }
                 json.put("company", companyStr);
                 json.put("other", companyStr);
                 Element element = Element.elementDao.findFirst("SELECT * FROM `db_element` WHERE name='" + elementStr + "'");

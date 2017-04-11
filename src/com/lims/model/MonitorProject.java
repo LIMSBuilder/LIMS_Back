@@ -18,6 +18,7 @@ public class MonitorProject extends Model<MonitorProject> {
         // temp.put("desp", this.get("desp"));
         //temp.put("department", Department.departmentdao.findById(this.get("department_id")));
         // temp.put("element", Element.elementDao.findById("element_id"));
+//        temp.put("isPackage",this.get("isPackage"));
         return temp;
     }
 }
