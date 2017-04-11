@@ -22,7 +22,7 @@ import java.util.*;
  *
  */
 public class ContractController extends Controller {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SimpleDateFormat formate_date = new SimpleDateFormat("yyyy-MM-dd");
 
     public void create() {
@@ -137,18 +137,50 @@ public class ContractController extends Controller {
                 Object value = condition.get(key);
                 if (key.equals("process")) { //process=wait_change
                     switch (value.toString()) {
-                        case "after_receive":
-                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") ";
+//                        case "after_receivesmall":
+//                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment<50000 ";
+//                            break;
+//                        case "after_receiveBig":
+//                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment>50000 ";
+//                            break;
+//                        case "reviewsmall":
+//                            小额审核
+//                            param += "AND process != " + ProcessKit.getContractProcess("stop") + " AND process !=" + ProcessKit.getContractProcess("finish") + " AND payment<50000";
+//                            break;
+//                        case "reviewBig":
+//                            大额审核
+//                            param += "AND process != " + ProcessKit.getContractProcess("stop") + " AND process !=" + ProcessKit.getContractProcess("finish") + " AND payment>50000";
+//                            break;
+                        case "reviewBig":
+                            param += "AND payment>50000";
                             break;
-                        case "review":
-                            param += "AND process != " + ProcessKit.getContractProcess("stop") + " AND process !=" + ProcessKit.getContractProcess("finish") + " ";
-
+                        case "waitReviewBig":
+                            param += " AND (process = " + ProcessKit.getContractProcess("create") + ") AND payment>50000 ";
+                            break;
+                        case "afterReviewBig":
+                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment>50000 ";
+                            break;
+                        case "beforeReviewBig":
+                            param += " AND (process = " + ProcessKit.getContractProcess("change") + ") AND payment>50000 ";
+                            break;
+                        case "reviewSmall":
+                            param += "AND payment<50000";
+                            break;
+                        case "waitReviewSmall":
+                            param += " AND (process = " + ProcessKit.getContractProcess("create") + ") AND payment<50000 ";
+                            break;
+                        case "afterReviewSmall":
+                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment<50000 ";
+                            break;
+                        case "beforeReviewSmall":
+                            param += " AND (process = " + ProcessKit.getContractProcess("change") + ") AND payment<50000 ";
                             break;
                         default:
                             param += " AND " + key + " = " + value;
                     }
                     continue;
                 }
+
                 if (key.equals("keyWords")) {
                     param += (" AND ( identify ='" + value + "' OR name like \"%" + value + "%\" OR client_unit like \"%" + value + "%\")");
                     continue;
@@ -303,7 +335,9 @@ public class ContractController extends Controller {
         }
     }
 
-
+    /**
+     * 大额审核通过
+     ***/
     public void review() {
         try {
             Boolean result = Db.tx(new IAtom() {
@@ -342,6 +376,44 @@ public class ContractController extends Controller {
             });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 小额审核通过
+     **/
+    public void reviewsmall() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+                    int result1 = getParaToInt("result");// 1-accept 0-reject
+                    Contract contract = Contract.contractDao.findById(id);
+                    if (contract != null) {
+                        User user = ParaUtils.getCurrentUser(getRequest());
+                        ContractReview contractReview = new ContractReview();
+                        Boolean result = true;
+                        result = result && contractReview.set("contract_id", contract.get("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("result", result1).save();
+                        if (!result) return false;
+                        if (getParaToInt("result") == 1) {
+                            LoggerKit.addContractLog(contract.getInt("id"), "审核通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("process", ProcessKit.getContractProcess("review")).set("review_id", contractReview.get("id")).update();
+
+                        } else {
+                            LoggerKit.addContractLog(contract.getInt("id"), "审核拒绝", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                            result = result && contract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("process", ProcessKit.getContractProcess("change")).set("review_id", contractReview.get("id")).update();
+                        }
+                        return result;
+                    } else {
+                        return false;
+                    }
+
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
@@ -395,11 +467,25 @@ public class ContractController extends Controller {
 
 
     /**
-     * 获取当前共有多少条需审核记录
+     * 获取大额当前共有多少条需审核记录
      */
     public void getWaitReviewCount() {
         try {
-            List<Contract> contractList = Contract.contractDao.find("SELECT * FROM `db_contract` WHERE process=" + ProcessKit.getContractProcess("create"));
+            List<Contract> contractList = Contract.contractDao.find("SELECT * FROM `db_contract` WHERE process=" + ProcessKit.getContractProcess("create") + " and payment>50000 ");
+            Map temp = new HashMap();
+            temp.put("count", contractList.size());
+            renderJson(temp);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 获取小额当前共有多少条需审核记录
+     */
+    public void getWaitSmallReviewCount() {
+        try {
+            List<Contract> contractList = Contract.contractDao.find("SELECT * FROM `db_contract` WHERE process=" + ProcessKit.getContractProcess("create") + " and payment<50000 ");
             Map temp = new HashMap();
             temp.put("count", contractList.size());
             renderJson(temp);
@@ -559,7 +645,7 @@ public class ContractController extends Controller {
         try {
             String path = getPara("path");
             ExcelRead read = new ExcelRead();
-            String[] titles = {"id", "name", "age", "style"};
+            String[] titles = {"序号", "监测企业", "环境要素", "监测点", "监测项目", "监测频次"};
             List<Map> result = read.readExcel(path, titles);
             for (Map temp : result) {
                 System.out.println(temp);
@@ -569,4 +655,5 @@ public class ContractController extends Controller {
             renderError(500);
         }
     }
+
 }
