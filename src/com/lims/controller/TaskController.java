@@ -51,18 +51,17 @@ public class TaskController extends Controller {
                     for (String item : items) {
                         Map temp = Jackson.getJson().parse(item, Map.class);
                         Contractitem contractitem = new Contractitem();
-                        List points = (ArrayList) temp.get("point");
-                        String point = "";
-                        if (points != null) {
-                            for (int i = 0; i < points.size(); i++) {
-                                point += points.get(i);
-                                if (i != points.size() - 1) {
-                                    point += ",";
-                                }
-                            }
-                        }
-
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", point).set("task_id", task.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).save();
+//                        List points = (ArrayList) temp.get("point");
+//                        String point = "";
+//                        if (points != null) {
+//                            for (int i = 0; i < points.size(); i++) {
+//                                point += points.get(i);
+//                                if (i != points.size() - 1) {
+//                                    point += ",";
+//                                }
+//                            }
+//                        }
+                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("task_id", task.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).save();
                         if (!result) break;
                         List<Map> projectList = (ArrayList) temp.get("project");
                         if (projectList != null) {
@@ -456,11 +455,11 @@ public class TaskController extends Controller {
 //            数据库中没有第一条记录，则创建它
             Encode entry = new Encode();
             entry.set("contract_identify", 1).set("self_identify", 0).set("scene_identify", 0).save();
-            identify = identify + "-" + String.format("%03d", 1);
+            identify = identify + "-" + String.format("%04d", 1);
         } else {
             int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
             encode.set("contract_identify", identify_Encode).update();
-            identify = identify + "-" + String.format("%03d", identify_Encode);
+            identify = identify + "-" + String.format("%04d", identify_Encode);
         }
         return identify;
     }
