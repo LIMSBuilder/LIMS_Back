@@ -70,7 +70,7 @@ public class ContractController extends Controller {
 //                                }
 //                            }
 //                        }
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("is_package", temp.get("is_package")).set("frequency", ((Map) (temp.get("frequency"))).get("id")).save();
+                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("frequency", ((Map) (temp.get("frequency"))).get("id")).save();
                         if (!result) break;
                         List<Map> projectList = (ArrayList) temp.get("project");
                         if (projectList != null) {
@@ -78,6 +78,7 @@ public class ContractController extends Controller {
                                 Map project = projectList.get(m);
                                 ItemProject entry = new ItemProject();
                                 entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
+                                entry.set("isPackage", project.get("isPackage") != null && project.get("isPackage") == true ? 1 : 0);
                                 result = result && entry.save();
                                 if (!result) break;
                             }
@@ -645,12 +646,37 @@ public class ContractController extends Controller {
         try {
             String path = getPara("path");
             ExcelRead read = new ExcelRead();
-            String[] titles = {"序号", "监测企业", "环境要素", "监测点", "监测项目", "监测频次"};
+            String[] titles = {"id", "company", "element", "pointList", "projectList", "frequency"};
             List<Map> result = read.readExcel(path, titles);
+            List returnBack = new ArrayList();
             for (Map temp : result) {
-                System.out.println(temp);
+                String companyStr = temp.get("company").toString();
+                String elementStr = temp.get("element").toString();
+                String[] pointList = temp.get("pointList").toString().split(" ");
+                String[] projectList = temp.get("projectList").toString().split(" ");
+                String frequencyStr = temp.get("frequency").toString();
+                Map json = new HashMap();
+                Map freMap = new HashMap();
+                freMap.put("total", frequencyStr);
+                json.put("frequency", freMap);
+                json.put("company", companyStr);
+                json.put("other", companyStr);
+                Element element = Element.elementDao.findFirst("SELECT * FROM `db_element` WHERE name='" + elementStr + "'");
+                if (element != null) {
+                    json.put("element", element);
+                }
+                json.put("point", pointList.length);
+                List projectTemp = new ArrayList();
+                for (String projectName : projectList) {
+                    MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+                    if (project != null) {
+                        projectTemp.add(project);
+                    }
+                }
+                json.put("project", projectTemp);
+                returnBack.add(json);
             }
-            renderNull();
+            renderJson(returnBack);
         } catch (Exception e) {
             renderError(500);
         }
