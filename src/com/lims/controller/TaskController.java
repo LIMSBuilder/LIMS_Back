@@ -61,7 +61,7 @@ public class TaskController extends Controller {
 //                                }
 //                            }
 //                        }
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("task_id", task.get("id")).set("other", temp.get("other")).save();
+                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("frequency",((Map)temp.get("frequency")).get("id")).set("task_id", task.get("id")).set("other", temp.get("other")).save();
                         if (!result) break;
                         List<Map> projectList = (ArrayList) temp.get("project");
                         if (projectList != null) {
