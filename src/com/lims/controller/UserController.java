@@ -113,6 +113,7 @@ public class UserController extends Controller {
                 map.put("departmentId", temp.getDepartment().getInt("id"));
                 continue;
             }
+            if (key.equals("cardId") || key.equals("password")) continue;
             map.put(key, user.get(key));
         }
         return map;
