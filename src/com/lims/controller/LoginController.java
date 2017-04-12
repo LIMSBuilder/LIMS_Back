@@ -75,7 +75,8 @@ public class LoginController extends Controller {
                         .set("nick", getPara("nick"))
                         .set("name", getPara("name"))
                         .set("password", ParaUtils.EncoderByMd5(getPara("password")))
-                        .set("cardId", getPara("cardId"));
+                        .set("cardId", getPara("cardId"))
+                        .set("isInit", 0);
                 renderJson(user.save() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             }
         } catch (Exception e) {

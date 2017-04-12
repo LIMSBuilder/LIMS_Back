@@ -222,6 +222,8 @@ public class ParaUtils extends Controller {
             if (user.get("roleId") != null) {
                 Map role = Role.roledao.findById(user.get("roleId")).toJSON();
                 temp.put("role", role);
+                temp.put("roleId", user.get("roleId"));
+                temp.put("departmentId", role.get("departmentId"));
             }
             temp.put("mail", user.get("mail"));
             temp.put("address", user.get("address"));
@@ -233,7 +235,8 @@ public class ParaUtils extends Controller {
             temp.put("isNotice", user.get("isNotice"));
             temp.put("cardId", user.get("cardId"));
             temp.put("password", user.get("password"));
-            temp.put("isInit",user.get("isInit"));
+            temp.put("isInit", user.get("isInit"));
+
         }
         return temp;
     }

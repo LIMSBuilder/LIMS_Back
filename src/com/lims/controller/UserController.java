@@ -350,4 +350,19 @@ public class UserController extends Controller {
         }
     }
 
+    public void initSetting() {
+        try {
+            int id = getParaToInt("id");
+            User user = User.userDao.findById(id);
+            user
+                    .set("roleId", getPara("roleId"))
+                    .set("cardId", getPara("cardId"))
+                    .set("name", getPara("name"))
+                    .set("isInit", 1);
+            renderJson(user.update() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }
