@@ -53,7 +53,7 @@ public class SampleController extends Controller {
                     entry.set("self_identify", 0).set("scene_identify", 1);
                 }
                 entry.save();
-                identify = identify + "-" + String.format("%03d", 1);
+                identify = identify + "-" + String.format("%04d", 1);
             } else {
                 int identify_Encode = 0;
                 if (sample_type == 0) {
@@ -65,7 +65,7 @@ public class SampleController extends Controller {
                     identify_Encode = (encode.get("scene_identify") == null ? 0 : encode.getInt("scene_identify")) + 1;
                     encode.set("scene_identify", identify_Encode).update();
                 }
-                identify += String.format("%03d", identify_Encode);
+                identify += String.format("%04d", identify_Encode);
             }
             return identify;
         } catch (Exception e) {
@@ -248,5 +248,6 @@ public class SampleController extends Controller {
             renderError(500);
         }
     }
+    
 
 }

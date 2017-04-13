@@ -176,9 +176,9 @@ public class TaskController extends Controller {
                         case "total_dispatch":
                             param += " process !=" + ProcessKit.getTaskProcess("stop");
                             break;
-//                        case "apply_sample":
-//                            param += "  AND process=" + ProcessKit.getTaskProcess("dispatch") + " ";
-//                            break;
+                        case "apply_sample":
+                            param += "  AND process=" + ProcessKit.getTaskProcess("dispatch") + " ";
+                            break;
 
                         default:
                             param += " AND " + key + " = " + value;
