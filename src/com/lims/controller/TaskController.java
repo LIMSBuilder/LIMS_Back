@@ -119,6 +119,11 @@ public class TaskController extends Controller {
                                 .set("other", contract.get("other"))
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
+                        List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_contract_item` WHERE contract_id=" + contract.get("id"));
+                        for (Contractitem contractitem : contractitemList) {
+                            result = result && contractitem.set("task_id", task.get("id")).update();
+                            if (!result) return false;
+                        }
                         LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                         return result;
                     } else
