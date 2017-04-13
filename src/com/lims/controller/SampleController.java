@@ -4,6 +4,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.lims.model.*;
 import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
@@ -168,12 +169,13 @@ public class SampleController extends Controller {
     public void applyLog() {
         try {
             int item_id = getParaToInt("id");
-        List<Log> logList= Log.logDao.find("select * from `db_log`  where item_id =" + item_id + "orderby create_time  DESC");
+            List<Log> logList = Log.logDao.find("select * from `db_log`  where item_id =" + item_id + "orderby create_time  DESC");
             renderJson(toLogJson(logList));
         } catch (Exception e) {
             renderError(500);
         }
     }
+
     public Map toLogJson(List<Log> entityList) {
         Map<String, Object> json = new HashMap<>();
         try {
@@ -248,6 +250,40 @@ public class SampleController extends Controller {
             renderError(500);
         }
     }
-    
+
+
+    public void getProjectByCategory() {
+        try {
+            int task_id = getParaToInt("id");
+            List<Record> recordList = Db.find("SELECT DISTINCT p.*,m.element_id FROM `db_contract_item` i,`db_task` t,`db_item_project` p,`db_monitor_project` m WHERE t.id=i.task_id AND t.id=" + task_id + " AND i.id=p.item_id AND m.id=p.project_id");
+            Map<Integer, List<Map>> listMap = new HashMap<>();
+            for (Record record : recordList) {
+                int element_id = record.get("element_id");
+                int project_id = record.get("project_id");
+                if (listMap.containsKey(element_id)) {
+                    listMap.get(element_id).add(MonitorProject.monitorProjectdao.findById(project_id).toJsonSingle());
+                } else {
+                    List<Map> temp = new ArrayList<>();
+                    temp.add(MonitorProject.monitorProjectdao.findById(project_id).toJsonSingle());
+                    listMap.put(element_id, temp);
+                }
+            }
+            List results = new ArrayList();
+            for (Integer key : listMap.keySet()) {
+                Element element = Element.elementDao.findById(key);
+                Map result = new HashMap();
+                result.put("element_id", element.get("id"));
+                result.put("name", element.get("name"));
+                result.put("project", listMap.get(key));
+                results.add(result);
+            }
+            Map t = new HashMap();
+            t.put("results", results);
+            renderJson(t);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 
 }
