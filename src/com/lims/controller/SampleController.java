@@ -14,10 +14,7 @@ import org.junit.Test;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenyangyang on 2017/3/29.
@@ -73,6 +70,34 @@ public class SampleController extends Controller {
             return null;
         }
 
+    }
+
+
+    /**
+     * 自送样编号创建
+     * 每次调用均返回一个自送样编号
+     *
+     * @return 自送样编号
+     */
+    public String createSelfIdentify() {
+        try {
+            String identify = "Z";
+            Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
+            if (encode == null) {
+                //数据库中没有第一条记录，则创建它
+                Encode entry = new Encode();
+                entry.set("contract_identify", 0).set("self_identify", 1).set("scene_identify", 0).save();
+                identify = identify + "-" + String.format("%04d", 1);
+            } else {
+                //当前已存在一条记录
+                int identify_Encode = (encode.get("self_identify") == null ? 0 : encode.getInt("self_identify")) + 1;
+                encode.set("self_identify", identify_Encode).update();
+                identify += String.format("%04d", identify_Encode);
+            }
+            return identify;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void apply() {
@@ -220,14 +245,40 @@ public class SampleController extends Controller {
      **/
     public void selfCreate() {
         try {
-            int task_id = getParaToInt("task_id");
-            Task task = Task.taskDao.findById(task_id);
-            if (task != null) {
-                String identify = createIdentify(task_id, getParaToInt("prefix"), getPara("prefix_text"));
-                Sample sample = new Sample();
-                sample.set("identify", identify).set("name", getPara("name")).set("character", getPara("character")).set("condition", getPara("condition")).set("process", ProcessKit.getSampleProcess("create"));
-                renderJson(sample.save() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-            } else renderJson(RenderUtils.CODE_EMPTY);
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int task_id = getParaToInt("task_id");
+                    Task task = Task.taskDao.findById(task_id);
+                    if (task != null) {
+                        Boolean result = true;
+                        String identify = createSelfIdentify();
+                        Sample sample = new Sample();
+                        result = result && sample
+                                .set("identify", identify)
+                                .set("name", getPara("name"))
+                                .set("character", getPara("character"))
+                                .set("condition", getPara("condition"))
+                                .set("process", ProcessKit.getSampleProcess("create"))
+                                .set("task_id", task_id)
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                                .set("create_time", ParaUtils.sdf.format(new Date()))
+                                .save();
+                        Integer[] projectList = getParaValuesToInt("project[]");
+                        for (int id : projectList) {
+                            SampleProject sampleProject = new SampleProject();
+                            sampleProject
+                                    .set("sample_id", sample.get("id"))
+                                    .set("project_id", id);
+                            result = result && sampleProject.save();
+                            if (!result) return false;
+
+                        }
+                        return result;
+                    } else return false;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
