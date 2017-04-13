@@ -89,11 +89,14 @@ public class FrequencyController extends Controller {
             int times = getParaToInt("times");
             String unit = getPara("unit");
             int notice = getParaToInt("notice");
+
             if (Frequency.frequencyDao.find("select * from `db_frequency` where count='" + count + "'and  times='" + times + "' and unit='" + unit + "'").size() != 0) {
                 renderJson(RenderUtils.CODE_REPEAT);
             } else {
                 Frequency frequency = new Frequency();
-                boolean result = frequency.set("count", count).set("times", times).set("unit", unit).set("notice", notice).save();
+                frequency.set("count", count).set("times", times).set("unit", unit).set("notice", notice);
+                frequency.set("total", countFrequency(frequency));
+                boolean result = frequency.save();
                 renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             }
         } catch (Exception e) {
@@ -165,5 +168,16 @@ public class FrequencyController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+    }
+
+    public String countFrequency(Frequency frequency) {
+        String value = "";
+        if (frequency.get("unit").equals("one")) {
+            value = "仅" + frequency.get("count") + "次";
+        } else {
+            String unit = Frequency.UnitMap.get(frequency.get("unit")).toString();
+            value = frequency.get("count") + "次/" + frequency.get("times") + unit;
+        }
+        return value;
     }
 }

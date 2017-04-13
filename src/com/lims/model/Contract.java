@@ -1,5 +1,6 @@
 package com.lims.model;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 import java.util.ArrayList;
@@ -30,19 +31,21 @@ public class Contract extends Model<Contract> {
                 }
                 result.put(t, item.get(t));
             }
-            List<ItemProject> projectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item.get("id"));
-            List<Map> mapList = new ArrayList<>();
-            for (ItemProject project : projectList) {
-                Map t = new HashMap();
-                t.put("id", project.get("id"));
-                t.put("project", MonitorProject.monitorProjectdao.findById(project.get("project_id")));
-                t.put("item_id", project.get("item_id"));
-                mapList.add(t);
+            result.put("charge", User.userDao.findById(item.get("charge_id")) == null ? null : User.userDao.findById(item.get("charge_id")).toSimpleJson());
+            List<ItemJoin> itemJoinList = ItemJoin.itemJoinDao.find("SELECT * FROM `db_item_join_user` WHERE contract_item_id=" + item.get("id"));
+            List userList = new ArrayList();
+            for (ItemJoin itemJoin : itemJoinList) {
+                User user = User.userDao.findById(itemJoin.get("join_id"));
+                userList.add(user.toSimpleJson());
             }
-            result.put("project", mapList);
+            result.put("join", userList);
+
             maps.add(result);
         }
         temp.put("items", maps);
         return temp;
     }
+
+
+
 }

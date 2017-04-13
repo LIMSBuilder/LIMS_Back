@@ -64,25 +64,25 @@ public class ContractitemController extends Controller {
         Map<String, Object> item = new HashMap<>();
         item.put("id", contractitem.getInt("id"));
         item.put("company", contractitem.get("company"));
-        item.put("point", contractitem.get("point"));
+        item.put("point", contractitem.getInt("point"));
         item.put("contract_id", contractitem.get("contract_id"));
         item.put("other", contractitem.get("other"));
-        item.put("is_package", contractitem.get("is_package"));
+//        item.put("is_package", contractitem.get("is_package"));
         return item;
     }
 
     public void create() {
         try {
             String company = getPara("company");
-            String point = getPara("point");
+            int  point = getParaToInt("point");
             int contract_id = getParaToInt("contract_id");
             String other = getPara("other");
-            int is_package = getParaToInt("is_package");
-            if (Contractitem.contractitemdao.find("select * from `db_frequency` where company='" + company + "'and  point='" + point + "' and contract_id='" + contract_id + "' and other= '" + other + "' and is_package='" + is_package + "'").size() != 0) {
+//            int is_package = getParaToInt("is_package");
+            if (Contractitem.contractitemdao.find("select * from `db_contract_item` where company='" + company + "'and  point='" + point + "' and contract_id='" + contract_id + "' and other= '" + other +  "'").size() != 0) {
                 renderJson(RenderUtils.CODE_REPEAT);
             } else {
                 Contractitem contractitem = new Contractitem();
-                Boolean result = contractitem.set("company", company).set("point", point).set("contract_id", contract_id).set("other", other).set("is_package", is_package).save();
+                Boolean result = contractitem.set("company", company).set("point", point).set("contract_id", contract_id).set("other", other).save();
                 renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             }
         } catch (Exception e) {
@@ -105,12 +105,12 @@ public class ContractitemController extends Controller {
         try {
             int id = getParaToInt("id");
             String company = getPara("company");
-            String point = getPara("point");
+            int point = getParaToInt("point");
             int contract_id = getParaToInt("contract_id");
             String other = getPara("other");
-            int is_package = getParaToInt("is_package");
+//            int is_package = getParaToInt("is_package");
             Contractitem contractitem = Contractitem.contractitemdao.findById(id);
-            boolean result = contractitem.set("id", id).set("company", company).set("point", point).set("contract_id", contract_id).set("other", other).set("is_package", is_package).update();
+            boolean result = contractitem.set("id", id).set("company", company).set("point", point).set("contract_id", contract_id).set("other", other).update();
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
