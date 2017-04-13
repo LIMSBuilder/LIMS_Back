@@ -336,5 +336,21 @@ public class SampleController extends Controller {
         }
     }
 
+    public void getSelfSampleList() {
+        try {
+            int task_id = getParaToInt("task_id");
+            List<Sample> sampleList = Sample.sampleDao.find("SELECT * FROM `db_sample` WHERE task_id=" + task_id);
+            List<Map> result = new ArrayList<>();
+            for (Sample sample : sampleList) {
+                result.add(sample.toSimpleJson());
+            }
+            Map t = new HashMap();
+            t.put("results", result);
+            renderJson(t);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 
 }
