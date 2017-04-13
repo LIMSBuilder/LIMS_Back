@@ -39,19 +39,13 @@ public class Contract extends Model<Contract> {
                 userList.add(user.toSimpleJson());
             }
             result.put("join", userList);
-//            List<ItemProject> projectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item.get("id"));
-//            List<Map> mapList = new ArrayList<>();
-//            for (ItemProject project : projectList) {
-//                Map t = new HashMap();
-//                t.put("id", project.get("id"));
-//                t.put("project", MonitorProject.monitorProjectdao.findById(project.get("project_id")));
-//                t.put("item_id", project.get("item_id"));
-//                mapList.add(t);
-//            }
-//            result.put("project", mapList);
+
             maps.add(result);
         }
         temp.put("items", maps);
         return temp;
     }
+
+
+
 }

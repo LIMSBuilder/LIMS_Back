@@ -39,6 +39,9 @@ public class LoginController extends Controller {
             renderError(500);
         }
     }
+    /**
+     * 忘记密码
+     * **/
 
     public void forget() {
         try {
