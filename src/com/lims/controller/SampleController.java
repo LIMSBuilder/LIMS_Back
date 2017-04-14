@@ -259,10 +259,11 @@ public class SampleController extends Controller {
                                 .set("name", getPara("name"))
                                 .set("character", getPara("character"))
                                 .set("condition", getPara("condition"))
-                                .set("process", ProcessKit.getSampleProcess("create"))
+                                .set("process", ProcessKit.getSampleProcess("apply"))
                                 .set("task_id", task_id)
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
-                                .set("create_time", ParaUtils.sdf.format(new Date()))
+                                .set("create_time", ParaUtils.sdf2.format(new Date()))
+                                .set("sample_type", getPara("sample_type"))
                                 .save();
                         Integer[] projectList = getParaValuesToInt("project[]");
                         for (int id : projectList) {
@@ -277,6 +278,34 @@ public class SampleController extends Controller {
                         return result;
                     } else return false;
                 }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /***
+     * 完成自送样登记
+     * */
+    public void register() {
+        try {
+
+            boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int task_id = getParaToInt("task_id");
+                    Task task = Task.taskDao.findById(task_id);
+                    Boolean result = true;
+                    List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where task_id = " + task_id + " AND creater= " + ParaUtils.getCurrentUser(getRequest()).get("id") + " and process = 0");
+                    for (Sample sample : sampleList) {
+                        result = result && sample.set("process", ProcessKit.getSampleProcess("create")).update();
+                        if (!result) return false;
+                    }
+
+                    return result;
+                }
+
             });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
@@ -336,6 +365,10 @@ public class SampleController extends Controller {
         }
     }
 
+    /**
+     * 得到自送样细节列表
+     **/
+
     public void getSelfSampleList() {
         try {
             int task_id = getParaToInt("task_id");
@@ -352,5 +385,99 @@ public class SampleController extends Controller {
         }
     }
 
+    /**
+     * 删除样品
+     **/
+    public void deleteSample() {
+        try {
+            int sample_id = getParaToInt("sample_id");
+            Boolean result = Sample.sampleDao.deleteById(sample_id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
+
+    /**
+     * 修改自送样样品接口
+     **/
+    public void changeSample() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int sample_id = getParaToInt("id");
+                    Sample sample = Sample.sampleDao.findById(sample_id);
+                    if (sample != null) {
+                        Boolean result = true;
+                        result = result && sample
+                                .set("name", getPara("name"))
+                                .set("character", getPara("character"))
+                                .set("condition", getPara("condition"))
+                                .set("process", ProcessKit.getSampleProcess("create"))
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                                .set("create_time", ParaUtils.sdf2.format(new Date()))
+                                .set("sample_type", getPara("sample_type"))
+                                .update();
+                        List<SampleProject> sampleProjects = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample_id);
+                        for (SampleProject p : sampleProjects) {
+                            result = result && SampleProject.sampleprojrctDao.deleteById(p.get("id"));
+                            if (!result) return false;
+                        }
+                        Integer[] projectList = getParaValuesToInt("project[]");
+                        for (int id : projectList) {
+                            SampleProject sampleProject = new SampleProject();
+                            sampleProject
+                                    .set("sample_id", sample.get("id"))
+                                    .set("project_id", id);
+                            result = result && sampleProject.save();
+                            if (!result) return false;
+                        }
+                        return result;
+                    } else return false;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 删除全部样品接口
+     **/
+    public void deleteAll() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Integer[] selected = getParaValuesToInt("selected[]");
+                    Boolean result = true;
+                    for (int i = 0; i < selected.length; i++) {
+                        int id = selected[i];
+                        result = result && Sample.sampleDao.deleteById(id);
+                        if (!result) break;
+                    }
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 自送样样品交托，交接记录
+     **/
+    public void selfSample() {
+        try {
+
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 
 }
