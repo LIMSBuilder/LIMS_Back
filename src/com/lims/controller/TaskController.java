@@ -117,6 +117,7 @@ public class TaskController extends Controller {
                                 .set("way", contract.get("way"))
                                 .set("wayDesp", contract.get("wayDesp"))
                                 .set("other", contract.get("other"))
+                                .set("charge", getPara("charge"))
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
                         List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_contract_item` WHERE contract_id=" + contract.get("id"));
@@ -494,5 +495,21 @@ public class TaskController extends Controller {
             renderError(500);
         }
 
+    }
+
+    /**
+     * 打印任务书
+     */
+    public void createTask() {
+        try {
+            String id = getPara("id");
+            Task task = Task.taskDao.findFirst("SELECT * FROM `db_task` WHERE id=" + id);
+            if (task != null) {
+                getRequest().setAttribute("task", task);
+                render("/template/create_task.jsp");
+            } else renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 }
