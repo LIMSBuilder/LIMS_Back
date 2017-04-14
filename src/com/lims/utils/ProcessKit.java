@@ -32,8 +32,8 @@ public class ProcessKit {
     }};
     //存放样品进度
     public static Map SampleMap = new HashMap() {{
-        this.put("apply", 0);//申请样品号
-        this.put("create", 1);//登记样品信息
+        this.put("apply", 0);//自送样未登记
+        this.put("create", 1);//自送样已经登记
     }};
 
 
