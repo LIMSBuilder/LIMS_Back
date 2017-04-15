@@ -103,7 +103,7 @@ public class TaskController extends Controller {
                                 .set("contract_id", getPara("contract_id"))
                                 .set("process", ProcessKit.getTaskProcess("create"))
                                 .set("create_time", ParaUtils.sdf.format(new Date()))
-                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                                 .set("identify", Task.taskDao.findFirst("select * from `db_task` where  identify ='" + contract.get("identify") + "'") != null ? createIdentify() : contract.get("identify"))
 //                                .set("identify", contract.get("identify"))
                                 .set("client_unit", contract.get("client_unit"))
@@ -126,7 +126,7 @@ public class TaskController extends Controller {
                             result = result && contractitem.set("task_id", task.get("id")).update();
                             if (!result) return false;
                         }
-                        LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                        LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                         return result;
                     } else
                         return false;
@@ -173,19 +173,14 @@ public class TaskController extends Controller {
                 Object value = condition.get(key);
                 if (key.equals("process")) {
                     switch (value.toString()) {
-                        case "before_dispath":
-                            param += "  AND process=" + ProcessKit.getTaskProcess("create") + " ";
+                        case "total":
                             break;
-                        case "after_dispath":
-                            //  param += " AND sample_type=1 AND process!=" + ProcessKit.getTaskProcess("create") + " ";
-                            param += " AND process != " + ProcessKit.getTaskProcess("create") + " AND process !=" + ProcessKit.getTaskProcess("stop") + " ";
-                            break;
-                        case "total_dispatch":
-                            param += " process !=" + ProcessKit.getTaskProcess("stop");
+                        case "totalDispatch":
+                            param += "AND ( process = " + ProcessKit.getTaskProcess("create") + " OR process = " + ProcessKit.getTaskProcess("dispatch") + ") ";
                             break;
                         //自送样
                         case "apply_sample":
-                            param += " AND  sample_type = 0   AND process=" + ProcessKit.getTaskProcess("dispatch") + " ";
+                            param += " AND  sample_type = 0   AND process=" + ProcessKit.getTaskProcess("create") + " ";
                             break;
 
                         default:
@@ -286,24 +281,20 @@ public class TaskController extends Controller {
                     for (int i = 0; i < temp.size(); i++) {
                         Map entry = temp.get(i);
                         int item_id = (int) entry.get("id");
-                        int charge = (int) entry.get("charge");
-//                        List<Integer> belongs = (ArrayList) entry.get("belongs");
-//                        Contractitem contractitem = Contractitem.contractitemdao.findById(item_id);
-//                        result = result && contractitem.set("charge_id", charge).update();
-//                        if (!result) return false;
-//                        for (int j = 0; j < belongs.size(); j++) {
-//                            int user = belongs.get(j);
-//                            ItemJoin itemJoin = new ItemJoin();
-//                            itemJoin.set("contract_item_id", item_id);
-//                            itemJoin.set("join_id", user);
-//                            result = result && itemJoin.save();
-//                            if (!result) break;
-//                        }
+                        List<Integer> belongs = (ArrayList) entry.get("belongs");
+                        for (int j = 0; j < belongs.size(); j++) {
+                            int user = belongs.get(j);
+                            ItemJoin itemJoin = new ItemJoin();
+                            itemJoin.set("contract_item_id", item_id);
+                            itemJoin.set("join_id", user);
+                            result = result && itemJoin.save();
+                            if (!result) break;
+                        }
                     }
                     if (!result) return false;
                     Task task = Task.taskDao.findById(task_id);
                     result = result && task.set("process", ProcessKit.TaskMap.get("dispatch")).update();
-                    LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    LoggerKit.addTaskLog(task.getInt("id"), "派遣任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                     return result;
                 }
             });
