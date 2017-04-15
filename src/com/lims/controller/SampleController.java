@@ -302,7 +302,7 @@ public class SampleController extends Controller {
                         result = result && sample.set("process", ProcessKit.getSampleProcess("create")).update();
                         if (!result) return false;
                     }
-
+                    result = result && task.set("sample_creater", ParaUtils.getCurrentUser(getRequest()).get("id")).set("sample_time", ParaUtils.sdf.format(new Date())).update();
                     return result;
                 }
 
