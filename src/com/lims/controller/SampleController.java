@@ -480,4 +480,17 @@ public class SampleController extends Controller {
         }
     }
 
+    public void createSample() {
+        try {
+            String id = getPara("id");
+            Task task = Task.taskDao.findFirst("SELECT * FROM `db_task` WHERE id=" + id);
+            if (task != null) {
+                getRequest().setAttribute("task", task);
+                render("/template/create_selfsample.jsp");
+            } else renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }
