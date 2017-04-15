@@ -182,7 +182,8 @@ public class TaskController extends Controller {
                         case "apply_sample":
                             param += " AND  sample_type = 0   AND process=" + ProcessKit.getTaskProcess("create") + " ";
                             break;
-
+                        case "delivery":
+                            param += "AND sample_type =1 AND process >" + ProcessKit.getTaskProcess("create") + " ";
                         default:
                             param += " AND " + key + " = " + value;
                     }
@@ -269,40 +270,40 @@ public class TaskController extends Controller {
         }
     }
 
-    public void delivery() {
-        try {
-            Boolean result = Db.tx(new IAtom() {
-                @Override
-                public boolean run() throws SQLException {
-                    String jsons = getPara("result");//前端传数组过来
-                    String task_id = getPara("id");
-                    List<Map> temp = Jackson.getJson().parse(jsons, List.class);
-                    Boolean result = true;
-                    for (int i = 0; i < temp.size(); i++) {
-                        Map entry = temp.get(i);
-                        int item_id = (int) entry.get("id");
-                        List<Integer> belongs = (ArrayList) entry.get("belongs");
-                        for (int j = 0; j < belongs.size(); j++) {
-                            int user = belongs.get(j);
-                            ItemJoin itemJoin = new ItemJoin();
-                            itemJoin.set("contract_item_id", item_id);
-                            itemJoin.set("join_id", user);
-                            result = result && itemJoin.save();
-                            if (!result) break;
-                        }
-                    }
-                    if (!result) return false;
-                    Task task = Task.taskDao.findById(task_id);
-                    result = result && task.set("process", ProcessKit.TaskMap.get("dispatch")).update();
-                    LoggerKit.addTaskLog(task.getInt("id"), "派遣任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
-                    return result;
-                }
-            });
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
+//    public void delivery() {
+//        try {
+//            Boolean result = Db.tx(new IAtom() {
+//                @Override
+//                public boolean run() throws SQLException {
+//                    String jsons = getPara("result");//前端传数组过来
+//                    String task_id = getPara("id");
+//                    List<Map> temp = Jackson.getJson().parse(jsons, List.class);
+//                    Boolean result = true;
+//                    for (int i = 0; i < temp.size(); i++) {
+//                        Map entry = temp.get(i);
+//                        int item_id = (int) entry.get("id");
+//                        List<Integer> belongs = (ArrayList) entry.get("belongs");
+//                        for (int j = 0; j < belongs.size(); j++) {
+//                            int user = belongs.get(j);
+//                            ItemJoin itemJoin = new ItemJoin();
+//                            itemJoin.set("contract_item_id", item_id);
+//                            itemJoin.set("join_id", user);
+//                            result = result && itemJoin.save();
+//                            if (!result) break;
+//                        }
+//                    }
+//                    if (!result) return false;
+//                    Task task = Task.taskDao.findById(task_id);
+//                    result = result && task.set("process", ProcessKit.TaskMap.get("dispatch")).update();
+//                    LoggerKit.addTaskLog(task.getInt("id"), "派遣任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+//                    return result;
+//                }
+//            });
+//            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+//        } catch (Exception e) {
+//            renderError(500);
+//        }
+//    }
 
     public void countProcess() {
 //        try {
@@ -505,4 +506,77 @@ public class TaskController extends Controller {
             renderError(500);
         }
     }
+
+    /**
+     * 根据Task_id获取项目
+     * *
+     **/
+    public void taskGetItems() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_contract_item` WHERE task_id=" + task_id);
+                Map<String, List<Map>> result = new HashMap<>();
+                for (Contractitem contractitem : contractitemList) {
+                    String compancy = contractitem.get("company");
+                    if (compancy == null) {
+                        compancy = task.get("client_unit");
+                    }
+                    if (result.containsKey(compancy)) {
+                        List<Map> temp = result.get(compancy);
+                        Map ele = new HashMap();
+                        Element element = Element.elementDao.findById(contractitem.get("element"));
+                        for (String key : element._getAttrNames()) {
+                            ele.put(key, element.get(key));
+                        }
+                        List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + contractitem.get("id"));
+                        List projectList = new ArrayList();
+                        for (ItemProject itemProject : itemProjectList) {
+                            MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(itemProject.get("project_id"));
+                            projectList.add(monitorProject.toJsonSingle());
+                        }
+                        ele.put("project", projectList);
+                        ele.put("other", contractitem.get("other"));
+                        ele.put("point", contractitem.get("point"));
+                        ele.put("frequency", Frequency.frequencyDao.findById("frequency"));
+                        temp.add(ele);
+                    } else {
+                        //Map里数据不存在
+                        List<Map> temp = new ArrayList<>();
+                        Map ele = new HashMap();
+                        Element element = Element.elementDao.findById(contractitem.get("element"));
+                        for (String key : element._getAttrNames()) {
+                            ele.put(key, element.get(key));
+                        }
+                        List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + contractitem.get("id"));
+                        List projectList = new ArrayList();
+                        for (ItemProject itemProject : itemProjectList) {
+                            MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(itemProject.get("project_id"));
+                            projectList.add(monitorProject.toJsonSingle());
+                        }
+                        ele.put("project", projectList);
+                        ele.put("other", contractitem.get("other"));
+                        ele.put("point", contractitem.get("point"));
+                        ele.put("frequency", Frequency.frequencyDao.findById("frequency"));
+                        temp.add(ele);
+                        result.put(compancy, temp);
+                    }
+                }
+                List back = new ArrayList();
+                for (String key : result.keySet()) {
+                    Map b = new HashMap();
+                    b.put("company", key);
+                    b.put("results", result.get(key));
+                    b.put("task_id", task_id);
+                    back.add(b);
+                }
+                renderJson(back);
+            } else renderNull();
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }

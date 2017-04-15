@@ -10,11 +10,13 @@ import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.junit.Test;
 
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by chenyangyang on 2017/3/29.
@@ -31,6 +33,7 @@ public class SampleController extends Controller {
     public static String createIdentify(int id, int flag, String prefix) {
         try {
             String identify = "";
+            String character = "";
             Task task = Task.taskDao.findById(id);
             if (flag == 0) {
                 Type type = task.get("type");
@@ -44,14 +47,14 @@ public class SampleController extends Controller {
             if (encode == null) {
 //            数据库中没有第一条记录，则创建它
                 Encode entry = new Encode();
-                entry.set("contract_identify", 0);
+                entry.set("contract_identify", 0).set("character", "A");
                 if (sample_type == 0) {
                     entry.set("self_identify", 1).set("scene_identify", 0);
                 } else {
                     entry.set("self_identify", 0).set("scene_identify", 1);
                 }
                 entry.save();
-                identify = identify + "-" + String.format("%04d", 1);
+                identify = identify + "A" + String.format("%04d", 1);
             } else {
                 int identify_Encode = 0;
                 if (sample_type == 0) {
@@ -61,7 +64,13 @@ public class SampleController extends Controller {
                 } else {
                     //现场采样
                     identify_Encode = (encode.get("scene_identify") == null ? 0 : encode.getInt("scene_identify")) + 1;
-                    encode.set("scene_identify", identify_Encode).update();
+                    character = encode.get("character");
+
+                    if (identify_Encode == 9999) {
+
+                    }
+                    encode.set("scene_identify", identify_Encode == 9999 ? 0 : identify_Encode).set("character", identify_Encode == 9999 ? driver(character) : character).update();
+
                 }
                 identify += String.format("%04d", identify_Encode);
             }
@@ -70,6 +79,35 @@ public class SampleController extends Controller {
             return null;
         }
 
+    }
+
+
+    /**
+     * 作用：字母+1
+     *
+     * @param driver
+     * @return
+     */
+    public static String driver(String driver) {
+        if (driver != null && driver.length() > 0) {
+            char[] charArray = driver.toCharArray();
+            AtomicInteger z = new AtomicInteger(0);
+            for (int i = charArray.length - 1; i > -1; i--) {
+                if (charArray[i] == 'Z') {
+                    z.set(z.incrementAndGet());
+                } else {
+                    if (z.intValue() > 0 || i == charArray.length - 1) {
+                        AtomicInteger atomic = new AtomicInteger(charArray[i]);
+                        charArray[i] = (char) atomic.incrementAndGet();
+                        z.set(0);
+                    }
+                }
+            }
+
+            return String.valueOf(charArray);
+        } else {
+            return "A";
+        }
     }
 
 
@@ -227,18 +265,18 @@ public class SampleController extends Controller {
     /**
      * 统计待申请的任务数
      **/
-    public void countProcess() {
-        try {
-            User user = new User();
-            int count = Task.taskDao.find("SELECT DISTINCT t.*", "FROM `db_task` t,`db_contract_item` i,`db_contract` c,`db_item_join_user` u  WHERE ((i.task_id=t.id AND t.process=2 AND t.sample_type=1) OR (i.task_id is NULL AND t.identify=c.identify AND t.process=2 AND t.sample_type=1)) AND (i.charge_id=" + user.get("id") + " OR (i.id=u.contract_item_id AND u.join_id=" + user.get("id") + ") and  i.process = 0)").size();
-            Map temp = new HashMap();
-            temp.put("beforeApply", temp);
-            renderJson(temp);
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
+//    public void countProcess() {
+//        try {
+//            User user = new User();
+//            int count = Task.taskDao.find("SELECT DISTINCT t.*", "FROM `db_task` t,`db_contract_item` i,`db_contract` c,`db_item_join_user` u  WHERE ((i.task_id=t.id AND t.process=2 AND t.sample_type=1) OR (i.task_id is NULL AND t.identify=c.identify AND t.process=2 AND t.sample_type=1)) AND (i.charge_id=" + user.get("id") + " OR (i.id=u.contract_item_id AND u.join_id=" + user.get("id") + ") and  i.process = 0)").size();
+//            Map temp = new HashMap();
+//            temp.put("beforeApply", temp);
+//            renderJson(temp);
+//
+//        } catch (Exception e) {
+//            renderError(500);
+//        }
+//    }
 
     /**
      * 提供自送样样品信息保存接口
@@ -491,6 +529,30 @@ public class SampleController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+
     }
 
+    /***
+     * 得到现场采样派遣任务细节接口
+     * **/
+    public void DetailList() {
+        try {
+            int task_id = getParaToInt("task_id");
+            String company = getPara("company");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                List<Contractitem> contractitemList = Contractitem.contractitemdao.find("select DISTINCT i.* From `db_task` t,`db_contract_item` i where (i.task_id=" + task_id + " AND i.company ='" + company + "') OR (i.task_id=" + task_id + " AND t.id=i.task_id AND t.client_unit='" + company + "')");
+                List temp = new ArrayList();
+                for (Contractitem items : contractitemList) {
+                    temp.add(items.toSimpleJson());
+                }
+                renderJson(temp);
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+
+        } catch (Exception e) {
+            renderError(50);
+        }
+    }
 }
