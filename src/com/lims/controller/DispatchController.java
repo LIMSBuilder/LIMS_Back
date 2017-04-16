@@ -5,10 +5,7 @@ import com.jfinal.json.Jackson;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
-import com.lims.model.Contractitem;
-import com.lims.model.Dispatch;
-import com.lims.model.Dispatch_Item;
-import com.lims.model.Dispatch_Joiner;
+import com.lims.model.*;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
@@ -112,6 +109,30 @@ public class DispatchController extends Controller {
 
 
         return project;
+    }
+
+
+    /**
+     * 获取个人派遣任务列表
+     */
+    public void UserDispatchList() {
+        try {
+            int rowCount = getParaToInt("rowCount");
+            int currentPage = getParaToInt("currentPage");
+            String condition_temp = getPara("condition");
+            Map condition = ParaUtils.getSplitCondition(condition_temp);
+            User user = ParaUtils.getCurrentUser(getRequest());
+            Page<Dispatch_Item> dispatch_itemPage = Dispatch_Item.dispatchItemDao.paginate(currentPage, rowCount, "SELECT i.*", " FROM `db_dispatch_item` i,`db_dispatch` d,`db_dispatch_join` j WHERE d.id=i.dispatch_id AND i.date='" + ParaUtils.sdf2.format(new Date()) + "' AND (d.charge_id=" + user.get("id") + " OR (d.id=j.dispatch_id AND j.join_id=" + user.get("id") + ")) " + condition);
+            List<Dispatch_Item> dispatch_itemList = dispatch_itemPage.getList();
+            Map results = toJson(dispatch_itemList);
+            results.put("currentPage", currentPage);
+            results.put("totalPage", dispatch_itemPage.getTotalPage());
+            results.put("rowCount", rowCount);
+            results.put("condition", condition_temp);
+            renderJson(results);
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 
 }
