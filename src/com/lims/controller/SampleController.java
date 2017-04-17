@@ -10,6 +10,7 @@ import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.poi.ss.formula.functions.T;
 import org.junit.Test;
 
@@ -145,18 +146,16 @@ public class SampleController extends Controller {
                 public boolean run() throws SQLException {
                     Boolean result = true;
                     int task_id = getParaToInt("task_id");
-                    int item_id = getParaToInt("item_id");
-                    int prefix = getParaToInt("prefix");
-                    String prefix_text = getPara("prefix_text");
-                    prefix_text = prefix_text.toUpperCase();
-                    int count = getParaToInt("count");
-                    Sample sample = new Sample();
-                    for (int i = 0; i > count; i++) {
-
-                        result = result && sample.set("identify", createIdentify(task_id, prefix, prefix_text)).save();
-                    }
-                    LoggerKit.addSampleLog(sample.getInt("id"), "申请编号", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
-
+                    Task task = Task.taskDao.findById(task_id);
+                    if (task != null) {
+                        int count = getParaToInt("count");
+                        for (int i = 0; i < count; i++) {
+                            String identify = createIdentify(task_id, 0, "");
+                            Sample sample = new Sample();
+                            result = result && sample.set("identify", identify).set("process", 0).save();
+                            if (!result) return false;
+                        }
+                    } else return false;
                     return result;
                 }
             });
@@ -555,4 +554,5 @@ public class SampleController extends Controller {
             renderError(50);
         }
     }
+
 }
