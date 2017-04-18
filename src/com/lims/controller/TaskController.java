@@ -50,31 +50,22 @@ public class TaskController extends Controller {
                     String[] items = getParaValues("project_items[]");
                     for (String item : items) {
                         Map temp = Jackson.getJson().parse(item, Map.class);
-                        Contractitem contractitem = new Contractitem();
-//                        List points = (ArrayList) temp.get("point");
-//                        String point = "";
-//                        if (points != null) {
-//                            for (int i = 0; i < points.size(); i++) {
-//                                point += points.get(i);
-//                                if (i != points.size() - 1) {
-//                                    point += ",";
-//                                }
-//                            }
-//                        }
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("frequency", ((Map) temp.get("frequency")).get("id")).set("task_id", task.get("id")).set("other", temp.get("other")).save();
-                        if (!result) break;
-                        List<Map> projectList = (ArrayList) temp.get("project");
-                        if (projectList != null) {
-                            for (int m = 0; m < projectList.size(); m++) {
-                                Map project = projectList.get(m);
-                                ItemProject entry = new ItemProject();
-                                entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
-                                entry.set("isPackage", project.get("isPackage") != null && project.get("isPackage") == true ? 1 : 0);
-                                result = result && entry.save();
+                        Company company = new Company();
+                        result = result && company.set("task_id", task.get("id")).set("company", temp.get("company")).set("flag", temp.get("flag")).set("process", 0).set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id")).set("create_time", ParaUtils.sdf.format(new Date())).save();
+                        List<Map> projectItems = (List<Map>) temp.get("items");
+                        for (Map itemMap : projectItems) {
+                            Contractitem contractitem = new Contractitem();
+                            result = result && contractitem.set("company_id", company.get("id")).set("element", ((Map) itemMap.get("element")).get("id")).set("frequency", ((Map) itemMap.get("frequency")).get("id")).set("point", itemMap.get("point")).set("other", itemMap.get("other")).save();
+
+                            List<Map> project = (List<Map>) itemMap.get("project");
+                            for (Map pro : project) {
+                                ItemProject itemProject = new ItemProject();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).save();
                                 if (!result) break;
                             }
+                            if (!result) break;
                         }
-                        if (!result) break;
+
                     }
                     LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                     return result;
@@ -121,9 +112,9 @@ public class TaskController extends Controller {
                                 .set("charge", getPara("charge"))
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
-                        List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_contract_item` WHERE contract_id=" + contract.get("id"));
-                        for (Contractitem contractitem : contractitemList) {
-                            result = result && contractitem.set("task_id", task.get("id")).update();
+                        List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE contract_id=" + contract.get("id"));
+                        for (Company company:companyList) {
+                            result = result && company.set("task_id", task.get("id")).update();
                             if (!result) return false;
                         }
                         LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));

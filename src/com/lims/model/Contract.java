@@ -14,38 +14,23 @@ import java.util.Map;
 public class Contract extends Model<Contract> {
     public static Contract contractDao = new Contract();
 
-    public Map getItems() {
-        Map temp = new HashMap();
-        List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_contract_item` WHERE contract_id=" + this.get("id"));
-        List<Map> maps = new ArrayList<>();
-        for (Contractitem item : contractitemList) {
-            Map result = new HashMap();
-            for (String t : item._getAttrNames()) {
-                if (t.equals("element")) {
-                    result.put("element", item.get(t) == null ? null : Element.elementDao.findById(item.get(t)));
-                    continue;
-                }
-                if (t.equals("frequency")) {
-                    result.put("frequency", item.get(t) == null ? null : Frequency.frequencyDao.findById(item.get(t)).toJsonSingle());
-                    continue;
-                }
-                result.put(t, item.get(t));
+    public List getItems() {
+        List<Map> mapList = new ArrayList<>();
+        List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE contract_id=" + this.get("id"));
+        for (Company company : companyList) {
+            Map temp = new HashMap();
+            for (String key : company._getAttrNames()) {
+                temp.put(key, company.get(key));
             }
-            result.put("charge", User.userDao.findById(item.get("charge_id")) == null ? null : User.userDao.findById(item.get("charge_id")).toSimpleJson());
-//            List<ItemJoin> itemJoinList = ItemJoin.itemJoinDao.find("SELECT * FROM `db_item_join_user` WHERE contract_item_id=" + item.get("id"));
-//            List userList = new ArrayList();
-//            for (ItemJoin itemJoin : itemJoinList) {
-//                User user = User.userDao.findById(itemJoin.get("join_id"));
-//                userList.add(user.toSimpleJson());
-//            }
-//            result.put("join", userList);
-
-            maps.add(result);
+            List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + company.get("id"));
+            List<Map> itemsList = new ArrayList<>();
+            for (Contractitem contractitem : contractitemList) {
+                itemsList.add(contractitem.toSimpleJson());
+            }
+            temp.put("items", itemsList);
+            mapList.add(temp);
         }
-        temp.put("items", maps);
-        return temp;
+        return mapList;
     }
-
-
 
 }

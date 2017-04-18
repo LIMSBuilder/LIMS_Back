@@ -16,16 +16,16 @@ public class Contractitem extends Model<Contractitem> {
     public Map toSimpleJson() {
         Map temp = new HashMap();
         temp.put("id", this.get("id"));
-        temp.put("company", this.get("company"));
-        temp.put("contract_id", this.get("contract_id"));
+        temp.put("company_id", this.get("company_id"));
+//        temp.put("contract_id", this.get("contract_id"));
         temp.put("other", this.get("other"));
         temp.put("element", Element.elementDao.findById(this.get("element")));
         temp.put("frequency", Frequency.frequencyDao.findById(this.get("frequency")));
 
-        temp.put("task_id", this.get("task_id"));
-        temp.put("process", this.get("process"));
+//        temp.put("task_id", this.get("task_id"));
+//        temp.put("process", this.get("process"));
         temp.put("point", this.get("point"));
-        temp.put("identify",Task.taskDao.findById(this.get("task_id")));
+//        temp.put("identify",Task.taskDao.findById(this.get("task_id")));
 
 
         List<Map> maps = new ArrayList<>();
