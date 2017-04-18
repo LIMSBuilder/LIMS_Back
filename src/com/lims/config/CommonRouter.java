@@ -33,6 +33,7 @@ public class CommonRouter extends Routes {
         add("/api/sample", SampleController.class);
         add("/api/item", ItemController.class);
         add("/api/dispatch", DispatchController.class);
+        add("/api/delivery",DeliveryController.class);
     }
 }
 
