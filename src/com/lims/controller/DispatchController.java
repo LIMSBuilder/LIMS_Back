@@ -31,6 +31,11 @@ public class DispatchController extends Controller {
                     for (int id : projectList) {
                         Dispatch dispatch = new Dispatch();
                         result = result && dispatch.set("company_id", id).set("creater", ParaUtils.getCurrentUser(getRequest()).get("id")).set("create_tine", ParaUtils.sdf.format(new Date())).set("date", ParaUtils.sdf2.format(new Date())).set("process", 0).save();
+                        Company company = Company.companydao.findById(id);
+                        if (company != null) {
+                            result = result && company.set("process", 1).update();
+                        } else return false;
+
                         if (!result) return false;
                         int charge_id = getParaToInt("charge_id");
                         DispatchUser dispatchUser = new DispatchUser();
