@@ -62,22 +62,32 @@ public class DispatchController extends Controller {
      */
     public void UserDispatchList() {
         try {
-//            int rowCount = getParaToInt("rowCount");
-//            int currentPage = getParaToInt("currentPage");
-//            String condition_temp = getPara("condition");
-//            Map condition = ParaUtils.getSplitCondition(condition_temp);
-//            User user = ParaUtils.getCurrentUser(getRequest());
-//            Page<Dispatch_Item> dispatch_itemPage = Dispatch_Item.dispatchItemDao.paginate(currentPage, rowCount, "SELECT i.*", " FROM `db_dispatch_item` i,`db_dispatch` d,`db_dispatch_join` j WHERE d.id=i.dispatch_id AND i.date='" + ParaUtils.sdf2.format(new Date()) + "' AND (d.charge_id=" + user.get("id") + " OR (d.id=j.dispatch_id AND j.join_id=" + user.get("id") + ")) " + condition);
-//            List<Dispatch_Item> dispatch_itemList = dispatch_itemPage.getList();
-//            Map results = toJson(dispatch_itemList);
-//            results.put("currentPage", currentPage);
-//            results.put("totalPage", dispatch_itemPage.getTotalPage());
-//            results.put("rowCount", rowCount);
-//            results.put("condition", condition_temp);
-//            renderJson(results);
+            int rowCount = getParaToInt("rowCount");
+            int currentPage = getParaToInt("currentPage");
+            String condition_temp = getPara("condition");
+            Map condition = ParaUtils.getSplitCondition(condition_temp);
+            User user = ParaUtils.getCurrentUser(getRequest());
+            Page<Company> companyPage = Company.companydao.paginate(currentPage, rowCount, "SELECT c.*", " FROM `db_company` c, `db_delivery` d,`db_delivery_user` u WHERE c.id=d.company_id AND d.id=u.delivery_id AND u.user_id=" + user.get("id"));
+            List<Company> companyList = companyPage.getList();
+            Map results = toJson(companyList);
+            results.put("currentPage", currentPage);
+            results.put("totalPage", companyPage.getTotalPage());
+            results.put("rowCount", rowCount);
+            results.put("condition", condition_temp);
+            renderJson(results);
         } catch (Exception e) {
             renderError(500);
         }
+    }
+
+    public Map toJson(List<Company> companyList) {
+        Map result = new HashMap();
+        List temp = new ArrayList();
+        for (Company company : companyList) {
+            temp.add(company.toSimpleJSON());
+        }
+        result.put("results", temp);
+        return result;
     }
 
 }

@@ -521,4 +521,16 @@ public class TaskController extends Controller {
         }
     }
 
+    public void getByCompanyId() {
+        try {
+            int company_id = getParaToInt("company_id");
+            Company company = Company.companydao.findById(company_id);
+            if (company != null) {
+                renderJson(company.toSimpleJSON());
+            } else renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }
