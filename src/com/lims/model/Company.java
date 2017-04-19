@@ -32,6 +32,14 @@ public class Company extends Model<Company> {
             items.add(contractitem.toSimpleJson());
         }
         result.put("items", items);
+        List<DeliveryUser> deliveryUserList = DeliveryUser.deliveryUser.find("SELECT du.* FROM `db_delivery` d,`db_delivery_user` du WHERE d.company_id=" + this.get("id") + " AND du.delivery_id=d.id ");
+        List<Map> joiner = new ArrayList<>();
+        for (DeliveryUser deliveryUser : deliveryUserList) {
+            Map temp = User.userDao.findById(deliveryUser.get("user_id")).toSimpleJson();
+            temp.put("type", deliveryUser.get("type"));
+            joiner.add(temp);
+        }
+        result.put("joiner", joiner);
         return result;
     }
 }
