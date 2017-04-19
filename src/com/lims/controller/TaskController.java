@@ -113,7 +113,7 @@ public class TaskController extends Controller {
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
                         List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE contract_id=" + contract.get("id"));
-                        for (Company company:companyList) {
+                        for (Company company : companyList) {
                             result = result && company.set("task_id", task.get("id")).update();
                             if (!result) return false;
                         }
@@ -174,7 +174,8 @@ public class TaskController extends Controller {
                             param += " AND  sample_type = 0   AND process=" + ProcessKit.getTaskProcess("create") + " ";
                             break;
                         case "delivery":
-                            param += "AND sample_type =1 AND process >" + ProcessKit.getTaskProcess("create") + " ";
+                            param += "AND sample_type =1 AND process =" + ProcessKit.getTaskProcess("create") + " ";
+                            break;
                         default:
                             param += " AND " + key + " = " + value;
                     }
@@ -507,62 +508,12 @@ public class TaskController extends Controller {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
             if (task != null) {
-                List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_contract_item` WHERE task_id=" + task_id);
-                Map<String, List<Map>> result = new HashMap<>();
-                for (Contractitem contractitem : contractitemList) {
-                    String compancy = contractitem.get("company");
-                    if (compancy == null) {
-                        compancy = task.get("client_unit");
-                    }
-                    if (result.containsKey(compancy)) {
-                        List<Map> temp = result.get(compancy);
-                        Map ele = new HashMap();
-                        Element element = Element.elementDao.findById(contractitem.get("element"));
-                        for (String key : element._getAttrNames()) {
-                            ele.put(key, element.get(key));
-                        }
-                        List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + contractitem.get("id"));
-                        List projectList = new ArrayList();
-                        for (ItemProject itemProject : itemProjectList) {
-                            MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(itemProject.get("project_id"));
-                            projectList.add(monitorProject.toJsonSingle());
-                        }
-                        ele.put("project", projectList);
-                        ele.put("other", contractitem.get("other"));
-                        ele.put("point", contractitem.get("point"));
-                        ele.put("frequency", Frequency.frequencyDao.findById("frequency"));
-                        temp.add(ele);
-                    } else {
-                        //Map里数据不存在
-                        List<Map> temp = new ArrayList<>();
-                        Map ele = new HashMap();
-                        Element element = Element.elementDao.findById(contractitem.get("element"));
-                        for (String key : element._getAttrNames()) {
-                            ele.put(key, element.get(key));
-                        }
-                        List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + contractitem.get("id"));
-                        List projectList = new ArrayList();
-                        for (ItemProject itemProject : itemProjectList) {
-                            MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(itemProject.get("project_id"));
-                            projectList.add(monitorProject.toJsonSingle());
-                        }
-                        ele.put("project", projectList);
-                        ele.put("other", contractitem.get("other"));
-                        ele.put("point", contractitem.get("point"));
-                        ele.put("frequency", Frequency.frequencyDao.findById("frequency"));
-                        temp.add(ele);
-                        result.put(compancy, temp);
-                    }
+                List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE task_id=" + task_id);
+                List<Map> result = new ArrayList<>();
+                for (Company company : companyList) {
+                    result.add(company.toSimpleJSON());
                 }
-                List back = new ArrayList();
-                for (String key : result.keySet()) {
-                    Map b = new HashMap();
-                    b.put("company", key);
-                    b.put("results", result.get(key));
-                    b.put("task_id", task_id);
-                    back.add(b);
-                }
-                renderJson(back);
+                renderJson(result);
             } else renderNull();
 
         } catch (Exception e) {
