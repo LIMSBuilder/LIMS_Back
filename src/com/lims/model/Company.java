@@ -24,6 +24,11 @@ public class Company extends Model<Company> {
                     continue;
                 }
             }
+            if (key.equals("task_id")) {
+                Task task = Task.taskDao.findById(this.get("task_id"));
+                result.put("task", task);
+                continue;
+            }
             result.put(key, this.get(key));
         }
         List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + this.get("id"));
