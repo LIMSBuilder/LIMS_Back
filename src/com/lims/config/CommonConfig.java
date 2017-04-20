@@ -76,7 +76,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_contract_review", ContractReview.class);
         arp.addMapping("db_task", Task.class);
         //arp.addMapping("db_item_join_user", ItemJoin.class);
-//        arp.addMapping("db_sample", Sample.class);
+        arp.addMapping("db_sample", Sample.class);
 //        arp.addMapping("db_sample_project", SampleProject.class);
         arp.addMapping("db_log", Log.class);
         arp.addMapping("db_delivery", Dispatch.class);
