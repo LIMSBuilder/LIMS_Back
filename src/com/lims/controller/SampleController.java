@@ -285,9 +285,9 @@ public class SampleController extends Controller {
             Boolean result = Db.tx(new IAtom() {
                 @Override
                 public boolean run() throws SQLException {
-                    int task_id = getParaToInt("task_id");
-                    Task task = Task.taskDao.findById(task_id);
-                    if (task != null) {
+                    int company_id = getParaToInt("company_id");
+                    Company company = Company.companydao.findById(company_id);
+                    if (company != null) {
                         Boolean result = true;
                         String identify = createSelfIdentify();
                         Sample sample = new Sample();
@@ -297,7 +297,7 @@ public class SampleController extends Controller {
                                 .set("character", getPara("character"))
                                 .set("condition", getPara("condition"))
                                 .set("process", ProcessKit.getSampleProcess("apply"))
-                                .set("task_id", task_id)
+                                .set("company_id", company_id)
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                                 .set("create_time", ParaUtils.sdf2.format(new Date()))
                                 .set("sample_type", getPara("sample_type"))
@@ -372,7 +372,7 @@ public class SampleController extends Controller {
     public void getProjectByCategory() {
         try {
             int task_id = getParaToInt("id");
-            List<Record> recordList = Db.find("SELECT DISTINCT p.*,m.element_id FROM `db_contract_item` i,`db_task` t,`db_item_project` p,`db_monitor_project` m WHERE t.id=i.task_id AND t.id=" + task_id + " AND i.id=p.item_id AND m.id=p.project_id");
+            List<Record> recordList = Db.find("SELECT DISTINCT p.*,m.element_id FROM `db_company` c,`db_item` i,`db_task` t,`db_item_project` p,`db_monitor_project` m WHERE t.id=c.task_id AND t.id=" + task_id + " AND c.id=i.company_id AND i.id =p.item_id AND m.id=p.project_id");
             Map<Integer, List<Map>> listMap = new HashMap<>();
             for (Record record : recordList) {
                 int element_id = record.get("element_id");
