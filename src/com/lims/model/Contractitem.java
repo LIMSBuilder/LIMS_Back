@@ -32,7 +32,9 @@ public class Contractitem extends Model<Contractitem> {
         List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + this.get("id"));
         for (ItemProject itemProject : itemProjectList) {
             MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(itemProject.get("project_id"));
-            maps.add(monitorProject.toJsonSingle());
+            Map p = monitorProject.toJsonSingle();
+            p.put("isPackage", itemProject.get("isPackage"));
+            maps.add(p);
         }
         temp.put("project", maps);
 
