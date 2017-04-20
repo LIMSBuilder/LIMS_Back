@@ -41,16 +41,70 @@ public class SampleController extends Controller {
     public void fetchProject() {
         try {
             int company_id = getParaToInt("company_id");
-            List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_company` c,`db_item` i,`db_item_project` p WHERE c.id=" + company_id + " AND i.company_id=c.id AND i.id=p.item_id ");
-            List result = new ArrayList();
-            for (ItemProject itemProject : itemProjectList) {
-                MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(itemProject.get("project_id"));
+            List<Record> recordList = Db.find("SELECT p.*,m.element_id,m.name FROM `db_company` c,`db_item` i,`db_item_project` p,`db_monitor_project` m WHERE c.id=" + company_id + " AND i.company_id=c.id AND i.id=p.item_id AND m.id=p.project_id");
+            //List result = new ArrayList();
+            Map<Integer, List<Map>> result = new HashMap<>();
+            for (Record record : recordList) {
                 Map temp = new HashMap();
-                temp.put("name", monitorProject.get("name"));
-                temp.put("id", itemProject.get("id"));
-                result.add(temp);
+                temp.put("name", record.get("name"));
+                temp.put("id", record.get("id"));
+                if (result.containsKey(record.get("element_id"))) {
+                    //存在
+                    result.get(record.get("element_id")).add(temp);
+                } else {
+                    List<Map> t = new ArrayList();
+                    t.add(temp);
+                    //不存在
+                    result.put(record.getInt("element_id"), t);
+                }
             }
-            renderJson(result);
+
+            List back = new ArrayList();
+            for (Integer key : result.keySet()) {
+                Element element = Element.elementDao.findById(key);
+                Map p = new HashMap();
+                p.put("element_id", element.get("id"));
+                p.put("name", element.get("name"));
+                p.put("project", result.get(key));
+                back.add(p);
+            }
+
+            renderJson(back);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void saveSampleSigle() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int sample_id = getParaToInt("id");
+                    Sample sample = Sample.sampleDao.findById(sample_id);
+                    if (sample != null) {
+                        if (getPara("isbalance[id]") != null) {
+                            sample.set("balance", getPara("isbalance[id]"));
+                        }
+                        Boolean result = sample.set("name", getPara("name")).set("point", getPara("point")).set("other", getPara("other")).set("creater", ParaUtils.getCurrentUser(getRequest()).get("id")).set("create_time", ParaUtils.sdf.format(new Date())).set("process", 0).update();
+                        List<SampleProject> sampleProjects = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample_id);
+                        for (SampleProject sp : sampleProjects) {
+                            result = result && SampleProject.sampleprojrctDao.deleteById(sp.get("id"));
+                            if (!result) return false;
+                        }
+
+                        Integer[] projectList = getParaValuesToInt("project[]");
+                        for (int id : projectList) {
+                            SampleProject sampleProject = new SampleProject();
+                            result = result && sampleProject.set("sample_id", sample_id).set("item_project_id", id).save();
+                            if (!result) return false;
+                        }
+                        return result;
+                    } else
+                        return false;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
@@ -213,16 +267,30 @@ public class SampleController extends Controller {
         types.put("category", sample.get("category"));
         types.put("name", sample.get("name"));
         types.put("character", sample.get("character"));
-        types.put("isbalance", sample.get("isbalance"));
+        types.put("condition", sample.get("condition"));
+        types.put("isbalance", Sample.sampleDao.findById(sample.get("balance")));
         types.put("task_id", sample.get("task_id"));
         types.put("item_id", sample.get("item_id"));
         types.put("create_time", sample.get("create_time"));
         types.put("creater", sample.get("creater"));
-//        List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample.get("id"));
-//        List result = new ArrayList();
-//        for (SampleProject sampleProject : sampleProjectList) {
-//            result.add(sampleProject.get("project_id"));
-//        }
+        types.put("process", sample.get("process"));
+        types.put("other", sample.get("other"));
+        types.put("point", sample.get("point"));
+
+        List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample.get("id"));
+
+        List project = new ArrayList();
+        List temp = new ArrayList();
+        for (SampleProject sp : sampleProjectList) {
+            Map m = new HashMap();
+            m.put("id", sp.get("item_project_id"));
+            m.put("name", MonitorProject.monitorProjectdao.findById(ItemProject.itemprojectDao.findById(sp.get("item_project_id")).get("project_id")).get("name"));
+            project.add(sp.get("item_project_id"));
+            temp.add(m);
+
+        }
+        types.put("project", project);
+        types.put("projectList", temp);
         return types;
     }
 
@@ -562,29 +630,4 @@ public class SampleController extends Controller {
         }
 
     }
-
-    /***
-     * 得到现场采样派遣任务细节接口
-     * **/
-    public void DetailList() {
-        try {
-            int task_id = getParaToInt("task_id");
-            String company = getPara("company");
-            Task task = Task.taskDao.findById(task_id);
-            if (task != null) {
-                List<Contractitem> contractitemList = Contractitem.contractitemdao.find("select DISTINCT i.* From `db_task` t,`db_contract_item` i where (i.task_id=" + task_id + " AND i.company ='" + company + "') OR (i.task_id=" + task_id + " AND t.id=i.task_id AND t.client_unit='" + company + "')");
-                List temp = new ArrayList();
-                for (Contractitem items : contractitemList) {
-                    temp.add(items.toSimpleJson());
-                }
-                renderJson(temp);
-            } else {
-                renderJson(RenderUtils.CODE_EMPTY);
-            }
-
-        } catch (Exception e) {
-            renderError(50);
-        }
-    }
-
 }

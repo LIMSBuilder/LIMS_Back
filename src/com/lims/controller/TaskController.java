@@ -129,25 +129,6 @@ public class TaskController extends Controller {
         }
     }
 
-//    public String createIdentify() {
-//        String identify = "";
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-//        identify = sdf.format(new Date());
-//        Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
-//        if (encode == null) {
-//            数据库中没有第一条记录，则创建它
-//            Encode entry = new Encode();
-//            entry.set("contract_identify", 0).save();
-//            identify += String.format("%04d", 1);
-//        } else {
-//            int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
-//            encode.set("contract_identify", identify_Encode).update();
-//            identify += String.format("%04d", identify_Encode);
-//        }
-//        return identify;
-//    }
-
-
     public void list() {
         try {
             int rowCount = getParaToInt("rowCount");
@@ -221,16 +202,6 @@ public class TaskController extends Controller {
 
     public Map toJsonSingle(Task entry) {
         Map temp = new HashMap();
-//        for (String key : entry._getAttrNames()) {
-//            switch (key) {
-//                case "type":
-//                    temp.put("type", Type.typeDao.findById(entry.get(key)));
-//                    break;
-//                default:
-//                    temp.put(key, entry.get(key));
-//            }
-//
-//        }
         temp.put("id", entry.get("id"));
         temp.put("name", entry.get("name"));
         temp.put("create_time", entry.get("create_time"));
