@@ -117,14 +117,18 @@ public class SampleController extends Controller {
      * self_identify:自送样  scene_identify:现场采样
      **/
 
-    public static String createIdentify(int id) {
+    public static String createIdentify(int id, int flag, String prefix) {
         try {
             String identify = "";
             String character = "";
             Task task = Task.taskDao.findById(id);
-            Type type = Type.typeDao.findById(task.get("type"));
-            String identifier = type.get("identifier");
-            identify += identifier.toUpperCase();//将数据库表中的type的identifer小写转大写
+            if (flag == 0) {
+                Type type = task.get("type");
+                String identifier = type.get("identifier");
+                identify += identifier.toUpperCase();//将数据库表中的type的identifer小写转大写
+            } else {
+                identify = prefix.toUpperCase();
+            }
             int sample_type = task.get("sample_type");
             Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
             if (encode == null) {
@@ -226,18 +230,19 @@ public class SampleController extends Controller {
             Boolean result = Db.tx(new IAtom() {
                 @Override
                 public boolean run() throws SQLException {
-                    int company_id = getParaToInt("company_id");
                     Boolean result = true;
-                    Company company = Company.companydao.findById(company_id);
-                    if (company != null) {
+                    int task_id = getParaToInt("task_id");
+                    Task task = Task.taskDao.findById(task_id);
+                    if (task != null) {
                         int count = getParaToInt("count");
                         for (int i = 0; i < count; i++) {
+                            String identify = createIdentify(task_id, 0, "");
                             Sample sample = new Sample();
-                            result = result && sample.set("identify", createIdentify(company.getInt("task_id"))).set("company_id", company_id).save();
-                            if (!result) break;
+                            result = result && sample.set("identify", identify).set("process", 0).save();
+                            if (!result) return false;
                         }
-                        return result;
                     } else return false;
+                    return result;
                 }
             });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
@@ -385,9 +390,9 @@ public class SampleController extends Controller {
             Boolean result = Db.tx(new IAtom() {
                 @Override
                 public boolean run() throws SQLException {
-                    int task_id = getParaToInt("task_id");
-                    Task task = Task.taskDao.findById(task_id);
-                    if (task != null) {
+                    int company_id = getParaToInt("company_id");
+                    Company company = Company.companydao.findById(company_id);
+                    if (company != null) {
                         Boolean result = true;
                         String identify = createSelfIdentify();
                         Sample sample = new Sample();
@@ -397,7 +402,7 @@ public class SampleController extends Controller {
                                 .set("character", getPara("character"))
                                 .set("condition", getPara("condition"))
                                 .set("process", ProcessKit.getSampleProcess("apply"))
-                                .set("task_id", task_id)
+                                .set("company_id", company_id)
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                                 .set("create_time", ParaUtils.sdf2.format(new Date()))
                                 .set("sample_type", getPara("sample_type"))
@@ -472,7 +477,7 @@ public class SampleController extends Controller {
     public void getProjectByCategory() {
         try {
             int task_id = getParaToInt("id");
-            List<Record> recordList = Db.find("SELECT DISTINCT p.*,m.element_id FROM `db_contract_item` i,`db_task` t,`db_item_project` p,`db_monitor_project` m WHERE t.id=i.task_id AND t.id=" + task_id + " AND i.id=p.item_id AND m.id=p.project_id");
+            List<Record> recordList = Db.find("SELECT DISTINCT p.*,m.element_id FROM `db_company` c,`db_item` i,`db_task` t,`db_item_project` p,`db_monitor_project` m WHERE t.id=c.task_id AND t.id=" + task_id + " AND c.id=i.company_id AND i.id =p.item_id AND m.id=p.project_id");
             Map<Integer, List<Map>> listMap = new HashMap<>();
             for (Record record : recordList) {
                 int element_id = record.get("element_id");
