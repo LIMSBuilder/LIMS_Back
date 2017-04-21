@@ -67,6 +67,7 @@ public class FileController extends Controller {
         temp.put("id", entry.get("id"));
         temp.put("name", entry.get("name"));
         temp.put("company_id", entry.get("company_id"));
+        temp.put("file_path",entry.get("file_path"));
         return temp;
     }
 
@@ -118,31 +119,14 @@ public class FileController extends Controller {
         }
     }
 
-    /**
-     * 根据ID实现在线查看
-     **/
-    public void onlineCheck() {
-        try {
-            int id = getParaToInt("id");
-            FileRecord fileRecord = FileRecord.fileRecordDao.findById(id);
-            if (fileRecord == null) {
-                renderJson(toJsonSingle1(fileRecord));
-            }
-            else{
-                render(RenderUtils.CODE_EMPTY);
-            }
 
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
     public Map toJsonSingle1(FileRecord fileRecord) {
         Map<String, Object> record = new HashMap<>();
         record.put("name", fileRecord.get("name"));
         record.put("file_path", fileRecord.get("file_path"));
         return record;
     }
+
     /***
      * 删除全部
      * */
@@ -166,15 +150,17 @@ public class FileController extends Controller {
     }
 
     /**
-     * 通过公司找到记录
+     * 通过公司找到现场采样记录列表
      **/
     public void findByCompanyId() {
         try {
             int company_id = getParaToInt("company_id");
-            List<FileRecord> fileRecordList = FileRecord.fileRecordDao.find("select * from `db_sample_record` where company_id =" + company_id + "");
+            List<FileRecord> fileRecordList = FileRecord.fileRecordDao.find("select * from `db_sample_record` where company_id =" + company_id);
             renderJson(toJson(fileRecordList));
 
-        } catch (Exception e) {
+        } catch (Exception e)
+
+        {
             renderError(500);
         }
     }

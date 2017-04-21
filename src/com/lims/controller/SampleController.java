@@ -117,18 +117,14 @@ public class SampleController extends Controller {
      * self_identify:自送样  scene_identify:现场采样
      **/
 
-    public static String createIdentify(int id, int flag, String prefix) {
+    public static String createIdentify(int id) {
         try {
             String identify = "";
             String character = "";
             Task task = Task.taskDao.findById(id);
-            if (flag == 0) {
-                Type type = task.get("type");
-                String identifier = type.get("identifier");
-                identify += identifier.toUpperCase();//将数据库表中的type的identifer小写转大写
-            } else {
-                identify = prefix.toUpperCase();
-            }
+            Type type = Type.typeDao.findById(task.get("type"));
+            String identifier = type.get("identifier");
+            identify += identifier.toUpperCase();//将数据库表中的type的identifer小写转大写
             int sample_type = task.get("sample_type");
             Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
             if (encode == null) {
@@ -231,14 +227,16 @@ public class SampleController extends Controller {
                 @Override
                 public boolean run() throws SQLException {
                     Boolean result = true;
-                    int task_id = getParaToInt("task_id");
+                    int company_id = getParaToInt("company_id");
+                    Company company = Company.companydao.findById(company_id);
+                    int task_id = company.get("task_id");
                     Task task = Task.taskDao.findById(task_id);
                     if (task != null) {
                         int count = getParaToInt("count");
                         for (int i = 0; i < count; i++) {
-                            String identify = createIdentify(task_id, 0, "");
+                            String identify = createIdentify(task_id);
                             Sample sample = new Sample();
-                            result = result && sample.set("identify", identify).set("process", 0).save();
+                            result = result && sample.set("identify", identify).set("company_id", company_id).save();
                             if (!result) return false;
                         }
                     } else return false;
