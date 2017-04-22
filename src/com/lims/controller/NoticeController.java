@@ -8,5 +8,5 @@ import com.lims.model.Notice;
  */
 public class NoticeController extends Controller {
 
-    
+
 }

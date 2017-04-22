@@ -86,12 +86,13 @@ public class PowerController extends Controller {
             int role_id = getParaToInt("role_id");
             Map result = new HashMap();
             result.put("results", getTotalPower());
-            List<PowerUser> powerUserList = PowerUser.powerUserDao.find("SELECT * FROM `db_power_user` WHERE role_id=" + role_id);
+            List<PowerUser> powerUserList = PowerUser.powerUserDao.find("SELECT * FROM `db_power_role` WHERE role_id=" + role_id);
             List<Integer> ids = new ArrayList<>();
             for (PowerUser powerUser : powerUserList) {
                 ids.add(powerUser.getInt("power_id"));
             }
             result.put("active", ids);
+            renderJson(result);
         } catch (Exception e) {
             renderError(500);
         }
