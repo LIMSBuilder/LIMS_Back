@@ -7,6 +7,7 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import com.lims.interceptor.ExceptionIntoLogInterceptor;
 import com.lims.interceptor.LoginInterceptor;
+import com.lims.interceptor.PowerInterceptor;
 import com.lims.model.*;
 import com.lims.utils.MessageSender;
 import com.lims.utils.WebSocketHandler;
@@ -75,18 +76,20 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_default", Default.class);
         arp.addMapping("db_contract_review", ContractReview.class);
         arp.addMapping("db_task", Task.class);
-        //arp.addMapping("db_item_join_user", ItemJoin.class);
+
         arp.addMapping("db_sample", Sample.class);
         arp.addMapping("db_sample_project", SampleProject.class);
 
         arp.addMapping("db_log", Log.class);
         arp.addMapping("db_delivery", Dispatch.class);
-//        arp.addMapping("db_dispatch_item", Dispatch_Item.class);
+
         arp.addMapping("db_delivery_user", DispatchUser.class);
         arp.addMapping("db_company", Company.class);
         arp.addMapping("db_delivery", Delivery.class);
         arp.addMapping("db_delivery_user", DeliveryUser.class);
-        arp.addMapping("db_sample_record",FileRecord.class);
+        arp.addMapping("db_sample_record", FileRecord.class);
+        arp.addMapping("db_power", Power.class);
+        arp.addMapping("db_power_role", PowerUser.class);
         //addMap增加数据库树形
 
     }
@@ -95,6 +98,7 @@ public class CommonConfig extends JFinalConfig {
     public void configInterceptor(Interceptors me) {
 //        me.add(new AdminIntercept());
         me.add(new LoginInterceptor());
+//        me.add(new PowerInterceptor());
         me.addGlobalActionInterceptor(new ExceptionIntoLogInterceptor());
     }
 
