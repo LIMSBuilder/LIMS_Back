@@ -2,35 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7adb65de-9683-469f-b0c3-f3c1cc41e101" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/controller/PowerController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/interceptor/PowerInterceptor.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/Power.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/PowerUser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonRouter.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonRouter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/LoginController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/LoginController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController$3.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController$4.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController$5.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController$6.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/SampleController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/interceptor/LoginInterceptor.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/interceptor/LoginInterceptor.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonConfig.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonRouter.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonRouter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/LoginController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/LoginController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController$3.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController$4.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController$5.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController$6.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/SampleController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/interceptor/LoginInterceptor.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/interceptor/LoginInterceptor.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" afterPath="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" afterPath="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/NoticeController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/NoticeController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/SampleController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/SampleController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/interceptor/LoginInterceptor.java" afterPath="$PROJECT_DIR$/src/com/lims/interceptor/LoginInterceptor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/PowerController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/PowerController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -46,41 +19,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SampleController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/SampleController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2217">
-              <caret line="595" column="0" lean-forward="false" selection-start-line="595" selection-start-column="0" selection-end-line="595" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginInterceptor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/interceptor/LoginInterceptor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="26" column="7" lean-forward="false" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/LoginController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="37" column="59" lean-forward="true" selection-start-line="37" selection-start-column="59" selection-end-line="37" selection-end-column="59" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PowerController.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="PowerController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/PowerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="93" column="38" lean-forward="true" selection-start-line="93" selection-start-column="38" selection-end-line="93" selection-end-column="38" />
+            <state relative-caret-position="282">
+              <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -88,51 +31,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NoticeController.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/NoticeController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="10" column="4" lean-forward="false" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Power.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/model/Power.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="48" lean-forward="false" selection-start-line="8" selection-start-column="48" selection-end-line="8" selection-end-column="48" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="CommonRouter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonRouter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
+            <state relative-caret-position="336">
               <caret line="36" column="13" lean-forward="true" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PowerInterceptor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/interceptor/PowerInterceptor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="20" column="86" lean-forward="true" selection-start-line="20" selection-start-column="86" selection-end-line="20" selection-end-column="86" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/FileController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-831">
-              <caret line="66" column="40" lean-forward="true" selection-start-line="66" selection-start-column="40" selection-end-line="66" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -141,7 +44,7 @@
       <file leaf-file-name="CommonConfig.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
+            <state relative-caret-position="222">
               <caret line="99" column="29" lean-forward="false" selection-start-line="99" selection-start-column="29" selection-end-line="99" selection-end-column="29" />
               <folding />
             </state>
@@ -187,8 +90,8 @@
         <option value="$PROJECT_DIR$/src/com/lims/controller/LoginController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/interceptor/LoginInterceptor.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/SampleController.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/controller/PowerController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/NoticeController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/PowerController.java" />
       </list>
     </option>
   </component>
@@ -247,7 +150,57 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LIMS_Back" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LIMS_Back" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LIMS_Back" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LIMS_Back" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LIMS_Back" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LIMS_Back" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="doc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -910,12 +863,12 @@
       <workItem from="1492698852881" duration="6379000" />
       <workItem from="1492775134326" duration="1196000" />
       <workItem from="1492828334340" duration="2676000" />
-      <workItem from="1492836412934" duration="15550000" />
+      <workItem from="1492836412934" duration="18872000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32220000" />
+    <option name="totallyTimeSpent" value="35542000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="0" />
@@ -997,7 +950,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="28" />
+      <option name="time" value="34" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1006,38 +959,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/lims/model/Power.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/model/Receiver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1305">
-          <caret line="103" column="44" lean-forward="false" selection-start-line="103" selection-start-column="44" selection-end-line="103" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2865">
-          <caret line="210" column="39" lean-forward="false" selection-start-line="210" selection-start-column="39" selection-end-line="210" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/FileController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="570">
@@ -1313,14 +1234,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/interceptor/ExceptionIntoLogInterceptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/RoleController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-960">
@@ -1385,14 +1298,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonRouter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="36" column="13" lean-forward="true" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/interceptor/PowerInterceptor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -1401,26 +1306,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="99" column="29" lean-forward="false" selection-start-line="99" selection-start-column="29" selection-end-line="99" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/model/Power.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="48" lean-forward="false" selection-start-line="8" selection-start-column="48" selection-end-line="8" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/interceptor/LoginInterceptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="26" column="7" lean-forward="false" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
           <folding />
         </state>
       </provider>
@@ -1441,10 +1330,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/com/jfinal/aop/Invocation.class">
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/NoticeController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="52" column="0" lean-forward="false" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+        <state relative-caret-position="165">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/template/create_contract.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/template/create_task.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-105">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/interceptor/ExceptionIntoLogInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/interceptor/LoginInterceptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="26" column="7" lean-forward="false" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
           <folding />
         </state>
       </provider>
@@ -1457,21 +1378,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/PowerController.java">
+    <entry file="file://$PROJECT_DIR$/web/template/create_selfsample.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="93" column="38" lean-forward="true" selection-start-line="93" selection-start-column="38" selection-end-line="93" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="-108">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/NoticeController.java">
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/com/jfinal/core/Controller.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="10" column="4" lean-forward="false" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+        <state relative-caret-position="147">
+          <caret line="799" column="0" lean-forward="false" selection-start-line="799" selection-start-column="0" selection-end-line="799" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/com/jfinal/aop/Invocation.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="99" column="29" lean-forward="false" selection-start-line="99" selection-start-column="29" selection-end-line="99" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/config/CommonRouter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="36" column="13" lean-forward="true" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/PowerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
