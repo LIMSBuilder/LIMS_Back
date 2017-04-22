@@ -51,7 +51,7 @@ public class PowerController extends Controller {
                 temp.put("name", power.get("name"));
                 temp.put("type", power.get("type"));
                 temp.put("child", childList);
-                temp.put("path",power.get("path"));
+                temp.put("path", power.get("path"));
                 result.add(temp);
 
             }
@@ -72,7 +72,7 @@ public class PowerController extends Controller {
                 temp.put("name", power.get("name"));
                 temp.put("type", power.get("type"));
                 temp.put("parent", power.get("parent"));
-                temp.put("path",power.get("path"));
+                temp.put("path", power.get("path"));
                 result.add(temp);
             }
             renderJson(result);
@@ -130,6 +130,22 @@ public class PowerController extends Controller {
         for (String key : power._getAttrNames()) {
             result.put(key, power.get(key));
         }
-        return  result;
+        return result;
+    }
+
+    /**
+     * 内部删除
+     **/
+
+    public void delete() {
+        try {
+            int id = getParaToInt("id");
+            Boolean result = Power.powerDao.deleteById(id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+
     }
 }

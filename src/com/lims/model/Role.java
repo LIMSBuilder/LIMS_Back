@@ -20,6 +20,7 @@ public class Role extends Model<Role> {
         temp.put("id", this.get("id"));
         temp.put("name", this.get("name"));
         temp.put("department", this.getDepartment());
+        temp.put("cardId",this.get("cardId"));
         return temp;
     }
 }
