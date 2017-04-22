@@ -24,8 +24,6 @@
         doc.openDataRegion("PO_way1").setValue(((Integer) task.get("way")) == 0 ? "是" : "否");
         doc.openDataRegion("PO_way1_text").setValue(task.getStr("wayDesp"));
         doc.openDataRegion("PO_charge").setValue(User.userDao.findById((Integer) task.get("charge")).getStr("name"));
-
-
     }
     poCtrl1.setWriter(doc);
     poCtrl1.setServerPage(request.getContextPath() + "/poserver.zz");
