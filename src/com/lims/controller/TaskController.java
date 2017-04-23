@@ -50,31 +50,22 @@ public class TaskController extends Controller {
                     String[] items = getParaValues("project_items[]");
                     for (String item : items) {
                         Map temp = Jackson.getJson().parse(item, Map.class);
-                        Contractitem contractitem = new Contractitem();
-//                        List points = (ArrayList) temp.get("point");
-//                        String point = "";
-//                        if (points != null) {
-//                            for (int i = 0; i < points.size(); i++) {
-//                                point += points.get(i);
-//                                if (i != points.size() - 1) {
-//                                    point += ",";
-//                                }
-//                            }
-//                        }
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("frequency", ((Map) temp.get("frequency")).get("id")).set("task_id", task.get("id")).set("other", temp.get("other")).save();
-                        if (!result) break;
-                        List<Map> projectList = (ArrayList) temp.get("project");
-                        if (projectList != null) {
-                            for (int m = 0; m < projectList.size(); m++) {
-                                Map project = projectList.get(m);
-                                ItemProject entry = new ItemProject();
-                                entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
-                                entry.set("isPackage", project.get("isPackage") != null && project.get("isPackage") == true ? 1 : 0);
-                                result = result && entry.save();
+                        Company company = new Company();
+                        result = result && company.set("task_id", task.get("id")).set("company", temp.get("company")).set("flag", temp.get("flag")).set("process", 0).set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id")).set("create_time", ParaUtils.sdf.format(new Date())).save();
+                        List<Map> projectItems = (List<Map>) temp.get("items");
+                        for (Map itemMap : projectItems) {
+                            Contractitem contractitem = new Contractitem();
+                            result = result && contractitem.set("company_id", company.get("id")).set("element", ((Map) itemMap.get("element")).get("id")).set("frequency", ((Map) itemMap.get("frequency")).get("id")).set("point", itemMap.get("point")).set("other", itemMap.get("other")).save();
+
+                            List<Map> project = (List<Map>) itemMap.get("project");
+                            for (Map pro : project) {
+                                ItemProject itemProject = new ItemProject();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).save();
                                 if (!result) break;
                             }
+                            if (!result) break;
                         }
-                        if (!result) break;
+
                     }
                     LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                     return result;
@@ -104,7 +95,8 @@ public class TaskController extends Controller {
                                 .set("process", ProcessKit.getTaskProcess("create"))
                                 .set("create_time", ParaUtils.sdf.format(new Date()))
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
-                                .set("identify", contract.get("identify"))
+                                .set("identify", Task.taskDao.findFirst("select * from `db_task` where  identify ='" + contract.get("identify") + "'") != null ? createIdentify() : contract.get("identify"))
+//                                .set("identify", contract.get("identify"))
                                 .set("client_unit", contract.get("client_unit"))
                                 .set("client_code", contract.get("client_code"))
                                 .set("client_tel", contract.get("client_tel"))
@@ -117,9 +109,15 @@ public class TaskController extends Controller {
                                 .set("way", contract.get("way"))
                                 .set("wayDesp", contract.get("wayDesp"))
                                 .set("other", contract.get("other"))
+                                .set("charge", getPara("charge"))
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
-                        LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                        List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE contract_id=" + contract.get("id"));
+                        for (Company company : companyList) {
+                            result = result && company.set("task_id", task.get("id")).update();
+                            if (!result) return false;
+                        }
+                        LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                         return result;
                     } else
                         return false;
@@ -130,25 +128,6 @@ public class TaskController extends Controller {
             renderError(500);
         }
     }
-
-//    public String createIdentify() {
-//        String identify = "";
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-//        identify = sdf.format(new Date());
-//        Encode encode = Encode.encodeDao.findFirst("SELECT * FROM `db_encode`");
-//        if (encode == null) {
-//            数据库中没有第一条记录，则创建它
-//            Encode entry = new Encode();
-//            entry.set("contract_identify", 0).save();
-//            identify += String.format("%04d", 1);
-//        } else {
-//            int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
-//            encode.set("contract_identify", identify_Encode).update();
-//            identify += String.format("%04d", identify_Encode);
-//        }
-//        return identify;
-//    }
-
 
     public void list() {
         try {
@@ -166,20 +145,18 @@ public class TaskController extends Controller {
                 Object value = condition.get(key);
                 if (key.equals("process")) {
                     switch (value.toString()) {
-                        case "before_dispath":
-                            param += "  AND process=" + ProcessKit.getTaskProcess("create") + " ";
+                        case "total":
                             break;
-                        case "after_dispath":
-                            //  param += " AND sample_type=1 AND process!=" + ProcessKit.getTaskProcess("create") + " ";
-                            param += " AND process != " + ProcessKit.getTaskProcess("create") + " AND process !=" + ProcessKit.getTaskProcess("stop") + " ";
+                        case "totalDispatch":
+                            param += "AND ( process = " + ProcessKit.getTaskProcess("create") + " OR process = " + ProcessKit.getTaskProcess("dispatch") + ") ";
                             break;
-                        case "total_dispatch":
-                            param += " process !=" + ProcessKit.getTaskProcess("stop");
-                            break;
+                        //自送样
                         case "apply_sample":
-                            param += "  AND process=" + ProcessKit.getTaskProcess("dispatch") + " ";
+                            param += " AND  sample_type = 0   AND process=" + ProcessKit.getTaskProcess("create") + " ";
                             break;
-
+                        case "delivery":
+                            param += "AND sample_type =1 AND process =" + ProcessKit.getTaskProcess("create") + " ";
+                            break;
                         default:
                             param += " AND " + key + " = " + value;
                     }
@@ -225,16 +202,6 @@ public class TaskController extends Controller {
 
     public Map toJsonSingle(Task entry) {
         Map temp = new HashMap();
-//        for (String key : entry._getAttrNames()) {
-//            switch (key) {
-//                case "type":
-//                    temp.put("type", Type.typeDao.findById(entry.get(key)));
-//                    break;
-//                default:
-//                    temp.put(key, entry.get(key));
-//            }
-//
-//        }
         temp.put("id", entry.get("id"));
         temp.put("name", entry.get("name"));
         temp.put("create_time", entry.get("create_time"));
@@ -266,44 +233,40 @@ public class TaskController extends Controller {
         }
     }
 
-    public void delivery() {
-        try {
-            Boolean result = Db.tx(new IAtom() {
-                @Override
-                public boolean run() throws SQLException {
-                    String jsons = getPara("result");//前端传数组过来
-                    String task_id = getPara("id");
-                    List<Map> temp = Jackson.getJson().parse(jsons, List.class);
-                    Boolean result = true;
-                    for (int i = 0; i < temp.size(); i++) {
-                        Map entry = temp.get(i);
-                        int item_id = (int) entry.get("id");
-                        int charge = (int) entry.get("charge");
-                        List<Integer> belongs = (ArrayList) entry.get("belongs");
-                        Contractitem contractitem = Contractitem.contractitemdao.findById(item_id);
-                        result = result && contractitem.set("charge_id", charge).update();
-                        if (!result) return false;
-                        for (int j = 0; j < belongs.size(); j++) {
-                            int user = belongs.get(j);
-                            ItemJoin itemJoin = new ItemJoin();
-                            itemJoin.set("contract_item_id", item_id);
-                            itemJoin.set("join_id", user);
-                            result = result && itemJoin.save();
-                            if (!result) break;
-                        }
-                    }
-                    if (!result) return false;
-                    Task task = Task.taskDao.findById(task_id);
-                    result = result && task.set("process", ProcessKit.TaskMap.get("dispatch")).update();
-                    LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
-                    return result;
-                }
-            });
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
+//    public void delivery() {
+//        try {
+//            Boolean result = Db.tx(new IAtom() {
+//                @Override
+//                public boolean run() throws SQLException {
+//                    String jsons = getPara("result");//前端传数组过来
+//                    String task_id = getPara("id");
+//                    List<Map> temp = Jackson.getJson().parse(jsons, List.class);
+//                    Boolean result = true;
+//                    for (int i = 0; i < temp.size(); i++) {
+//                        Map entry = temp.get(i);
+//                        int item_id = (int) entry.get("id");
+//                        List<Integer> belongs = (ArrayList) entry.get("belongs");
+//                        for (int j = 0; j < belongs.size(); j++) {
+//                            int user = belongs.get(j);
+//                            ItemJoin itemJoin = new ItemJoin();
+//                            itemJoin.set("contract_item_id", item_id);
+//                            itemJoin.set("join_id", user);
+//                            result = result && itemJoin.save();
+//                            if (!result) break;
+//                        }
+//                    }
+//                    if (!result) return false;
+//                    Task task = Task.taskDao.findById(task_id);
+//                    result = result && task.set("process", ProcessKit.TaskMap.get("dispatch")).update();
+//                    LoggerKit.addTaskLog(task.getInt("id"), "派遣任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+//                    return result;
+//                }
+//            });
+//            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+//        } catch (Exception e) {
+//            renderError(500);
+//        }
+//    }
 
     public void countProcess() {
 //        try {
@@ -490,4 +453,55 @@ public class TaskController extends Controller {
         }
 
     }
+
+    /**
+     * 打印任务书
+     */
+    public void createTask() {
+        try {
+            String id = getPara("id");
+            Task task = Task.taskDao.findFirst("SELECT * FROM `db_task` WHERE id=" + id);
+            if (task != null) {
+                getRequest().setAttribute("task", task);
+                render("/template/create_task.jsp");
+            } else renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 根据Task_id获取项目
+     * *
+     **/
+    public void taskGetItems() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE task_id=" + task_id);
+                List<Map> result = new ArrayList<>();
+                for (Company company : companyList) {
+                    result.add(company.toSimpleJSON());
+                }
+                renderJson(result);
+            } else renderNull();
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void getByCompanyId() {
+        try {
+            int company_id = getParaToInt("company_id");
+            Company company = Company.companydao.findById(company_id);
+            if (company != null) {
+                renderJson(company.toSimpleJSON());
+            } else renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }

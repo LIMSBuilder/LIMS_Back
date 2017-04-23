@@ -64,7 +64,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_customer", Customer.class);
         arp.addMapping("db_monitor_project", MonitorProject.class);
         arp.addMapping("db_contract", Contract.class);
-        arp.addMapping("db_contract_item", Contractitem.class);
+        arp.addMapping("db_item", Contractitem.class);
         arp.addMapping("db_item_project", ItemProject.class);
         arp.addMapping("db_encode", Encode.class);
         arp.addMapping("db_notice", Notice.class);
@@ -75,10 +75,18 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_default", Default.class);
         arp.addMapping("db_contract_review", ContractReview.class);
         arp.addMapping("db_task", Task.class);
-        arp.addMapping("db_item_join_user", ItemJoin.class);
-        arp.addMapping("db_sample",Sample.class);
-        arp.addMapping("db_sample_project",SampleProject.class);
-        arp.addMapping("db_log",Log.class);
+        //arp.addMapping("db_item_join_user", ItemJoin.class);
+        arp.addMapping("db_sample", Sample.class);
+        arp.addMapping("db_sample_project", SampleProject.class);
+
+        arp.addMapping("db_log", Log.class);
+        arp.addMapping("db_delivery", Dispatch.class);
+//        arp.addMapping("db_dispatch_item", Dispatch_Item.class);
+        arp.addMapping("db_delivery_user", DispatchUser.class);
+        arp.addMapping("db_company", Company.class);
+        arp.addMapping("db_delivery", Delivery.class);
+        arp.addMapping("db_delivery_user", DeliveryUser.class);
+        arp.addMapping("db_sample_record",FileRecord.class);
         //addMap增加数据库树形
 
     }

@@ -331,6 +331,7 @@ public class MailController extends Controller {
     }
 
 
+
     public void getReceiverList() {
         try {
             int id = getParaToInt("id");

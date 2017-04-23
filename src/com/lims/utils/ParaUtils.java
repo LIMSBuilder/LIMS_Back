@@ -28,6 +28,7 @@ import java.util.Map;
 public class ParaUtils extends Controller {
 
     public final static DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public  final static  DateFormat sdf2= new SimpleDateFormat("yyyy-MM-dd");
 
     public final static Map flows = new HashMap() {{
         put("stop_task", -2);//中止任务书

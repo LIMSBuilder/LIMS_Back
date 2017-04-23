@@ -33,7 +33,6 @@ public class ContractController extends Controller {
                     Map paraMaps = getParaMap();
                     Contract contract = new Contract();
                     Boolean result = true;
-                    System.out.println(paraMaps.get("item[]"));
                     for (Object key : paraMaps.keySet()) {
                         switch (key.toString()) {
                             case "in_room":
@@ -55,37 +54,27 @@ public class ContractController extends Controller {
                     User user = ParaUtils.getCurrentUser(getRequest());
                     contract.set("identify", createIdentify()).set("create_time", sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getContractProcess("create"));
                     result = result && contract.save();
+
                     String[] items = getParaValues("project_items[]");
                     for (String item : items) {
                         Map temp = Jackson.getJson().parse(item, Map.class);
-                        Contractitem contractitem = new Contractitem();
+                        Company company = new Company();
+                        result = result && company.set("contract_id", contract.get("id")).set("company", temp.get("company")).set("flag", temp.get("flag")).set("process", 0).set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id")).set("create_time", ParaUtils.sdf.format(new Date())).save();
+                        List<Map> projectItems = (List<Map>) temp.get("items");
+                        for (Map itemMap : projectItems) {
+                            Contractitem contractitem = new Contractitem();
+                            result = result && contractitem.set("company_id", company.get("id")).set("element", ((Map) itemMap.get("element")).get("id")).set("frequency", ((Map) itemMap.get("frequency")).get("id")).set("point", itemMap.get("point")).set("other", itemMap.get("other")).save();
 
-//                        List points = (ArrayList) temp.get("point");
-//                        String point = "";
-//                        if (points != null) {
-//                            for (int i = 0; i < points.size(); i++) {
-//                                point += points.get(i);
-//                                if (i != points.size() - 1) {
-//                                    point += ",";
-//                                }
-//                            }
-//                        }
-                        result = result && contractitem.set("element", ((Map) temp.get("element")).get("id")).set("company", temp.get("company")).set("point", temp.get("point")).set("contract_id", contract.get("id")).set("other", temp.get("other")).set("frequency", ((Map) (temp.get("frequency"))).get("id")).save();
-                        if (!result) break;
-                        List<Map> projectList = (ArrayList) temp.get("project");
-                        if (projectList != null) {
-                            for (int m = 0; m < projectList.size(); m++) {
-                                Map project = projectList.get(m);
-                                ItemProject entry = new ItemProject();
-                                entry.set("item_id", contractitem.get("id")).set("project_id", project.get("id"));
-                                entry.set("isPackage", project.get("isPackage") != null && project.get("isPackage") == true ? 1 : 0);
-                                result = result && entry.save();
+                            List<Map> project = (List<Map>) itemMap.get("project");
+                            for (Map pro : project) {
+                                ItemProject itemProject = new ItemProject();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).save();
                                 if (!result) break;
                             }
+                            if (!result) break;
                         }
-                        if (!result) break;
+
                     }
-                    //{{user}}于{{create_time}}创建了合同
                     LoggerKit.addContractLog(contract.getInt("id"), "创建了合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                     return result;
                 }
@@ -138,20 +127,6 @@ public class ContractController extends Controller {
                 Object value = condition.get(key);
                 if (key.equals("process")) { //process=wait_change
                     switch (value.toString()) {
-//                        case "after_receivesmall":
-//                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment<50000 ";
-//                            break;
-//                        case "after_receiveBig":
-//                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment>50000 ";
-//                            break;
-//                        case "reviewsmall":
-//                            小额审核
-//                            param += "AND process != " + ProcessKit.getContractProcess("stop") + " AND process !=" + ProcessKit.getContractProcess("finish") + " AND payment<50000";
-//                            break;
-//                        case "reviewBig":
-//                            大额审核
-//                            param += "AND process != " + ProcessKit.getContractProcess("stop") + " AND process !=" + ProcessKit.getContractProcess("finish") + " AND payment>50000";
-//                            break;
                         case "reviewBig":
                             param += "AND payment>50000";
                             break;
@@ -285,15 +260,9 @@ public class ContractController extends Controller {
         }
     }
 
-    public void findByIdentify() {
-        try {
-            String identify = getPara("identify");
-
-            Contract contract = Contract.contractDao.findFirst("select * from db_contracter where identify = '" + identify + "'");
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
+    /**
+     * 默认乙方信息
+     * **/
 
     public void defaultInfo() {
         try {
@@ -325,6 +294,9 @@ public class ContractController extends Controller {
         }
     }
 
+    /**
+     * 默认乙方信息
+     * **/
     public void fetchDefault() {
         try {
             Default defaultModel = Default.defaultDao.findFirst("SELECT * FROM `db_default`");
@@ -562,7 +534,9 @@ public class ContractController extends Controller {
         }
         return temp;
     }
-
+  /**
+   * 统计合同的数量
+   * **/
     public void countProcess() {
         try {
             Map temp = ProcessKit.ContractMap;
@@ -682,38 +656,95 @@ public class ContractController extends Controller {
             String[] titles = {"id", "company", "element", "pointList", "projectList", "frequency"};
             List<Map> result = read.readExcel(path, titles);
             List returnBack = new ArrayList();
+
+            Map<String, List> obj = new HashMap<>();
+
             for (Map temp : result) {
                 String companyStr = temp.get("company").toString();
                 String elementStr = temp.get("element").toString();
-                String[] pointList = temp.get("pointList").toString().split(" ");
-                String[] projectList = temp.get("projectList").toString().split(" ");
                 String frequencyStr = temp.get("frequency").toString();
-                Map json = new HashMap();
-//                Map freMap = new HashMap();
-//                freMap.put("total", frequencyStr);
-//                json.put("frequency", freMap);
-                Frequency frequency=Frequency.frequencyDao.findFirst("SELECT * FROM `db_frequency` WHERE total='" + frequencyStr + "'");
-                if(frequency!=null){
-                    json.put("frequency", frequency.toJsonSingle());
-                }
-                json.put("company", companyStr);
-                json.put("other", companyStr);
                 Element element = Element.elementDao.findFirst("SELECT * FROM `db_element` WHERE name='" + elementStr + "'");
-                if (element != null) {
-                    json.put("element", element);
-                }
-                json.put("point", pointList.length);
-                List projectTemp = new ArrayList();
-                for (String projectName : projectList) {
-                    MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
-                    if (project != null) {
-                        projectTemp.add(project);
+                Frequency frequency = Frequency.frequencyDao.findFirst("SELECT * FROM `db_frequency` WHERE total='" + frequencyStr + "'");
+                String[] projectList = temp.get("projectList").toString().split(" ");
+                String[] pointList = temp.get("pointList").toString().split(" ");
+                if (obj.containsKey(companyStr)) {
+                    //当前已经存在该公司的记录
+                    List items = obj.get(companyStr);
+                    Map item = new HashMap();
+                    item.put("element", element);
+                    item.put("frequency", frequency.toJsonSingle());
+                    item.put("point", pointList.length);
+                    item.put("other", companyStr);
+                    List projectTemp = new ArrayList();
+                    for (String projectName : projectList) {
+                        MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+                        if (project != null) {
+                            projectTemp.add(project);
+                        }
                     }
+                    item.put("project", projectTemp);
+                    items.add(item);
+                } else {
+                    //当前没有该公司的记录
+                    List items = new ArrayList();
+                    Map item = new HashMap();
+                    item.put("element", element);
+                    item.put("frequency", frequency.toJsonSingle());
+                    item.put("point", pointList.length);
+                    item.put("other", companyStr);
+                    List projectTemp = new ArrayList();
+                    for (String projectName : projectList) {
+                        MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+                        if (project != null) {
+                            projectTemp.add(project);
+                        }
+                    }
+                    item.put("project", projectTemp);
+                    items.add(item);
+                    obj.put(companyStr, items);
                 }
-                json.put("project", projectTemp);
-                returnBack.add(json);
+
+
+//                String companyStr = temp.get("company").toString();
+//                String elementStr = temp.get("element").toString();
+//                String[] pointList = temp.get("pointList").toString().split(" ");
+//                String[] projectList = temp.get("projectList").toString().split(" ");
+//                String frequencyStr = temp.get("frequency").toString();
+//                Map json = new HashMap();
+//                Frequency frequency=Frequency.frequencyDao.findFirst("SELECT * FROM `db_frequency` WHERE total='" + frequencyStr + "'");
+//                if(frequency!=null){
+//                    json.put("frequency", frequency.toJsonSingle());
+//                }
+//                json.put("company", companyStr);
+//                json.put("other", companyStr);
+//                Element element = Element.elementDao.findFirst("SELECT * FROM `db_element` WHERE name='" + elementStr + "'");
+//                if (element != null) {
+//                    json.put("element", element);
+//                }
+//                json.put("point", pointList.length);
+//                List projectTemp = new ArrayList();
+//                for (String projectName : projectList) {
+//                    MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+//                    if (project != null) {
+//                        projectTemp.add(project);
+//                    }
+//                }
+//                json.put("project", projectTemp);
+//                returnBack.add(json);
+
+
             }
-            renderJson(returnBack);
+            //=====拼接JSON
+
+            List back = new ArrayList();
+            for (String key : obj.keySet()) {
+                Map backMap = new HashMap();
+                backMap.put("company", key);
+                backMap.put("flag", 1);
+                backMap.put("items", obj.get(key));
+                back.add(backMap);
+            }
+            renderJson(back);
         } catch (Exception e) {
             renderError(500);
         }
