@@ -145,7 +145,39 @@ public class PowerController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+    }
 
+    /**
+     * 保存权限
+     **/
+    public void savePower() {
+        try {
+            boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int role_id = getParaToInt("role_id");
+                    List<PowerUser> powerUserList = PowerUser.powerUserDao.find("SELECT * FROM `db_power_role` WHERE role_id=" + role_id);
+                    Boolean result = true;
+                    for (PowerUser powerUser : powerUserList) {
+                        result = result && PowerUser.powerUserDao.deleteById(powerUser.get("id"));
+                        if (!result) return false;
+                    }
+                    Integer[] powers = getParaValuesToInt("actives[]");
+                    for (int id : powers) {
+                        PowerUser powerUser = new PowerUser();
+                        powerUser.set("power_id",id).set("role_id",role_id);
+                        result = result && powerUser.save();
+                        if (!result) return false;
 
+                    }
+                    return result;
+                }
+            });
+
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 }

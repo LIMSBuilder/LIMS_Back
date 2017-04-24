@@ -1,5 +1,6 @@
 package com.lims.controller;
 
+import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
 import com.jfinal.json.Jackson;
 import com.jfinal.kit.JsonKit;
@@ -64,7 +65,6 @@ public class ContractController extends Controller {
                         for (Map itemMap : projectItems) {
                             Contractitem contractitem = new Contractitem();
                             result = result && contractitem.set("company_id", company.get("id")).set("element", ((Map) itemMap.get("element")).get("id")).set("frequency", ((Map) itemMap.get("frequency")).get("id")).set("point", itemMap.get("point")).set("other", itemMap.get("other")).save();
-
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
@@ -80,6 +80,52 @@ public class ContractController extends Controller {
                 }
             });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /***
+     * 修改合同
+     * */
+    public void change() {
+        try {
+            int id = getParaToInt("id");
+            Contract contract = Contract.contractDao.findById(id);
+            boolean result = true;
+            if (contract != null) {
+                User user = ParaUtils.getCurrentUser(getRequest());
+                contract.set("id", id).set("create_time", sdf.format(new Date()))
+                        .set("creater", user.get("id"))
+                        .set("process", ProcessKit.getContractProcess("create"))
+                        .set("trustee_unit", getPara("trustee_unit"))
+                        .set("trustee_address", getPara("trustee_address"))
+                        .set("trustee_tel", getPara("trustee_tel"))
+                        .set("trustee_code", getPara("trustee_code"))
+                        .set("trustee_fax", getPara("trustee_fax"))
+                        .set("client_unit", getPara("client_unit"))
+                        .set("client_address", getPara("client_address"))
+                        .set("client_tel", getPara("client_tel"))
+                        .set("client_code", getPara("client_code"))
+                        .set("client_fax", getPara("client_fax"))
+                        .set("name", getPara("name"))
+                        .set("aim", getPara("aim"))
+                        .set("way", getPara("way"))
+                        .set("wayDesp", getPara("wayDesp"))
+                        .set("package_unit", getPara("package_unit"))
+                        .set("in_room", getPara("in_room"))
+                        .set("secret", getPara("secret"))
+                        .set("paymentWay", getPara("paymentWay"))
+                        .set("payment", getPara("payment"))
+                        .set("other", getPara("other"))
+                        .set("finish_time", sdf.format(new Date()));
+                result = result && contract.update();
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else {
+                renderError(500);
+            }
+
+
         } catch (Exception e) {
             renderError(500);
         }
@@ -262,7 +308,7 @@ public class ContractController extends Controller {
 
     /**
      * 默认乙方信息
-     * **/
+     **/
 
     public void defaultInfo() {
         try {
@@ -296,7 +342,7 @@ public class ContractController extends Controller {
 
     /**
      * 默认乙方信息
-     * **/
+     **/
     public void fetchDefault() {
         try {
             Default defaultModel = Default.defaultDao.findFirst("SELECT * FROM `db_default`");
@@ -534,9 +580,10 @@ public class ContractController extends Controller {
         }
         return temp;
     }
-  /**
-   * 统计合同的数量
-   * **/
+
+    /**
+     * 统计合同的数量
+     **/
     public void countProcess() {
         try {
             Map temp = ProcessKit.ContractMap;
@@ -633,6 +680,7 @@ public class ContractController extends Controller {
     /**
      * 打印合同
      */
+    @Clear
     public void createContract() {
         try {
             String id = getPara("id");
@@ -644,6 +692,27 @@ public class ContractController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+    }
+
+
+    /**
+     * 打印审核书
+     **/
+    @Clear
+    public void createReview() {
+        try {
+            String id = getPara("id");
+            ContractReview contractReview=ContractReview.contractReviewDao.findById(id);
+            if (contractReview != null) {
+                getRequest().setAttribute("contractReview", contractReview);
+                render("/template/review.jsp");
+            } else renderNull();
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+
     }
 
     /***

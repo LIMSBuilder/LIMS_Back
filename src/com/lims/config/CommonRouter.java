@@ -35,6 +35,7 @@ public class CommonRouter extends Routes {
         add("/api/dispatch", DispatchController.class);
         add("/api/delivery",DeliveryController.class);
         add("/api/power",PowerController.class);
+        add("/api/equip",EquipmentController.class);
     }
 }
 
