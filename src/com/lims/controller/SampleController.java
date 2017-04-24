@@ -364,21 +364,6 @@ public class SampleController extends Controller {
         return types;
     }
 
-    /**
-     * 统计待申请的任务数
-     **/
-//    public void countProcess() {
-//        try {
-//            User user = new User();
-//            int count = Task.taskDao.find("SELECT DISTINCT t.*", "FROM `db_task` t,`db_contract_item` i,`db_contract` c,`db_item_join_user` u  WHERE ((i.task_id=t.id AND t.process=2 AND t.sample_type=1) OR (i.task_id is NULL AND t.identify=c.identify AND t.process=2 AND t.sample_type=1)) AND (i.charge_id=" + user.get("id") + " OR (i.id=u.contract_item_id AND u.join_id=" + user.get("id") + ") and  i.process = 0)").size();
-//            Map temp = new HashMap();
-//            temp.put("beforeApply", temp);
-//            renderJson(temp);
-//
-//        } catch (Exception e) {
-//            renderError(500);
-//        }
-//    }
 
     /**
      * 提供自送样样品信息保存接口
@@ -608,17 +593,7 @@ public class SampleController extends Controller {
         }
     }
 
-    /**
-     * 自送样样品交托，交接记录
-     **/
-    public void selfSample() {
-        try {
 
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
 
     public void createSample() {
         try {

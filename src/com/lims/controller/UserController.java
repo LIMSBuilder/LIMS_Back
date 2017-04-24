@@ -40,6 +40,7 @@ public class UserController extends Controller {
                 Prop p = PropKit.use("default.properties");
                 if (user.get("password") == null)
                     user.set("password", ParaUtils.EncoderByMd5(p.get("init_password")));
+                user.set("isInit", 0);
                 renderJson(user.save() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             }
         } catch (Exception e) {
@@ -113,7 +114,10 @@ public class UserController extends Controller {
                 map.put("departmentId", temp.getDepartment().getInt("id"));
                 continue;
             }
-            if (key.equals("cardId") || key.equals("password")) continue;
+            if (key.equals("cardId") ) {
+                map.put("cardId", user.get(key));
+                continue;
+            }
             map.put(key, user.get(key));
         }
         return map;
@@ -172,12 +176,11 @@ public class UserController extends Controller {
         try {
             int id = getParaToInt("id");
             String nick = getPara("nick");
-            String password = getPara("password");
             String name = getPara("name");
             int roleId = getParaToInt("roleId");
             String cardId = getPara("cardId");
             User user = User.userDao.findById(id);
-            boolean result = user.set("id", id).set("nick", nick).set("password", password).set("name", name).set("roleId", roleId).set("cardId", cardId).update();
+            boolean result = user.set("id", id).set("nick", nick).set("name", name).set("roleId", roleId).set("cardId", cardId).set("isInit", 0).update();
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
         } catch (Exception e) {
