@@ -1,5 +1,6 @@
 package com.lims.controller;
 
+import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
 import com.jfinal.json.Jackson;
 import com.jfinal.plugin.activerecord.Db;
@@ -457,6 +458,7 @@ public class TaskController extends Controller {
     /**
      * 打印任务书
      */
+    @Clear
     public void createTask() {
         try {
             String id = getPara("id");
