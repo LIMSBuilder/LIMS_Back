@@ -68,7 +68,7 @@ public class ContractController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("isPackage",itemProject.get("isPackage")).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -120,6 +120,30 @@ public class ContractController extends Controller {
                         .set("other", getPara("other"))
                         .set("finish_time", sdf.format(new Date()));
                 result = result && contract.update();
+//                List<Company> companyList = Company.companydao.find("select * from `db_company` where company_id =" + id);
+//                for (Company company : companyList) {
+//                    result = result && Company.companydao.deleteById(company.get("id"));
+//                    if (!result) break;
+//                }
+//                String[] items = getParaValues("project_items[]");
+//                for (String item : items) {
+//                    Map temp = Jackson.getJson().parse(item, Map.class);
+//                    Company company = new Company();
+//                    result = result && company.set("contract_id", contract.get("id")).set("company", temp.get("company")).set("flag", temp.get("flag")).set("process", 0).set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id")).set("create_time", ParaUtils.sdf.format(new Date())).update();
+//                    List<Map> projectItems = (List<Map>) temp.get("items");
+//                    for (Map itemMap : projectItems) {
+//                        Contractitem contractitem = new Contractitem();
+//                        result = result && contractitem.set("company_id", company.get("id")).set("element", ((Map) itemMap.get("element")).get("id")).set("frequency", ((Map) itemMap.get("frequency")).get("id")).set("point", itemMap.get("point")).set("other", itemMap.get("other")).update();
+//                        List<Map> project = (List<Map>) itemMap.get("project");
+//                        for (Map pro : project) {
+//                            ItemProject itemProject = new ItemProject();
+//                            result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).update();
+//                            if (!result) break;
+//                        }
+//                        if (!result) break;
+//                    }
+//
+//                }
                 renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             } else {
                 renderError(500);
@@ -147,11 +171,11 @@ public class ContractController extends Controller {
 //            数据库中没有第一条记录，则创建它
             Encode entry = new Encode();
             entry.set("contract_identify", 1).set("self_identify", 0).set("scene_identify", 0).save();
-            identify = identify + "-" + String.format("%04d", 1);
+            identify = identify + "-" + String.format("%03d", 1);
         } else {
             int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
             encode.set("contract_identify", identify_Encode).update();
-            identify = identify + "-" + String.format("%04d", identify_Encode);
+            identify = identify + "-" + String.format("%03d", identify_Encode);
         }
         return identify;
     }
@@ -702,7 +726,7 @@ public class ContractController extends Controller {
     public void createReview() {
         try {
             String id = getPara("id");
-            ContractReview contractReview=ContractReview.contractReviewDao.findById(id);
+            ContractReview contractReview = ContractReview.contractReviewDao.findById(id);
             if (contractReview != null) {
                 getRequest().setAttribute("contractReview", contractReview);
                 render("/template/review.jsp");
