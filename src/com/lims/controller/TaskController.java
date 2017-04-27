@@ -421,11 +421,11 @@ public class TaskController extends Controller {
 //            数据库中没有第一条记录，则创建它
             Encode entry = new Encode();
             entry.set("contract_identify", 1).set("self_identify", 0).set("scene_identify", 0).save();
-            identify = identify + "-" + String.format("%04d", 1);
+            identify = identify + "-" + String.format("%03d", 1);
         } else {
             int identify_Encode = (encode.get("contract_identify") == null ? 0 : encode.getInt("contract_identify")) + 1;
             encode.set("contract_identify", identify_Encode).update();
-            identify = identify + "-" + String.format("%04d", identify_Encode);
+            identify = identify + "-" + String.format("%03d", identify_Encode);
         }
         return identify;
     }

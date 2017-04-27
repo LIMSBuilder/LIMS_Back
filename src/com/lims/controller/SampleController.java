@@ -113,7 +113,7 @@ public class SampleController extends Controller {
     /**
      * 样品编号生成
      * 【小写字母变成大写字母】
-     * 例如WS0001
+     * 例如WSA0001
      * self_identify:自送样  scene_identify:现场采样
      **/
 
