@@ -68,7 +68,7 @@ public class ContractController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("isPackage",itemProject.get("isPackage")).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -838,6 +838,31 @@ public class ContractController extends Controller {
                 back.add(backMap);
             }
             renderJson(back);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    /**
+     * 上传服务合同
+     */
+    public void createService() {
+        try {
+            int review = getParaToInt("review");//是否技术评审
+            String path = getPara("path");//服务合同路径
+            String name = getPara("name");//合同名称
+            ServiceContract serviceContract = new ServiceContract();
+            serviceContract
+                    .set("path", path)
+                    .set("name", name)
+                    .set("review", review)
+                    .set("state", 0)
+                    .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                    .set("create_time", ParaUtils.sdf.format(new Date()));
+            Boolean result = serviceContract.save();
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
         } catch (Exception e) {
             renderError(500);
         }
