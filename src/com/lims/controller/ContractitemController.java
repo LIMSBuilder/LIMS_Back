@@ -74,11 +74,11 @@ public class ContractitemController extends Controller {
     public void create() {
         try {
             String company = getPara("company");
-            int  point = getParaToInt("point");
+            int point = getParaToInt("point");
             int contract_id = getParaToInt("contract_id");
             String other = getPara("other");
 //            int is_package = getParaToInt("is_package");
-            if (Contractitem.contractitemdao.find("select * from `db_contract_item` where company='" + company + "'and  point='" + point + "' and contract_id='" + contract_id + "' and other= '" + other +  "'").size() != 0) {
+            if (Contractitem.contractitemdao.find("select * from `db_contract_item` where company='" + company + "'and  point='" + point + "' and contract_id='" + contract_id + "' and other= '" + other + "'").size() != 0) {
                 renderJson(RenderUtils.CODE_REPEAT);
             } else {
                 Contractitem contractitem = new Contractitem();
@@ -152,6 +152,7 @@ public class ContractitemController extends Controller {
             renderError(500);
         }
     }
+
 }
 
 
