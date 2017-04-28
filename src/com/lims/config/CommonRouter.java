@@ -3,6 +3,7 @@ package com.lims.config;
 import com.jfinal.config.Routes;
 import com.lims.controller.*;
 import com.lims.model.Dispatch;
+import com.lims.model.Package;
 
 /**
  * 路由页面
@@ -33,9 +34,11 @@ public class CommonRouter extends Routes {
         add("/api/sample", SampleController.class);
         add("/api/item", ItemController.class);
         add("/api/dispatch", DispatchController.class);
-        add("/api/delivery",DeliveryController.class);
-        add("/api/power",PowerController.class);
-        add("/api/equip",EquipmentController.class);
+        add("/api/delivery", DeliveryController.class);
+        add("/api/power", PowerController.class);
+        add("/api/equip", EquipmentController.class);
+        add("/api/package", PackageController.class);
+        add("/api/service", ServiceController.class);
     }
 }
 
