@@ -90,6 +90,10 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_sample_record", FileRecord.class);
         arp.addMapping("db_power", Power.class);
         arp.addMapping("db_power_role", PowerUser.class);
+        arp.addMapping("db_equipment", Equipment.class);
+
+
+        arp.addMapping("db_service_contract", ServiceContract.class);
         //addMap增加数据库树形
 
     }
