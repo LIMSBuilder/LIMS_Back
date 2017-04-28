@@ -830,28 +830,4 @@ public class ContractController extends Controller {
     }
 
 
-    /**
-     * 上传服务合同
-     */
-    public void createService() {
-        try {
-            int review = getParaToInt("review");//是否技术评审
-            String path = getPara("path");//服务合同路径
-            String name = getPara("name");//合同名称
-            ServiceContract serviceContract = new ServiceContract();
-            serviceContract
-                    .set("path", path)
-                    .set("name", name)
-                    .set("review", review)
-                    .set("state", 0)
-                    .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
-                    .set("create_time", ParaUtils.sdf.format(new Date()));
-            Boolean result = serviceContract.save();
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
-
 }
