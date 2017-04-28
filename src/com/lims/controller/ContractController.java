@@ -12,6 +12,7 @@ import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.*;
 
+import com.lims.model.Package;
 import com.lims.utils.*;
 import org.junit.Test;
 
@@ -94,62 +95,30 @@ public class ContractController extends Controller {
             Contract contract = Contract.contractDao.findById(id);
             boolean result = true;
             if (contract != null) {
-                User user = ParaUtils.getCurrentUser(getRequest());
-                contract.set("id", id).set("create_time", sdf.format(new Date()))
-                        .set("creater", user.get("id"))
-                        .set("process", ProcessKit.getContractProcess("create"))
-                        .set("trustee_unit", getPara("trustee_unit"))
-                        .set("trustee_address", getPara("trustee_address"))
-                        .set("trustee_tel", getPara("trustee_tel"))
-                        .set("trustee_code", getPara("trustee_code"))
-                        .set("trustee_fax", getPara("trustee_fax"))
-                        .set("client_unit", getPara("client_unit"))
-                        .set("client_address", getPara("client_address"))
-                        .set("client_tel", getPara("client_tel"))
-                        .set("client_code", getPara("client_code"))
-                        .set("client_fax", getPara("client_fax"))
-                        .set("name", getPara("name"))
-                        .set("aim", getPara("aim"))
-                        .set("way", getPara("way"))
-                        .set("wayDesp", getPara("wayDesp"))
-                        .set("package_unit", getPara("package_unit"))
-                        .set("in_room", getPara("in_room"))
-                        .set("secret", getPara("secret"))
-                        .set("paymentWay", getPara("paymentWay"))
-                        .set("payment", getPara("payment"))
-                        .set("other", getPara("other"))
-                        .set("finish_time", sdf.format(new Date()));
+                Map paraMaps = getParaMap();
+                for (Object key : paraMaps.keySet()) {
+                    switch (key.toString()) {
+                        case "in_room":
+                            contract.set("in_room", ((String[]) paraMaps.get(key))[0].equals("true") ? 1 : 0);
+                            break;
+                        case "secret":
+                            contract.set("secret", ((String[]) paraMaps.get(key))[0].equals("true") ? 1 : 0);
+                            break;
+                        case "id":
+                            break;//不知道为什么会传一个id过来，待观察
+                        default:
+                            if (key.toString().indexOf("item") != -1) {
+                                continue;
+                            }
+                            contract.set(key.toString(), ((String[]) paraMaps.get(key))[0]);
+                    }
+                }
+                contract.set("update_time", ParaUtils.sdf.format(new Date()));
                 result = result && contract.update();
-//                List<Company> companyList = Company.companydao.find("select * from `db_company` where company_id =" + id);
-//                for (Company company : companyList) {
-//                    result = result && Company.companydao.deleteById(company.get("id"));
-//                    if (!result) break;
-//                }
-//                String[] items = getParaValues("project_items[]");
-//                for (String item : items) {
-//                    Map temp = Jackson.getJson().parse(item, Map.class);
-//                    Company company = new Company();
-//                    result = result && company.set("contract_id", contract.get("id")).set("company", temp.get("company")).set("flag", temp.get("flag")).set("process", 0).set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id")).set("create_time", ParaUtils.sdf.format(new Date())).update();
-//                    List<Map> projectItems = (List<Map>) temp.get("items");
-//                    for (Map itemMap : projectItems) {
-//                        Contractitem contractitem = new Contractitem();
-//                        result = result && contractitem.set("company_id", company.get("id")).set("element", ((Map) itemMap.get("element")).get("id")).set("frequency", ((Map) itemMap.get("frequency")).get("id")).set("point", itemMap.get("point")).set("other", itemMap.get("other")).update();
-//                        List<Map> project = (List<Map>) itemMap.get("project");
-//                        for (Map pro : project) {
-//                            ItemProject itemProject = new ItemProject();
-//                            result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).update();
-//                            if (!result) break;
-//                        }
-//                        if (!result) break;
-//                    }
-//
-//                }
                 renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             } else {
-                renderError(500);
+                renderJson(RenderUtils.CODE_EMPTY);
             }
-
-
         } catch (Exception e) {
             renderError(500);
         }
@@ -221,6 +190,15 @@ public class ContractController extends Controller {
                         case "beforeReviewSmall":
                             param += " AND (process = " + ProcessKit.getContractProcess("change") + ") AND payment<50000 ";
                             break;
+                        case "waitPackage":
+                            param += " AND process<" + ProcessKit.getContractProcess("finish") + " AND process !=-2 AND isPackage=1 AND package_id is NULL ";
+                            break;
+                        case "afterPackage":
+                            param += " AND isPackage=1 AND package_id is NOT NULL ";
+                            break;
+                        case "totalPackage":
+                            param += " AND isPackage=1 ";
+                            break;
                         default:
                             param += " AND " + key + " = " + value;
                     }
@@ -289,6 +267,7 @@ public class ContractController extends Controller {
         temp.put("aim", entry.get("aim"));
         temp.put("create_time", entry.get("create_time"));
         temp.put("client_unit", entry.get("client_unit"));
+        temp.put("package_id", entry.get("package_id"));
         return temp;
     }
 
@@ -598,6 +577,13 @@ public class ContractController extends Controller {
                 case "type":
                     temp.put("type", entry.get(key) == null ? "" : Type.typeDao.findById(entry.get(key)));
                     break;
+                case "package_id":
+                    if (entry.get("package_id") != null) {
+                        Package p = Package.packageDao.findById(entry.get("package_id"));
+                        temp.put("package_unit", p.toSingleJson());
+                    } else {
+                        temp.put("package_unit", null);
+                    }
                 default:
                     temp.put(key, entry.get(key));
             }
