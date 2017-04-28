@@ -33,6 +33,7 @@ public class Contractitem extends Model<Contractitem> {
         for (ItemProject itemProject : itemProjectList) {
             MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(itemProject.get("project_id"));
             Map p = monitorProject.toJsonSingle();
+            p.put("item_project_id",itemProject.get("id"));
             p.put("isPackage", itemProject.get("isPackage"));
             maps.add(p);
         }

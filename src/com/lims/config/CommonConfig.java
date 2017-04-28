@@ -9,6 +9,7 @@ import com.lims.interceptor.ExceptionIntoLogInterceptor;
 import com.lims.interceptor.LoginInterceptor;
 import com.lims.interceptor.PowerInterceptor;
 import com.lims.model.*;
+import com.lims.model.Package;
 import com.lims.utils.MessageSender;
 import com.lims.utils.WebSocketHandler;
 
@@ -94,6 +95,7 @@ public class CommonConfig extends JFinalConfig {
 
 
         arp.addMapping("db_service_contract", ServiceContract.class);
+        arp.addMapping("db_package", Package.class);
         //addMap增加数据库树形
 
     }
