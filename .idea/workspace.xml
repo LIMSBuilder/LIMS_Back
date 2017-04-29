@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7adb65de-9683-469f-b0c3-f3c1cc41e101" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Contract.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Contract.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TaskController.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TaskController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="128" column="0" lean-forward="false" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+            <state relative-caret-position="80">
+              <caret line="136" column="31" lean-forward="false" selection-start-line="136" selection-start-column="16" selection-end-line="136" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -70,10 +70,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Contract.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Contract.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/model/Contract.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-376">
+            <state relative-caret-position="380">
               <caret line="20" column="43" lean-forward="false" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -176,8 +176,8 @@
       <find>Detail</find>
       <find>list</find>
       <find>createIden</find>
-      <find>create</find>
       <find>getItems</find>
+      <find>create</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -209,7 +209,6 @@
         <option value="$PROJECT_DIR$/web/template/create_contract.jsp" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Equipment.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/EquipmentController.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/SampleController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/ContractitemController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/ServiceContract.java" />
@@ -221,6 +220,7 @@
         <option value="$PROJECT_DIR$/src/com/lims/controller/ServiceController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Contract.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" />
       </list>
     </option>
   </component>
@@ -931,12 +931,12 @@
       <workItem from="1493254233790" duration="3767000" />
       <workItem from="1493277032015" duration="1632000" />
       <workItem from="1493280357461" duration="965000" />
-      <workItem from="1493301112242" duration="17576000" />
+      <workItem from="1493301112242" duration="18080000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="116941000" />
+    <option name="totallyTimeSpent" value="117445000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="14" width="1680" height="1023" extended-state="6" />
@@ -1425,14 +1425,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="128" column="0" lean-forward="false" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1455,11 +1447,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/model/Contract.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-376">
+        <state relative-caret-position="380">
           <caret line="20" column="43" lean-forward="false" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="136" column="31" lean-forward="false" selection-start-line="136" selection-start-column="16" selection-end-line="136" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -130,6 +130,64 @@ public class TaskController extends Controller {
         }
     }
 
+
+    /**
+     * 根据服务合同导入
+     */
+    public void createByService(){
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Map paraMaps = getParaMap();
+                    Task task = new Task();
+                    Boolean result = true;
+                    for (Object key : paraMaps.keySet()) {
+                        switch (key.toString()) {
+                            case "id":
+                                break;//不知道为什么会传一个id过来，待观察
+                            default:
+                                if (key.toString().indexOf("item") != -1) {
+                                    continue;
+                                }
+                                task.set(key.toString(), ((String[]) paraMaps.get(key))[0]);
+                        }
+
+                    }
+                    User user = ParaUtils.getCurrentUser(getRequest());
+                    task.set("sample_type", getPara("sample_type")).set("create_time", ParaUtils.sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getTaskProcess("create"));
+                    result = result && task.save();
+                    String[] items = getParaValues("project_items[]");
+                    for (String item : items) {
+                        Map temp = Jackson.getJson().parse(item, Map.class);
+                        Company company = new Company();
+                        result = result && company.set("task_id", task.get("id")).set("company", temp.get("company")).set("flag", temp.get("flag")).set("process", 0).set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id")).set("create_time", ParaUtils.sdf.format(new Date())).save();
+                        List<Map> projectItems = (List<Map>) temp.get("items");
+                        for (Map itemMap : projectItems) {
+                            Contractitem contractitem = new Contractitem();
+                            result = result && contractitem.set("company_id", company.get("id")).set("element", ((Map) itemMap.get("element")).get("id")).set("frequency", ((Map) itemMap.get("frequency")).get("id")).set("point", itemMap.get("point")).set("other", itemMap.get("other")).save();
+
+                            List<Map> project = (List<Map>) itemMap.get("project");
+                            for (Map pro : project) {
+                                ItemProject itemProject = new ItemProject();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).save();
+                                if (!result) break;
+                            }
+                            if (!result) break;
+                        }
+
+                    }
+                    LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
     public void list() {
         try {
             int rowCount = getParaToInt("rowCount");
