@@ -22,8 +22,9 @@ public class ProcessKit {
     public static Map TaskMap = new HashMap() {{
         this.put("stop", -2);//已中止任务
         this.put("create", 1);//创建任务完成，已下达 办公室派发给具体负责人待派遣
-        this.put("dispatch",2);//派遣任务，待样品登记
-        this.put("apply",3);//样品登记
+        this.put("dispatch", 2);//派遣任务，待样品登记
+        this.put("apply", 3);//样品登记
+        this.put("quality", 4);//质控
 
     }};
 
