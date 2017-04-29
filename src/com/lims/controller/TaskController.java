@@ -13,6 +13,7 @@ import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
 import org.junit.Test;
 
+import javax.xml.ws.Service;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -134,7 +135,7 @@ public class TaskController extends Controller {
     /**
      * 根据服务合同导入
      */
-    public void createByService(){
+    public void createByService() {
         try {
             Boolean result = Db.tx(new IAtom() {
                 @Override
@@ -146,6 +147,12 @@ public class TaskController extends Controller {
                         switch (key.toString()) {
                             case "id":
                                 break;//不知道为什么会传一个id过来，待观察
+                            case "serviceId":
+                                ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(getPara("serviceId"));
+                                if (serviceContract != null) {
+                                    task.set("identify", serviceContract.get("identify")).set("service_id", serviceContract.get("id"));
+                                }
+                                break;
                             default:
                                 if (key.toString().indexOf("item") != -1) {
                                     continue;
