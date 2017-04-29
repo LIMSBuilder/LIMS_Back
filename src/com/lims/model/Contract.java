@@ -18,17 +18,42 @@ public class Contract extends Model<Contract> {
         List<Map> mapList = new ArrayList<>();
         List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE contract_id=" + this.get("id"));
         for (Company company : companyList) {
-            Map temp = new HashMap();
-            for (String key : company._getAttrNames()) {
-                temp.put(key, company.get(key));
+            if (company.get("name") != null) {
+                //不为空，导入的
+                Map temp = new HashMap();
+                for (String key : company._getAttrNames()) {
+                    temp.put(key, company.get(key));
+                }
+                List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + company.get("id"));
+                List<Map> itemsList = new ArrayList<>();
+                for (Contractitem contractitem : contractitemList) {
+                    itemsList.add(contractitem.toSimpleJson());
+                }
+                temp.put("items", itemsList);
+                mapList.add(temp);
+            } else {
+                //为空，手动创建的
+                if (mapList.size() == 0) {
+                    Map temp = new HashMap();
+                    for (String key : company._getAttrNames()) {
+                        temp.put(key, company.get(key));
+                    }
+                    List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + company.get("id"));
+                    List<Map> itemsList = new ArrayList<>();
+                    for (Contractitem contractitem : contractitemList) {
+                        itemsList.add(contractitem.toSimpleJson());
+                    }
+                    temp.put("items", itemsList);
+                    mapList.add(temp);
+                } else {
+                    List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + company.get("id"));
+                    List<Map> itemsList = new ArrayList<>();
+                    for (Contractitem contractitem : contractitemList) {
+                        itemsList.add(contractitem.toSimpleJson());
+                    }
+                    ((List) mapList.get(0).get("items")).addAll(itemsList);
+                }
             }
-            List<Contractitem> contractitemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + company.get("id"));
-            List<Map> itemsList = new ArrayList<>();
-            for (Contractitem contractitem : contractitemList) {
-                itemsList.add(contractitem.toSimpleJson());
-            }
-            temp.put("items", itemsList);
-            mapList.add(temp);
         }
         return mapList;
     }
