@@ -7,6 +7,7 @@ import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.*;
 import com.lims.utils.ParaUtils;
+import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
 
 import java.sql.SQLException;
@@ -42,10 +43,12 @@ public class DispatchController extends Controller {
                         result = result && dispatchUser.set("delivery_id", dispatch.get("id")).set("user_id", charge_id).set("type", 1).save();
                         if (!result) return false;
                         Integer[] joiner = getParaValuesToInt("join_id[]");
-                        for (int joinId : joiner) {
-                            DispatchUser dispatchJoiner = new DispatchUser();
-                            result = result && dispatchJoiner.set("delivery_id", dispatch.get("id")).set("user_id", joinId).set("type", 0).save();
-                            if (!result) break;
+                        if (joiner != null) {
+                            for (int joinId : joiner) {
+                                DispatchUser dispatchJoiner = new DispatchUser();
+                                result = result && dispatchJoiner.set("delivery_id", dispatch.get("id")).set("user_id", joinId).set("type", 0).save();
+                                if (!result) break;
+                            }
                         }
                     }
                     return result;
@@ -67,7 +70,8 @@ public class DispatchController extends Controller {
             String condition_temp = getPara("condition");
             Map condition = ParaUtils.getSplitCondition(condition_temp);
             User user = ParaUtils.getCurrentUser(getRequest());
-            Page<Company> companyPage = Company.companydao.paginate(currentPage, rowCount, "SELECT c.*", " FROM `db_company` c, `db_delivery` d,`db_delivery_user` u WHERE c.id=d.company_id AND d.id=u.delivery_id AND u.user_id=" + user.get("id"));
+            Page<Company> companyPage = Company.companydao.paginate(currentPage, rowCount, "SELECT c.*", " FROM `db_delivery_user` u,`db_delivery` d,`db_company` c \n" +
+                    "WHERE u.user_id=" + user.get("id") + " AND u.delivery_id=d.id AND d.company_id=c.id AND d.process=0");
             List<Company> companyList = companyPage.getList();
             Map results = toJson(companyList);
             results.put("currentPage", currentPage);
@@ -90,4 +94,43 @@ public class DispatchController extends Controller {
         return result;
     }
 
+
+    /**
+     * 检查当前任务书是否已经允许流转
+     */
+    public void checkFlow() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                int size = Company.companydao.find("SELECT * FROM `db_company` c WHERE c.task_id=" + task_id + " AND c.process!=2").size();
+                if (size != 0) {
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                } else {
+                    Boolean result = task.set("process", ProcessKit.getTaskProcess("quality")).update();
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                }
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 获取执行中的派遣列表
+     */
+    public void executingJobs() {
+        try {
+            List<Delivery> deliveryList = Delivery.deliverydao.find("SELECT * FROM `db_delivery` d WHERE d.process=0");
+            for (Delivery delivery : deliveryList) {
+
+            }
+
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }

@@ -1,14 +1,16 @@
 package com.lims.controller;
 
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
-import com.lims.model.Encode;
-import com.lims.model.ServiceContract;
-import com.lims.model.User;
+import com.lims.model.*;
+import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -30,8 +32,25 @@ public class ServiceController extends Controller {
             for (int i = 0; i < keys.length; i++) {
                 String key = (String) keys[i];
                 Object value = condition.get(key);
-                if (key.equals("process")) { //process=wait_change
+                if (key.equals("state")) { //process=wait_change
                     switch (value.toString()) {
+                        case "total":
+                            break;
+                        case "before_review":
+                            param += "AND (state = " + ProcessKit.getServiceProcess("create") + " )";
+                            break;
+                        case "after_review":
+                            param += "AND (state = " + ProcessKit.getServiceProcess("review") + ")";
+                            break;
+                        case "finish_contract":
+                            param += "AND (state = " + ProcessKit.getServiceProcess("finish") + ")";
+                            break;
+                        case "change_contract":
+                            param += "AND (state = " + ProcessKit.getServiceProcess("change") + ")";
+                            break;
+                        case "stop_contract":
+                            param += "AND (state = " + ProcessKit.getServiceProcess("stop") + ")";
+                            break;
                         default:
                             param += " AND " + key + " = " + value;
                     }
@@ -105,11 +124,12 @@ public class ServiceController extends Controller {
                     .set("path", path)
                     .set("name", name)
                     .set("review", review)
-                    .set("state", 0)
+                    .set("state", ProcessKit.getServiceProcess("create"))
                     .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                     .set("create_time", ParaUtils.sdf.format(new Date()))
                     .set("identify", createIdentify());
             Boolean result = serviceContract.save();
+            LoggerKit.addServiceContractLog(serviceContract.getInt("id"), "创建合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
         } catch (Exception e) {
@@ -141,4 +161,225 @@ public class ServiceController extends Controller {
         }
         return identify;
     }
+
+    /**
+     * 审核合同
+     * *
+     **/
+    public void review() {
+        try {
+            boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+                    int same = getParaToInt("same");
+                    int contract1 = getParaToInt("contract");
+                    int guest = getParaToInt("guest");
+                    int pack = getParaToInt("package");
+                    int company = getParaToInt("company");
+                    int money = getParaToInt("money");
+                    int time = getParaToInt("time");
+                    int result1 = getParaToInt("result");
+                    ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
+                    if (serviceContract != null) {
+                        User user = ParaUtils.getCurrentUser(getRequest());
+                        ContractReview contractReview = new ContractReview();
+                        Boolean result = true;
+                        result = result && contractReview.set("service_id",serviceContract.getInt("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("same", same).set("contract", contract1).set("guest", guest).set("package", pack).set("company", company).set("money", money).set("time", time).set("result", result1).save();
+                        if (!result) return false;
+                        if (getParaToInt("result") == 1) {
+                            LoggerKit.addServiceContractLog(serviceContract.getInt("id"), "审核通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                            result = result && serviceContract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("state", ProcessKit.getContractProcess("review")).set("review_id", contractReview.get("id")).update();
+
+                        } else {
+                            LoggerKit.addServiceContractLog(serviceContract.getInt("id"), "审核拒绝", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                            result = result && serviceContract.set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("review_id", contractReview.get("id")).set("state", ProcessKit.getContractProcess("change")).update();
+                        }
+                        return result;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /***
+     * 中止合同
+     * */
+
+    public void stopContract() {
+        try {
+
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+                    ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
+                    boolean result = true;
+                    boolean taskresult = true;
+                    if (serviceContract != null) {
+                        result = serviceContract.set("state", -2).update();
+                        Task task = Task.taskDao.findFirst("select * from `db_task` where contract_id =" + serviceContract.get("id"));
+                        if (task != null) {
+                            taskresult = task.set("process", ProcessKit.TaskMap.get("stop")).update();
+                        }
+                    }
+                    LoggerKit.addServiceContractLog(serviceContract.getInt("id"), "中止了合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    return result && taskresult;
+                }
+            });
+
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (
+                Exception e)
+
+        {
+            renderError(500);
+        }
+    }
+
+
+    /***
+     * 完成合同
+     * */
+    public void finishContract() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int id = getParaToInt("id");
+                    ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
+                    Boolean result = true;
+                    if (serviceContract != null && serviceContract.getInt("process") == 2) {
+                        result = serviceContract.set("state", 3).update();
+                    }
+                    LoggerKit.addServiceContractLog(serviceContract.getInt("id"), "完成合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    /**
+     * 根据编号找到合同
+     **/
+    public void findById() {
+        try {
+            int id = getParaToInt("id");
+            ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
+            if (serviceContract != null) {
+                renderJson(toJsonSingle(serviceContract));
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 通过ID查找服务合同细节列表
+     **/
+    public void serviceContractDetails() {
+        try {
+            int id = getParaToInt("id");
+            ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
+            if (serviceContract != null) {
+                renderJson(toJsonSingle(serviceContract));
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 根据ID删除合同
+     **/
+    public void deleteserviceContract() {
+        try {
+            int id = getParaToInt("id");
+            Boolean result = ServiceContract.serviceContractDao.deleteById(id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_EMPTY);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 统计待审核数量
+     **/
+    public void countreview() {
+        try {
+            List<ServiceContract> serviceContractList = ServiceContract.serviceContractDao.find("select * from `db_service_contract` where state =" + ProcessKit.getServiceProcess("create"));
+            Map temp = new HashMap();
+            temp.put("count", serviceContractList.size());
+            renderJson(temp);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 获取所有审核记录
+     * 包括通过的和拒绝的
+     */
+    public void getReviewServiceList() {
+        try {
+            ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(getPara("id"));
+            if (serviceContract.getInt("state") != 1 && serviceContract.get("reviewer") != null) {
+                //只要不是1就表示已经进入过流程了,判断reviewer是否存在防止中止的情况
+                List<ContractReview> contractReviewList = ContractReview.contractReviewDao.find("SELECT * FROM `db_contract_review` WHERE service_id=" + serviceContract.get("id"));
+                Map temp = toReviewJson(contractReviewList);
+                if (serviceContract.getInt("state") > 1) {
+                    Map acept = new HashMap();
+                    acept.put("reviewer", User.userDao.findById(serviceContract.get("reviewer")).toSimpleJson());
+                    acept.put("review_time", serviceContract.get("review_time"));
+                    temp.put("accept", acept);
+                }
+                renderJson(temp);
+            } else
+                renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    public Map toReviewJson(List<ContractReview> contractReviewList) {
+        List temp = new ArrayList();
+        for (ContractReview contractReview : contractReviewList) {
+            temp.add(toReviewJsonSingle(contractReview));
+        }
+        Map result = new HashMap();
+        result.put("result", temp);
+        return result;
+    }
+
+    public Map toReviewJsonSingle(ContractReview contractReview) {
+        Map temp = new HashMap();
+        temp.put("id", contractReview.get("id"));
+        temp.put("msg", contractReview.get("reject_msg"));
+        temp.put("reviewer", User.userDao.findById(contractReview.get("reviewer")).toSimpleJson());
+        temp.put("review_time", contractReview.get("review_time"));
+        temp.put("result", contractReview.get("result"));
+        return temp;
+    }
+
 }
