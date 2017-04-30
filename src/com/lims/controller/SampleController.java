@@ -388,14 +388,13 @@ public class SampleController extends Controller {
                                 .set("company_id", company_id)
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                                 .set("create_time", ParaUtils.sdf2.format(new Date()))
-                                .set("sample_type", getPara("sample_type"))
                                 .save();
                         Integer[] projectList = getParaValuesToInt("project[]");
                         for (int id : projectList) {
                             SampleProject sampleProject = new SampleProject();
                             sampleProject
                                     .set("sample_id", sample.get("id"))
-                                    .set("project_id", id);
+                                    .set("item_project_id", id);
                             result = result && sampleProject.save();
                             if (!result) return false;
 
@@ -496,8 +495,8 @@ public class SampleController extends Controller {
 
     public void getSelfSampleList() {
         try {
-            int task_id = getParaToInt("task_id");
-            List<Sample> sampleList = Sample.sampleDao.find("SELECT * FROM `db_sample` WHERE task_id=" + task_id);
+            int company_id = getParaToInt("company_id");
+            List<Sample> sampleList = Sample.sampleDao.find("SELECT * FROM `db_sample` WHERE company_id=" + company_id);
             List<Map> result = new ArrayList<>();
             for (Sample sample : sampleList) {
                 result.add(sample.toSimpleJson());

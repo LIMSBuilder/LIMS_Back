@@ -21,7 +21,7 @@ public class Sample extends Model<Sample> {
         List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + this.get("id"));
         List<Map> projectList = new ArrayList<>();
         for (SampleProject sampleProject : sampleProjectList) {
-            MonitorProject project = MonitorProject.monitorProjectdao.findById(sampleProject.get("project_id"));
+            MonitorProject project = MonitorProject.monitorProjectdao.findById(sampleProject.get("item_project_id"));
             projectList.add(project.toJsonSingle());
         }
         temp.put("project", projectList);

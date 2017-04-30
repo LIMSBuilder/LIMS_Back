@@ -624,7 +624,7 @@ public class ContractController extends Controller {
     }
 
     /***
-     * 完成合同
+     * 中止合同
      * */
 
     public void stopContract() {
