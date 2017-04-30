@@ -117,39 +117,107 @@ public class ServiceController extends Controller {
      */
     public void createService() {
         try {
-      boolean result =Db.tx(new IAtom() {
-          @Override
-          public boolean run() throws SQLException {
-              int review = getParaToInt("review");//是否技术评审
-              String path = getPara("path");//服务合同路径
-              String name = getPara("name");//合同名称
-              ServiceContract serviceContract = new ServiceContract();
-              boolean  result=true;
-              if (getParaToInt("review") == 1) {
-                  result = result && serviceContract.set("state", ProcessKit.getServiceProcess("create")).set("path", path)
-                          .set("name", name)
-                          .set("review", review)
-                          .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
-                          .set("create_time", ParaUtils.sdf.format(new Date()))
-                          .set("identify", createIdentify()).save();
-              } else {
-                  result = result && serviceContract.set("state", ProcessKit.getServiceProcess("review")).set("path", path)
-                          .set("name", name)
-                          .set("review", review)
-                          .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
-                          .set("create_time", ParaUtils.sdf.format(new Date()))
-                          .set("identify", createIdentify()).save();
-              }
-              LoggerKit.addServiceContractLog(serviceContract.getInt("id"), "创建合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
-              return result;
-          }
-      });
+            boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int review = getParaToInt("review");//是否技术评审
+                    String path = getPara("path");//服务合同路径
+                    String name = getPara("name");//合同名称
+                    ServiceContract serviceContract = new ServiceContract();
+                    boolean result = true;
+                    if (getParaToInt("review") == 1) {
+                        result = result && serviceContract.set("state", ProcessKit.getServiceProcess("create")).set("path", path)
+                                .set("name", name)
+                                .set("path", path)
+                                .set("review", review)
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                                .set("create_time", ParaUtils.sdf.format(new Date()))
+                                .set("identify", createIdentify()).save();
+                    } else {
+                        result = result && serviceContract.set("state", ProcessKit.getServiceProcess("review")).set("path", path)
+                                .set("name", name)
+                                .set("review", review)
+                                .set("path", path)
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                                .set("create_time", ParaUtils.sdf.format(new Date()))
+                                .set("identify", createIdentify()).save();
+                    }
+                    LoggerKit.addServiceContractLog(serviceContract.getInt("id"), "创建合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    return result;
+                }
+            });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
         } catch (Exception e) {
             renderError(500);
         }
     }
+
+    /**
+     * 修改服务合同
+     **/
+    public void change() {
+        try {
+            int id = getParaToInt("id");
+            Boolean result = true;
+            int review = getParaToInt("review");//是否技术评审
+            String path = getPara("path");//服务合同路径
+            String name = getPara("name");//合同名称
+            ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
+            if (serviceContract != null) {
+                if (getParaToInt("review") == 1) {
+                    result = result && serviceContract.set("state", ProcessKit.getServiceProcess("create")).set("path", path)
+                            .set("name", name)
+                            .set("review", review)
+                            .set("path", path)
+                            .set("changer", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                            .set("update_time", ParaUtils.sdf.format(new Date()))
+                            .update();
+                } else {
+                    result = result && serviceContract.set("state", ProcessKit.getServiceProcess("review")).set("path", path)
+                            .set("name", name)
+                            .set("review", review)
+                            .set("path", path)
+                            .set("changer", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                            .set("update_time", ParaUtils.sdf.format(new Date()))
+                            .update();
+
+                }
+                LoggerKit.addServiceContractLog(serviceContract.getInt("id"), "创建合同", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+    /**
+     * 根据Id 获取数据
+     * **/
+    public  void findDetailsList(){
+        try {
+            int id =getParaToInt("id");
+            ServiceContract serviceContract =ServiceContract.serviceContractDao.findById(id);
+            if (serviceContract !=null){
+                List<ServiceContract> serviceContractList =ServiceContract.serviceContractDao.find("SELECT * FROM `db_service_contract` where id = "+id);
+                renderJson( toJsonSingle1(serviceContract));
+            }
+
+        }catch (Exception e){
+            renderError(500);
+        }
+    }
+    public Map toJsonSingle1(ServiceContract entry) {
+        Map temp = new HashMap();
+        temp.put("id", entry.get("id"));
+        temp.put("path", entry.get("path"));
+        temp.put("name", entry.get("name"));
+        temp.put("review", entry.get("review"));
+        return temp;
+    }
+
 
     /**
      * 合同编号生成
@@ -395,5 +463,6 @@ public class ServiceController extends Controller {
         temp.put("result", contractReview.get("result"));
         return temp;
     }
+
 
 }
