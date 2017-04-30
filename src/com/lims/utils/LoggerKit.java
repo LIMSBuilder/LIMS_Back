@@ -52,5 +52,14 @@ public class LoggerKit {
         }
         else  return  false;
     }
+    public static boolean addServiceContractLog(int serviceContractId,String msg, int userId){
+       ServiceContract serviceContract=ServiceContract.serviceContractDao.findById(serviceContractId);
+        if(serviceContract!= null){
+            Log log = new Log();
+            Boolean result = log.set("serviceContract_id",serviceContractId).set("msg", msg).set("user_id", userId).set("create_time", ParaUtils.sdf.format(new Date())).save();
+            return  result;
+        }
+        else  return  false;
+    }
 }
 

@@ -137,4 +137,17 @@ public class LogController extends Controller {
             renderError(500);
         }
     }
+
+    /**
+     * 日志
+     **/
+    public void serviceContractLog() {
+        try {
+            int id = getParaToInt("id");
+            List<Log> logList = Log.logDao.find("select * from `db_log`  where serviceContract_id = " + id + " order by create_time  DESC");
+            renderJson(toJson(logList));
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }
