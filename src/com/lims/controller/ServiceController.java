@@ -166,7 +166,7 @@ public class ServiceController extends Controller {
             ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
             if (serviceContract != null) {
                 if (getParaToInt("review") == 1) {
-                    result = result && serviceContract.set("state", ProcessKit.getServiceProcess("create")).set("path", path)
+                    result = result && serviceContract.set("id",id).set("state", ProcessKit.getServiceProcess("create")).set("path", path)
                             .set("name", name)
                             .set("review", review)
                             .set("path", path)
@@ -174,7 +174,7 @@ public class ServiceController extends Controller {
                             .set("update_time", ParaUtils.sdf.format(new Date()))
                             .update();
                 } else {
-                    result = result && serviceContract.set("state", ProcessKit.getServiceProcess("review")).set("path", path)
+                    result = result && serviceContract.set("id",id).set("state", ProcessKit.getServiceProcess("review")).set("path", path)
                             .set("name", name)
                             .set("review", review)
                             .set("path", path)
