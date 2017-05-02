@@ -41,7 +41,7 @@ public class DeliveryController extends Controller {
                 for (ItemProject itemProject : itemProjectList) {
                     int count = Db.find("SELECT p.* FROM `db_company` c,`db_sample` s ,`db_sample_project` p\n" +
                             "WHERE c.id=" + company.get("id") + " AND c.id =s.company_id AND s.id=p.sample_id AND p.item_project_id=" + itemProject.get("id")).size();
-                    result = result && (count == 0 ? false : true);
+                    result = result && count == 0 ? false : true;
                     if (!result) break;
                 }
                 if (!result) {
