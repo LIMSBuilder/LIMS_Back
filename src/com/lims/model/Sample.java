@@ -16,6 +16,10 @@ public class Sample extends Model<Sample> {
     public Map toSimpleJson() {
         Map temp = new HashMap();
         for (String key : this._getAttrNames()) {
+            if (key.equals("balance")) {
+                temp.put("balance", Sample.sampleDao.findById(this.get("balance")));
+                continue;
+            }
             temp.put(key, this.get(key));
         }
         List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + this.get("id"));
