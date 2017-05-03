@@ -18,6 +18,7 @@ public class ItemProject extends Model<ItemProject> {
             temp.put(name, monitorProject.get(name));
         }
         temp.put("isPackage", this.get("isPackage"));
+        temp.put("item_project_id", this.get("id"));
 //        return monitorProject.toJsonSingle();
         return temp;
     }
