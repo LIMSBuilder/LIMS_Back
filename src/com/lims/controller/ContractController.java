@@ -738,6 +738,7 @@ public class ContractController extends Controller {
 
             Map<String, List> obj = new HashMap<>();
 
+
             for (Map temp : result) {
                 String companyStr = temp.get("company").toString();
                 String elementStr = temp.get("element").toString();
@@ -746,8 +747,14 @@ public class ContractController extends Controller {
                 Frequency frequency = Frequency.frequencyDao.findFirst("SELECT * FROM `db_frequency` WHERE total='" + frequencyStr + "'");
                 String[] projectList = temp.get("projectList").toString().split(" ");
                 String[] pointList = temp.get("pointList").toString().split(" ");
+
+                //flag ==1 company="xxx" AND task_id ="xxxx"  flag==0  company="xxx" AND contract_id =xxx  List<COmpany>
+
+
+
                 if (obj.containsKey(companyStr)) {
                     //当前已经存在该公司的记录
+                    //读取db_company 获取到company_id,db_contractItem  遍历itemProject
                     List items = obj.get(companyStr);
                     Map item = new HashMap();
                     item.put("element", element);
@@ -765,6 +772,7 @@ public class ContractController extends Controller {
                     items.add(item);
                 } else {
                     //当前没有该公司的记录
+                    //创建db_company 创建db-contractItem  循环创建itemproject
                     List items = new ArrayList();
                     Map item = new HashMap();
                     item.put("element", element);

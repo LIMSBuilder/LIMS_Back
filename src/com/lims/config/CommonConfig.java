@@ -77,13 +77,10 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_default", Default.class);
         arp.addMapping("db_contract_review", ContractReview.class);
         arp.addMapping("db_task", Task.class);
-
         arp.addMapping("db_sample", Sample.class);
         arp.addMapping("db_sample_project", SampleProject.class);
-
         arp.addMapping("db_log", Log.class);
         arp.addMapping("db_delivery", Dispatch.class);
-
         arp.addMapping("db_delivery_user", DispatchUser.class);
         arp.addMapping("db_company", Company.class);
         arp.addMapping("db_delivery", Delivery.class);
@@ -92,10 +89,11 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_power", Power.class);
         arp.addMapping("db_power_role", PowerUser.class);
         arp.addMapping("db_equipment", Equipment.class);
-
-
         arp.addMapping("db_service_contract", ServiceContract.class);
         arp.addMapping("db_package", Package.class);
+        arp.addMapping("db_lib",Lib.class);
+        arp.addMapping("db_tag",Tag.class);
+        arp.addMapping("db_blind",Blind.class);
         //addMap增加数据库树形
 
     }
