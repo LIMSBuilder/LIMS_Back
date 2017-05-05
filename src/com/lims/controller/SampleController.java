@@ -384,7 +384,7 @@ public class SampleController extends Controller {
                                 .set("name", getPara("name"))
                                 .set("character", getPara("character"))
                                 .set("condition", getPara("condition"))
-                                .set("process", ProcessKit.getSampleProcess("apply"))
+                                .set("process", 0)
                                 .set("company_id", company_id)
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                                 .set("create_time", ParaUtils.sdf2.format(new Date()))
@@ -542,7 +542,6 @@ public class SampleController extends Controller {
                                 .set("process", ProcessKit.getSampleProcess("create"))
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                                 .set("create_time", ParaUtils.sdf2.format(new Date()))
-                                .set("sample_type", getPara("sample_type"))
                                 .update();
                         List<SampleProject> sampleProjects = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample_id);
                         for (SampleProject p : sampleProjects) {
@@ -554,7 +553,7 @@ public class SampleController extends Controller {
                             SampleProject sampleProject = new SampleProject();
                             sampleProject
                                     .set("sample_id", sample.get("id"))
-                                    .set("project_id", id);
+                                    .set("item_project_id", id);
                             result = result && sampleProject.save();
                             if (!result) return false;
                         }
@@ -591,7 +590,6 @@ public class SampleController extends Controller {
             renderError(500);
         }
     }
-
 
 
     public void createSample() {

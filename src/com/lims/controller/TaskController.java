@@ -91,13 +91,14 @@ public class TaskController extends Controller {
                     Task task = new Task();
                     Contract contract = Contract.contractDao.findById(getPara("contract_id"));
                     if (contract != null) {
+                        Boolean isFirst = Task.taskDao.findFirst("select * from `db_task` where  identify ='" + contract.get("identify") + "'") != null;
                         Boolean result = task
                                 .set("sample_type", getPara("sample_type"))
                                 .set("contract_id", getPara("contract_id"))
                                 .set("process", ProcessKit.getTaskProcess("create"))
                                 .set("create_time", ParaUtils.sdf.format(new Date()))
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
-                                .set("identify", Task.taskDao.findFirst("select * from `db_task` where  identify ='" + contract.get("identify") + "'") != null ? createIdentify() : contract.get("identify"))
+                                .set("identify", isFirst ? createIdentify() : contract.get("identify"))
 //                                .set("identify", contract.get("identify"))
                                 .set("client_unit", contract.get("client_unit"))
                                 .set("client_code", contract.get("client_code"))
@@ -114,9 +115,32 @@ public class TaskController extends Controller {
                                 .set("charge", getPara("charge"))
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
+                        //加入判定，即若当前合同创建了多个任务书，则需要将db_company复制一份新的
+
+
                         List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE contract_id=" + contract.get("id"));
                         for (Company company : companyList) {
-                            result = result && company.set("task_id", task.get("id")).update();
+                            if (isFirst) {
+                                int company_id = company.get("id");
+                                //非第一次创建
+                                result = result && company.set("id", null).set("task_id", task.get("id")).set("contract_id", null).set("process", 0).save();
+                                if (!result) return false;
+                                List<Contractitem> itemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + company_id);
+                                for (Contractitem item : itemList) {
+                                    int item_id = item.get("id");
+                                    result = result && item.set("id", null).set("company_id", company.get("id")).save();
+                                    if (!result) return false;
+                                    List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item_id);
+                                    for (ItemProject itemProject : itemProjectList) {
+                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).save();
+                                        if (!result) return false;
+                                    }
+
+                                }
+
+                            } else {
+                                result = result && company.set("task_id", task.get("id")).update();
+                            }
                             if (!result) return false;
                         }
                         LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
