@@ -4,9 +4,8 @@ import com.jfinal.core.Controller;
 import com.jfinal.json.Jackson;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
-import com.lims.model.Company;
-import com.lims.model.Contractitem;
-import com.lims.model.ItemProject;
+import com.lims.model.*;
+import com.lims.utils.ExcelRead;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
@@ -86,7 +85,7 @@ public class CompanyController extends Controller {
             String name = getPara("name");
             Company company = Company.companydao.findById(id);
             if (company != null) {
-                result = result && company.set("id", id).set("name", name).update();
+                result = result && company.set("name", name).update();
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
@@ -139,10 +138,10 @@ public class CompanyController extends Controller {
             boolean result = Db.tx(new IAtom() {
                 @Override
                 public boolean run() throws SQLException {
-                    int id =getParaToInt("id");
+                    int id = getParaToInt("id");
                     Integer[] project = getParaValuesToInt("project[]");
-                    boolean result =true;
-                    for (Integer pro:project){
+                    boolean result = true;
+                    for (Integer pro : project) {
 
                         ItemProject itemProject = new ItemProject();
                         result = result && itemProject.set("project_id", pro).set("item_id", id).set("isPackage", itemProject.get("isPackage")).save();
@@ -158,4 +157,66 @@ public class CompanyController extends Controller {
 
     }
 
+    /**
+     * 新增一家公司  EXCEL
+     **/
+    public void addCompany() {
+        try {
+            int flag = getParaToInt("flag");
+            String path = getPara("path");
+            ExcelRead read = new ExcelRead();
+            String[] titles = {"id", "company", "element", "pointList", "projectList", "frequency"};
+            List<Map> reading = read.readExcel(path, titles);
+            List returnBack = new ArrayList();
+            Map<String, List> obj = new HashMap<>();
+            Boolean result = true;
+            for (Map temp : reading) {
+
+                String companyStr = temp.get("company").toString();
+                String elementStr = temp.get("element").toString();
+                String frequencyStr = temp.get("frequency").toString();
+                Element element = Element.elementDao.findFirst("SELECT * FROM `db_element` WHERE name='" + elementStr + "'");
+                Frequency frequency = Frequency.frequencyDao.findFirst("SELECT * FROM `db_frequency` WHERE total='" + frequencyStr + "'");
+                String[] projectList = temp.get("projectList").toString().split(" ");
+                String[] pointList = temp.get("pointList").toString().split(" ");
+                Company company = new Company();
+                if (getParaToInt("flag") == 1) {
+                    List<Company> companyList = Company.companydao.find("select * from `db_company` where company = " + companyStr + "And task_id =" + getPara("task_id"));
+                    if (companyList != null) {
+
+                        company.set("company", companyStr).set("task_id", getPara("task_id")).set("flag", 1)
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
+                                .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0)
+                                .save();
+                        result = result && company.save();
+                    } else {
+                        company.set("company", companyStr).set("task_id", getPara("task_id")).set("flag", 1)
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
+                                .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0)
+                                .save();
+                        result = result && company.save();
+                    }
+
+                } else if (getParaToInt("flag") == 0) {
+                    List<Company> companyList = Company.companydao.find("select * from `db_company` where company = " + companyStr + "And contract_id =" + getPara("contract_id"));
+                    if (companyList != null) {
+                        company.set("company", companyStr).set("contract_id", getPara("contract_id")).set("flag", 0)
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
+                                .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0)
+                                .save();
+                        result = result && company.save();
+                    } else {
+                        company.set("company", companyStr).set("contract_id", getPara("contract_id")).set("flag", 0)
+                                .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
+                                .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0)
+                                .save();
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
 }
