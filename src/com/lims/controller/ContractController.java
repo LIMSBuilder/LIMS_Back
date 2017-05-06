@@ -771,8 +771,6 @@ public class ContractController extends Controller {
                     item.put("project", projectTemp);
                     items.add(item);
                 } else {
-                    //当前没有该公司的记录
-                    //创建db_company 创建db-contractItem  循环创建itemproject
                     List items = new ArrayList();
                     Map item = new HashMap();
                     item.put("element", element);
