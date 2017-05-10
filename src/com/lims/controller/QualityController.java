@@ -154,7 +154,7 @@ public class QualityController extends Controller {
 
 
                         Blind blind = new Blind();
-                        blind.set("count", temp.get("blind")).set("item_project_id", temp.get("id"));
+                        blind.set("count", temp.get("blind")).set("item_project_id", temp.get("item_project_id"));
                         result = result && blind.save();
                         Integer[] libList = getParaValuesToInt("labs[]");
                         if (libList == null) {
@@ -162,8 +162,8 @@ public class QualityController extends Controller {
                             for (int id : libList) {
                                 Lib lib = new Lib();
                                 lib.set("sample_id", id)
-                                        .set("item_project_id", temp.get("id"));
-                                result = result && lib.update();
+                                        .set("item_project_id", temp.get("item_project_id"));
+                                result = result && lib.save();
                                 if (!result) return false;
                             }
                         }
@@ -173,8 +173,8 @@ public class QualityController extends Controller {
                             for (int id : tagList) {
                                 Tag tag = new Tag();
                                 tag.set("sample_id", id)
-                                        .set("item_project_id", temp.get("id"));
-                                result = result && tag.update();
+                                        .set("item_project_id", temp.get("item_project_id"));
+                                result = result && tag.save();
                                 if (!result) return false;
 
                             }
