@@ -96,7 +96,7 @@ public class DispatchController extends Controller {
 
 
     /**
-     * 检查当前任务书是否已经允许流转
+     * 检查当前任务书是否已经允许流转到质控室
      */
     public void checkFlow() {
         try {
@@ -117,6 +117,29 @@ public class DispatchController extends Controller {
             renderError(500);
         }
     }
+    /**
+     * 检查当前任务书是否已经允许流转到实验室
+     */
+    public void checkFlowLab() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                int size = Company.companydao.find("SELECT * FROM `db_company` c WHERE c.task_id=" + task_id + " AND c.process!=3").size();
+                if (size != 0) {
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                } else {
+                    Boolean result = task.set("process", ProcessKit.getTaskProcess("laboratory")).update();
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                }
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 
     /**
      * 获取执行中的派遣列表

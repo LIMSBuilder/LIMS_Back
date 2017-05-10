@@ -34,6 +34,7 @@ public class ProcessKit {
         this.put("dispatch", 2);//派遣任务，待样品登记
         this.put("apply", 3);//样品登记
         this.put("quality", 4);//质控
+        this.put("laboratory",5);//实验室
 
     }};
 

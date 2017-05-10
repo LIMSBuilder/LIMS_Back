@@ -1,5 +1,6 @@
 package com.lims.controller;
 
+import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
 import com.jfinal.json.Jackson;
 import com.jfinal.plugin.activerecord.Db;
@@ -156,7 +157,7 @@ public class QualityController extends Controller {
                         Blind blind = new Blind();
                         blind.set("count", temp.get("blind")).set("item_project_id", temp.get("item_project_id"));
                         result = result && blind.save();
-                        Integer[] libList = getParaValuesToInt("labs[]");
+                        List<Integer> libList = (List<Integer>) temp.get("labs");
                         if (libList == null) {
                         } else {
                             for (int id : libList) {
@@ -167,7 +168,8 @@ public class QualityController extends Controller {
                                 if (!result) return false;
                             }
                         }
-                        Integer[] tagList = getParaValuesToInt("tags[]");
+
+                        List<Integer> tagList = (List<Integer>) temp.get("tags");
                         if (tagList == null) {
                         } else {
                             for (int id : tagList) {
@@ -200,7 +202,7 @@ public class QualityController extends Controller {
             int item_project_id = getParaToInt("id");
             ItemProject itemProject = ItemProject.itemprojectDao.findById(item_project_id);
             Boolean result = true;
-            result = result && itemProject.set("process", 0).update();
+            result = result && itemProject.set("process", null).update();
             if (itemProject != null) {
 
                 List<Lib> libList = Lib.libDao.find("SELECT * FROM `db_lib` WHERE item_project_id=" + item_project_id);
@@ -283,6 +285,51 @@ public class QualityController extends Controller {
                 }
             });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 是否完成质控
+     **/
+
+
+    public void finishQuality() {
+        try {
+            int company_id = getParaToInt("id");
+            Company company = Company.companydao.findById(company_id);
+            boolean result = true;
+            if (company != null) {
+                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_company` c,`db_item` i,`db_item_project` p WHERE c.id=" + company.get("id") + " AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
+                if (itemProjectSize != 0) {
+                    //还有没有质控
+                    renderJson(RenderUtils.CODE_UNIQUE);
+                    return;
+                } else {
+                    result = result && company.set("process", 3).update();
+
+                }
+            }
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
+
+    /**
+     * 打印样品交接单
+     */
+    @Clear
+    public void createTaskhandover() {
+        try {
+            String id = getPara("id");
+            Task task = Task.taskDao.findFirst("select * from `db_task` where id =" + id);
+            if (task != null) {
+                getRequest().setAttribute("task", task);
+                render("/template/create_taskBook.jsp");
+            } else renderNull();
         } catch (Exception e) {
             renderError(500);
         }
