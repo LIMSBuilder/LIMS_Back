@@ -15,14 +15,6 @@ import java.util.List;
  * Created by chenyangyang on 2017/4/18.
  */
 public class DeliveryController extends Controller {
-    public void delivery() {
-        try {
-            String date = ParaUtils.sdf2.format(new Date());
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
 
     public void finishItem() {
         try {
