@@ -44,19 +44,6 @@ public class CompanyController extends Controller {
     }
 
     /**
-     * 删除一个项目
-     **/
-    public void deleteProject() {
-        try {
-            int id = getParaToInt("id");
-            boolean result = ItemProject.itemprojectDao.deleteById(id);
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
-
-    /**
      * 返回公司列表
      **/
     public void compangList() {
@@ -76,23 +63,6 @@ public class CompanyController extends Controller {
         }
     }
 
-    /**
-     * 修改公司名称
-     **/
-    public void changeCompany() {
-        try {
-            int id = getParaToInt("id");
-            Boolean result = true;
-            String name = getPara("name");
-            Company company = Company.companydao.findById(id);
-            if (company != null) {
-                result = result && company.set("name", name).update();
-            }
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
 
     /**
      * 增加监测项目记录
@@ -131,32 +101,6 @@ public class CompanyController extends Controller {
         }
     }
 
-    /**
-     * 新增一个分析项目
-     **/
-    public void addProject() {
-        try {
-            boolean result = Db.tx(new IAtom() {
-                @Override
-                public boolean run() throws SQLException {
-                    int id = getParaToInt("id");
-                    Integer[] project = getParaValuesToInt("project[]");
-                    boolean result = true;
-                    for (Integer pro : project) {
-
-                        ItemProject itemProject = new ItemProject();
-                        result = result && itemProject.set("project_id", pro).set("item_id", id).set("isPackage", itemProject.get("isPackage")).save();
-                        if (!result) break;
-                    }
-                    return result;
-                }
-            });
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-        } catch (Exception e) {
-            renderError(500);
-        }
-
-    }
 
     /**
      * 新增一家公司  EXCEL
