@@ -72,24 +72,27 @@ public class CompanyController extends Controller {
             Boolean result = Db.tx(new IAtom() {
                 @Override
                 public boolean run() throws SQLException {
-                    int id = getParaToInt("id");
-                    String[] items = getParaValues("project_items[]");
+                    int company_id = getParaToInt("id");
+                    int element = getParaToInt("element");
+                    int point = getParaToInt("point");
+                    int frequency = getParaToInt("frequency");
+                    String other = getPara("other");
                     Boolean result = true;
-
-                    for (String item : items) {
-                        Map temp = Jackson.getJson().parse(item, Map.class);
-                        List<Map> projectItems = (List<Map>) temp.get("items");
-                        for (Map itemMap : projectItems) {
-                            Contractitem contractitem = new Contractitem();
-                            result = result && contractitem.set("company_id", id).set("element", ((Map) itemMap.get("element")).get("id")).set("frequency", ((Map) itemMap.get("frequency")).get("id")).set("point", itemMap.get("point")).set("other", itemMap.get("other")).save();
-                            List<Map> project = (List<Map>) itemMap.get("project");
-                            for (Map pro : project) {
-                                ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
-                                if (!result) break;
-                            }
-                            if (!result) break;
+                    if (Contractitem.contractitemdao.find("select * from `db_item` where company_id='" + company_id + "'and  point='" + point + "' and element='" + element + "' and other= '" + other + "' and frequency ='" + frequency + "'").size() != 0) {
+                        renderJson(RenderUtils.CODE_REPEAT);
+                    } else {
+                        Contractitem contractitem = new Contractitem();
+                        contractitem.set("company_id", company_id).set("point", point).set("element", element).set("other", other).set("frequency", frequency);
+                        result = result && contractitem.save();
+                        Integer[] projectList = getParaValuesToInt("project[]");
+                        for (int id : projectList) {
+                            ItemProject itemProject = new ItemProject();
+                            itemProject.set("item_id", contractitem.getInt("id"))
+                                    .set("project_id", id);
+                            result = result && itemProject.save();
+                            if (!result) return false;
                         }
+
 
                     }
                     return result;
@@ -107,7 +110,7 @@ public class CompanyController extends Controller {
      **/
     public void addCompany() {
         try {
-            int flag = getParaToInt("flag");
+            int contract_id = getParaToInt("id");
             String path = getPara("path");
             ExcelRead read = new ExcelRead();
             String[] titles = {"id", "company", "element", "pointList", "projectList", "frequency"};
@@ -122,73 +125,49 @@ public class CompanyController extends Controller {
                 String[] projectList = temp.get("projectList").toString().split(" ");
                 String[] pointList = temp.get("pointList").toString().split(" ");
                 Company company = new Company();
-                if (getParaToInt("flag") == 1) {
-                    List<Company> companyList = Company.companydao.find("select * from `db_company` where company = " + companyStr + "And task_id =" + getPara("task_id"));
-                    Contractitem contractitem = new Contractitem();
-                    if (companyList != null) {
+
+                int companyList = Company.companydao.find("select * from `db_company` where company = '" + companyStr + "'And contract_id =" + contract_id).size();
+                Contractitem contractitem = new Contractitem();
+                if (companyList != 0) {
+                    if (company.get("process") != 0) {
                         company.set("process", 0);
                         result = result && company.update();
-                        contractitem.set("company_id", company.getInt("id")).set("point", pointList.length).set("other", companyStr).set("element", element).set("frequency", frequency.toJsonSingle());
-                        result = result && contractitem.save();
-                        for (String projectName : projectList) {
-                            MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
-                            if (project != null) {
-                                Integer[] project1 = getParaValuesToInt("project[]");
-                                for (Integer pro : project1) {
-                                    ItemProject itemProject = new ItemProject();
-                                    result = result && itemProject.set("project_id", pro).set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
-                                }
-                            }
-                        }
-
-                    } else {
-                        company.set("company", companyStr).set("task_id", getPara("task_id")).set("flag", 1)
-                                .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
-                                .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0);
-                        result = result && company.save();
-                        contractitem.set("company_id", company.getInt("id")).set("point", pointList.length).set("other", companyStr).set("element", element).set("frequency", frequency.toJsonSingle());
-                        result = result && contractitem.save();
-                        for (String projectName : projectList) {
-                            MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
-                            if (project != null) {
-
+                    }
+                    contractitem.set("company_id", company.getInt("id")).set("point", pointList.length)
+                            .set("other", companyStr).set("element", element.getInt("id")).set("frequency", frequency.get("id"));
+                    result = result && contractitem.save();
+                    for (String projectName : projectList) {
+                        MonitorProject project = MonitorProject.monitorProjectdao
+                                .findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+                        if (project != null) {
+                            Integer[] project1 = getParaValuesToInt("project[]");
+                            for (Integer pro : project1) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", project.getInt("id")).set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
-
+                                result = result && itemProject.set("project_id", pro)
+                                        .set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
                             }
                         }
                     }
 
-                } else if (getParaToInt("flag") == 0) {
-                    List<Company> companyList = Company.companydao.find("select * from `db_company` where company = " + companyStr + "And contract_id =" + getPara("contract_id"));
-                    Contractitem contractitem = new Contractitem();
-                    if (companyList != null) {
-                        company.set("process", 0);
-                        result = result && company.update();
-                        for (String projectName : projectList) {
-                            MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
-                            if (project != null) {
-                                ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", project.getInt("id")).set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
+                } else {
+                    company.set("company", companyStr).set("contract_id", contract_id).set("flag", 1)
+                            .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
+                            .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0);
+                    result = result && company.save();
+                    contractitem.set("company_id", company.getInt("id")).set("point", pointList.length).set("other", companyStr).set("element", element.getInt("id")).set("frequency", frequency.getInt("id"));
+                    result = result && contractitem.save();
+                    for (String projectName : projectList) {
+                        MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+                        if (project != null) {
+                            ItemProject itemProject = new ItemProject();
+                            result = result && itemProject.set("project_id", project.getInt("id")).set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
 
-                            }
-                        }
-                    } else {
-                        company.set("company", companyStr).set("contract_id", getPara("contract_id")).set("flag", 0)
-                                .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
-                                .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0);
-                        result = result && company.save();
-                        for (String projectName : projectList) {
-                            MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
-                            if (project != null) {
-                                ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", project.getInt("id")).set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
-                            }
                         }
                     }
-
                 }
+
             }
+
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
@@ -207,7 +186,7 @@ public class CompanyController extends Controller {
             boolean result = true;
             if (contractitem != null) {
                 List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_item` i,`db_item_project`p WHERE id =" + item_id + "And p.item_id=i.id");
-                Integer[] list =(Integer[])itemProjectList.toArray();
+                Integer[] list = (Integer[]) itemProjectList.toArray();
 
             }
 
