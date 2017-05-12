@@ -124,11 +124,12 @@ public class CompanyController extends Controller {
                 Frequency frequency = Frequency.frequencyDao.findFirst("SELECT * FROM `db_frequency` WHERE total='" + frequencyStr + "'");
                 String[] projectList = temp.get("projectList").toString().split(" ");
                 String[] pointList = temp.get("pointList").toString().split(" ");
-                Company company = new Company();
+                Company company = null;
 
-                int companyList = Company.companydao.find("select * from `db_company` where company = '" + companyStr + "'And contract_id =" + contract_id).size();
+                List<Company> companyList = Company.companydao.find("select * from `db_company` where company = '" + companyStr + "'And contract_id =" + contract_id);
                 Contractitem contractitem = new Contractitem();
-                if (companyList != 0) {
+                if (companyList.size() != 0) {
+                    company = companyList.get(0);
                     if (company.get("process") != 0) {
                         company.set("process", 0);
                         result = result && company.update();
@@ -140,16 +141,14 @@ public class CompanyController extends Controller {
                         MonitorProject project = MonitorProject.monitorProjectdao
                                 .findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
                         if (project != null) {
-                            Integer[] project1 = getParaValuesToInt("project[]");
-                            for (Integer pro : project1) {
-                                ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro)
-                                        .set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
-                            }
+                            ItemProject itemProject = new ItemProject();
+                            result = result && itemProject.set("project_id", project.get("id"))
+                                    .set("item_id", contractitem.get("id")).set("isPackage", 0).save();
                         }
                     }
 
                 } else {
+                    company = new Company();
                     company.set("company", companyStr).set("contract_id", contract_id).set("flag", 1)
                             .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
                             .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0);
