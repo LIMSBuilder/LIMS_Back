@@ -5,6 +5,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.json.Jackson;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
+import com.jfinal.plugin.activerecord.Record;
 import com.lims.model.*;
 import com.lims.utils.ExcelRead;
 import com.lims.utils.ParaUtils;
@@ -184,12 +185,32 @@ public class CompanyController extends Controller {
             Integer[] project = getParaValuesToInt("project[]");
             boolean result = true;
             if (contractitem != null) {
-                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_item` i,`db_item_project`p WHERE id =" + item_id + "And p.item_id=i.id");
-                Integer[] list = (Integer[]) itemProjectList.toArray();
+                result = result && contractitem.set("element", getPara("element")).set("frequency", getPara("frequency")).set("point", getPara("point")).set("other", getPara("other")).update();
+                List<Record> itemProjectList = Db.find("SELECT p.project_id FROM `db_item` i,`db_item_project`p WHERE i.id =" + item_id + " and p.item_id=i.id");
+                Integer[] a = new Integer[itemProjectList.size()];
+                for (int i = 0; i < itemProjectList.size(); i++) {
+                    a[i] = itemProjectList.get(i).get("project_id");
+                }
+                List<Integer> diff = ParaUtils.CheckMore(project, a);
+                for (int dif : diff) {
+                    ItemProject itemProject = new ItemProject();
+                    itemProject.set("item_id", contractitem.getInt("id"))
+                            .set("project_id", dif);
+                    result = result && itemProject.save();
+                    if (!result) break;
+                }
 
+                List<Integer> waitDelete = ParaUtils.CheckMore(a, project);
+                for (int wait : waitDelete) {
+                    ItemProject itemProject = ItemProject.itemprojectDao.findFirst("SELECT * FROM `db_item_project` WHERE item_id=" + contractitem.get("id") + " AND project_id=" + wait);
+                    if (itemProject != null) {
+                        result = result && itemProject.delete();
+                    }
+                    if (!result) break;
+                }
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             }
-
-
+            renderJson(RenderUtils.CODE_EMPTY);
         } catch (Exception e) {
             renderError(500);
         }
