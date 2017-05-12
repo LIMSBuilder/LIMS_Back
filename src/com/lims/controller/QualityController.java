@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * Created by qulongjun on 2017/5/3.
  */
@@ -335,3 +336,4 @@ public class QualityController extends Controller {
         }
     }
 }
+

@@ -18,7 +18,7 @@ public class Contract extends Model<Contract> {
         List<Map> mapList = new ArrayList<>();
         List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE contract_id=" + this.get("id"));
         for (Company company : companyList) {
-            if (company.get("name") != null) {
+            if (company.get("company") != null) {
                 //不为空，导入的
                 Map temp = new HashMap();
                 for (String key : company._getAttrNames()) {
