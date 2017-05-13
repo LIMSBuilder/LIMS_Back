@@ -38,6 +38,12 @@ public class TaskController extends Controller {
                         switch (key.toString()) {
                             case "id":
                                 break;//不知道为什么会传一个id过来，待观察
+                            case "serviceId":
+                                ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(getPara("serviceId"));
+                                if (serviceContract != null) {
+                                    task.set("identify", serviceContract.get("identify")).set("service_id", serviceContract.get("id"));
+                                }
+                                break;
                             default:
                                 if (key.toString().indexOf("item") != -1) {
                                     continue;
@@ -47,7 +53,10 @@ public class TaskController extends Controller {
 
                     }
                     User user = ParaUtils.getCurrentUser(getRequest());
-                    task.set("identify", createIdentify()).set("sample_type", getPara("sample_type")).set("create_time", ParaUtils.sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getTaskProcess("create"));
+                    if (task.get("identify") == null) {
+                        task.set("identify", createIdentify());
+                    }
+                    task.set("sample_type", getPara("sample_type")).set("importWrite",getPara("importWrite")).set("create_time", ParaUtils.sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getTaskProcess("create"));
                     result = result && task.save();
                     String[] items = getParaValues("project_items[]");
                     for (String item : items) {
@@ -113,7 +122,7 @@ public class TaskController extends Controller {
                                 .set("wayDesp", contract.get("wayDesp"))
                                 .set("other", contract.get("other"))
                                 .set("charge", getPara("charge"))
-                                .set("importWrite",contract.get("importWrite"))
+                                .set("importWrite", contract.get("importWrite"))
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
                         //加入判定，即若当前合同创建了多个任务书，则需要将db_company复制一份新的
