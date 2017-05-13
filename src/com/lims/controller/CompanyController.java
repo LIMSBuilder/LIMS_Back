@@ -10,6 +10,7 @@ import com.lims.model.*;
 import com.lims.utils.ExcelRead;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -283,5 +284,24 @@ public class CompanyController extends Controller {
         } catch (Exception e) {
             renderError(500);
         }
+    }
+
+
+    /**
+     * 导出交接联单
+     */
+    public void exportDelivery() {
+        try {
+            int task_id = getParaToInt("id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                getRequest().setAttribute("task", task);
+                render("/template/create_delivery.jsp");
+            } else renderNull();
+        } catch (Exception e) {
+
+        }
+
+
     }
 }
