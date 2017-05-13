@@ -320,6 +320,26 @@ public class QualityController extends Controller {
     }
 
     /**
+     * 交接单列表
+     **/
+    public void handList() {
+        try {
+            int company_id = getParaToInt("id");
+            List result = new ArrayList();
+            Company company = Company.companydao.findById(company_id);
+            if (company != null) {
+                Task task = Task.taskDao.findFirst("select * from `db_task` where id = " + company.get("task_id"));
+                result.add(task.toJsonSingle());
+                List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where company_id = '" + company_id + "' order by id ");
+
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
      * 打印样品交接单
      */
     @Clear
