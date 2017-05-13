@@ -107,7 +107,7 @@ public class CompanyController extends Controller {
 
 
     /**
-     * 新增一家公司  EXCEL
+     * 新增一家公司  EXCEL合同部分
      **/
     public void addCompany() {
         try {
@@ -173,6 +173,75 @@ public class CompanyController extends Controller {
             renderError(500);
         }
     }
+
+    /**
+     * 新增一家公司  EXCEL任务书部分
+     **/
+    public void addCompanyByTask() {
+        try {
+            int task_id = getParaToInt("id");
+            String path = getPara("path");
+            ExcelRead read = new ExcelRead();
+            String[] titles = {"id", "company", "element", "pointList", "projectList", "frequency"};
+            List<Map> reading = read.readExcel(path, titles);
+            Boolean result = true;
+            for (Map temp : reading) {
+                String companyStr = temp.get("company").toString();
+                String elementStr = temp.get("element").toString();
+                String frequencyStr = temp.get("frequency").toString();
+                Element element = Element.elementDao.findFirst("SELECT * FROM `db_element` WHERE name='" + elementStr + "'");
+                Frequency frequency = Frequency.frequencyDao.findFirst("SELECT * FROM `db_frequency` WHERE total='" + frequencyStr + "'");
+                String[] projectList = temp.get("projectList").toString().split(" ");
+                String[] pointList = temp.get("pointList").toString().split(" ");
+                Company company = null;
+
+                List<Company> companyList = Company.companydao.find("select * from `db_company` where company = '" + companyStr + "'And task_id =" + task_id);
+                Contractitem contractitem = new Contractitem();
+                if (companyList.size() != 0) {
+                    company = companyList.get(0);
+                    if (company.get("process") != 0) {
+                        company.set("process", 0);
+                        result = result && company.update();
+                    }
+                    contractitem.set("company_id", company.getInt("id")).set("point", pointList.length)
+                            .set("other", companyStr).set("element", element.getInt("id")).set("frequency", frequency.get("id"));
+                    result = result && contractitem.save();
+                    for (String projectName : projectList) {
+                        MonitorProject project = MonitorProject.monitorProjectdao
+                                .findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+                        if (project != null) {
+                            ItemProject itemProject = new ItemProject();
+                            result = result && itemProject.set("project_id", project.get("id"))
+                                    .set("item_id", contractitem.get("id")).set("isPackage", 0).save();
+                        }
+                    }
+
+                } else {
+                    company = new Company();
+                    company.set("company", companyStr).set("task_id", task_id).set("flag", 1)
+                            .set("creater", ParaUtils.getCurrentUser(getRequest()).getInt("id"))
+                            .set("create_time", ParaUtils.sdf2.format(new Date())).set("process", 0);
+                    result = result && company.save();
+                    contractitem.set("company_id", company.getInt("id")).set("point", pointList.length).set("other", companyStr).set("element", element.getInt("id")).set("frequency", frequency.getInt("id"));
+                    result = result && contractitem.save();
+                    for (String projectName : projectList) {
+                        MonitorProject project = MonitorProject.monitorProjectdao.findFirst("SELECT * FROM `db_monitor_project` WHERE name='" + projectName + "'");
+                        if (project != null) {
+                            ItemProject itemProject = new ItemProject();
+                            result = result && itemProject.set("project_id", project.getInt("id")).set("item_id", contractitem.get("id")).set("isPackage", itemProject.get("isPackage")).save();
+
+                        }
+                    }
+                }
+
+            }
+
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 
     /***
      * 修改监测项目

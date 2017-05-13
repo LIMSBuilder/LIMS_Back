@@ -113,6 +113,7 @@ public class TaskController extends Controller {
                                 .set("wayDesp", contract.get("wayDesp"))
                                 .set("other", contract.get("other"))
                                 .set("charge", getPara("charge"))
+                                .set("importWrite",contract.get("importWrite"))
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
                         //加入判定，即若当前合同创建了多个任务书，则需要将db_company复制一份新的
