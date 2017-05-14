@@ -23,7 +23,7 @@
         doc.openDataRegion("PO_aim").setValue(contract.getStr("aim"));
         doc.openDataRegion("PO_monitorWay").setValue(Type.typeDao.findById((Integer) contract.get("type")).getStr("name"));
         DataRegion dataRegion = doc.openDataRegion("PO_Table");
-        Table table = dataRegion.openTable(7);
+        Table table = dataRegion.openTable(1);
         List<Company> companyList = Company.companydao.find("select * from `db_company` where contract_id =" + contract.get("id"));
         for (int i = 0; i < companyList.size(); i++) {
             Company company = companyList.get(i);
