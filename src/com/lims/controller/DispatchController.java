@@ -107,7 +107,7 @@ public class DispatchController extends Controller {
                 if (size != 0) {
                     renderJson(RenderUtils.CODE_NOTEMPTY);
                 } else {
-                    Boolean result = task.set("process", ProcessKit.getTaskProcess("quality")).update();
+                    Boolean result = task.set("process", ProcessKit.getTaskProcess("quality")).set("sample_time", ParaUtils.sdf2.format(new Date())).set("sample_creater", ParaUtils.getCurrentUser(getRequest()).get("id")).update();
                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                 }
             } else {
@@ -117,6 +117,7 @@ public class DispatchController extends Controller {
             renderError(500);
         }
     }
+
     /**
      * 检查当前任务书是否已经允许流转到实验室
      */
