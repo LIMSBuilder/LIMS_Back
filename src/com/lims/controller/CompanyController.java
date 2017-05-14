@@ -301,7 +301,19 @@ public class CompanyController extends Controller {
         } catch (Exception e) {
 
         }
+    }
+    /**导出质量控制统计表**/
+    public  void exportQuality(){
+        try {
+            int task_id=getParaToInt("id");
+            Task task=Task.taskDao.findById(task_id);
+            if(task!=null){
+                getRequest().setAttribute("task",task);
+                render("/template/create_quality.jsp");
+            }else  renderNull();
 
-
+        }catch (Exception e){
+            renderError(500);
+        }
     }
 }
