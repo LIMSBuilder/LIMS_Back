@@ -50,9 +50,9 @@
                 temp += tag.getStr("identify") + " ";
             }
             table.openCellRC(3 + i, 8).setValue(tags);
-
-            Blind blind = Blind.blindDao.findById(itemProjectList.get(i).get("id"));
-            table.openCellRC(3 + i, 9).setValue(blind.get("blind").toString());
+            Blind blind = Blind.blindDao.findFirst("select * from `db_blind` where item_project_id =" +itemProjectList.get(i).get("id"));
+            table.openCellRC(3 + i, 9).setValue(blind == null ? "" : blind.get("blind").toString());
+          //  table.openCellRC(3 + i, 9).setValue(blind.get("blind") == null ? "" : blind.get("blind").toString());
         }
 
     }
