@@ -299,9 +299,11 @@ public class CompanyController extends Controller {
                 render("/template/create_delivery.jsp");
             } else renderNull();
         } catch (Exception e) {
-
+            renderError(500);
         }
 
 
     }
+
+
 }
