@@ -2,38 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7adb65de-9683-469f-b0c3-f3c1cc41e101" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/water.doc" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/Inspect.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/InspectAir.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/InspectDysodia.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/InspectSoil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/InspectSoild.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/lims/model/InspectWater.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/template/create_inspect.jsp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/config/CommonConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/CompanyController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/CompanyController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/DispatchController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/DispatchController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$1.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$2.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$3.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$4.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/controller/TaskController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/ItemProject.class" afterPath="$PROJECT_DIR$/out/artifacts/LIMS_Back_war_exploded/WEB-INF/classes/com/lims/model/ItemProject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonConfig.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/config/CommonConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/CompanyController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/CompanyController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/DispatchController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/DispatchController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$1.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$2.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$3.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$4.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/controller/TaskController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/ItemProject.class" afterPath="$PROJECT_DIR$/out/production/LIMS_Back/com/lims/model/ItemProject.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" afterPath="$PROJECT_DIR$/src/com/lims/config/CommonConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/CompanyController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/CompanyController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/DispatchController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/DispatchController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" afterPath="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/air.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/soil.doc" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/doc/solid.docx" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -66,7 +37,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/CompanyController.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="260">
-              <caret line="298" column="56" lean-forward="true" selection-start-line="297" selection-start-column="16" selection-end-line="298" selection-end-column="56" />
+              <caret line="298" column="56" lean-forward="false" selection-start-line="297" selection-start-column="16" selection-end-line="298" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -86,7 +57,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="412">
-              <caret line="661" column="33" lean-forward="true" selection-start-line="641" selection-start-column="36" selection-end-line="661" selection-end-column="33" />
+              <caret line="661" column="33" lean-forward="false" selection-start-line="641" selection-start-column="36" selection-end-line="661" selection-end-column="33" />
               <folding>
                 <element signature="e#27988#31203#0" expanded="true" />
                 <element signature="e#31202#31203#0" expanded="true" />
@@ -98,8 +69,8 @@
       <file leaf-file-name="create_inspect.jsp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/template/create_inspect.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="412">
-              <caret line="37" column="65" lean-forward="false" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
+            <state relative-caret-position="627">
+              <caret line="36" column="21" lean-forward="false" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -971,12 +942,12 @@
       <workItem from="1494636135501" duration="7411000" />
       <workItem from="1494662030885" duration="679000" />
       <workItem from="1494663162420" duration="1492000" />
-      <workItem from="1494679990909" duration="14594000" />
+      <workItem from="1494679990909" duration="15556000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="253711000" />
+    <option name="totallyTimeSpent" value="254673000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -1443,7 +1414,7 @@
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/CompanyController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
-          <caret line="298" column="56" lean-forward="true" selection-start-line="297" selection-start-column="16" selection-end-line="298" selection-end-column="56" />
+          <caret line="298" column="56" lean-forward="false" selection-start-line="297" selection-start-column="16" selection-end-line="298" selection-end-column="56" />
           <folding />
         </state>
       </provider>
@@ -1459,7 +1430,7 @@
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="412">
-          <caret line="661" column="33" lean-forward="true" selection-start-line="641" selection-start-column="36" selection-end-line="661" selection-end-column="33" />
+          <caret line="661" column="33" lean-forward="false" selection-start-line="641" selection-start-column="36" selection-end-line="661" selection-end-column="33" />
           <folding>
             <element signature="e#27988#31203#0" expanded="true" />
             <element signature="e#31202#31203#0" expanded="true" />
@@ -1477,8 +1448,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web/template/create_inspect.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="412">
-          <caret line="37" column="65" lean-forward="false" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
+        <state relative-caret-position="627">
+          <caret line="36" column="21" lean-forward="false" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="21" />
           <folding />
         </state>
       </provider>
