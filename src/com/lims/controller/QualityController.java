@@ -203,7 +203,7 @@ public class QualityController extends Controller {
             int item_project_id = getParaToInt("id");
             ItemProject itemProject = ItemProject.itemprojectDao.findById(item_project_id);
             Boolean result = true;
-            result = result && itemProject.set("process", null).update();
+            result = result && itemProject.set("process", 0).update();
             if (itemProject != null) {
 
                 List<Lib> libList = Lib.libDao.find("SELECT * FROM `db_lib` WHERE item_project_id=" + item_project_id);
@@ -319,41 +319,6 @@ public class QualityController extends Controller {
 
     }
 
-    /**
-     * 交接单列表
-     **/
-    public void handList() {
-        try {
-            int company_id = getParaToInt("id");
-            List result = new ArrayList();
-            Company company = Company.companydao.findById(company_id);
-            if (company != null) {
-                Task task = Task.taskDao.findFirst("select * from `db_task` where id = " + company.get("task_id"));
-                result.add(task.toJsonSingle());
-                List<Sample> sampleList = Sample.sampleDao.find("select * from `db_sample` where company_id = '" + company_id + "' order by id ");
 
-            }
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
-
-    /**
-     * 打印样品交接单
-     */
-    @Clear
-    public void createTaskhandover() {
-        try {
-            String id = getPara("id");
-            Task task = Task.taskDao.findFirst("select * from `db_task` where id =" + id);
-            if (task != null) {
-                getRequest().setAttribute("task", task);
-                render("/template/create_taskBook.jsp");
-            } else renderNull();
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
 }
 

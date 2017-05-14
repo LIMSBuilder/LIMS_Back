@@ -56,7 +56,7 @@ public class TaskController extends Controller {
                     if (task.get("identify") == null) {
                         task.set("identify", createIdentify());
                     }
-                    task.set("sample_type", getPara("sample_type")).set("importWrite",getPara("importWrite")).set("create_time", ParaUtils.sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getTaskProcess("create"));
+                    task.set("sample_type", getPara("sample_type")).set("importWrite", getPara("importWrite")).set("create_time", ParaUtils.sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getTaskProcess("create"));
                     result = result && task.save();
                     String[] items = getParaValues("project_items[]");
                     for (String item : items) {

@@ -13,7 +13,7 @@ import java.util.Map;
 public class Contractitem extends Model<Contractitem> {
     public static Contractitem contractitemdao = new Contractitem();
 
-    public Map toSimpleJson() {
+   public Map toSimpleJson() {
         Map temp = new HashMap();
         temp.put("id", this.get("id"));
         temp.put("company_id", this.get("company_id"));
