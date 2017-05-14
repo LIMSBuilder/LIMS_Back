@@ -38,7 +38,7 @@
     poCtrl1.setServerPage(request.getContextPath() + "/poserver.zz");
     poCtrl1.setSaveFilePage("savefile.jsp");//如要保存文件，此行必须
     //打开文件
-    poCtrl1.webOpen("/doc/selfSample.docx", OpenModeType.docNormalEdit, "张三");
+    poCtrl1.webOpen("/doc/QualityTemplate.docx", OpenModeType.docNormalEdit, "张三");
     poCtrl1.setTagId("PageOfficeCtrl1"); //此行必须
 %>
 <html>
