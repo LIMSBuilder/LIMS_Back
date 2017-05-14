@@ -38,12 +38,48 @@
                 table.insertRowAfter(table.openCellRC(2 + i, 1));
             }
         }
+
+        if (type.equals("soil")) {
+            List<InspectSoil> soilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id=" + inspect.get("id"));
+            for (int i = 0; i < soilList.size(); i++) {
+                table.openCellRC(2 + i, 1).setValue(Sample.sampleDao.findById(soilList.get(i).get("sample_id")).getStr("identify"));
+                table.openCellRC(2 + i, 2).setValue(Element.elementDao.findById(MonitorProject.monitorProjectdao.findById(itemProject.get("project_id")).get("element_id")).getStr("name"));
+                table.insertRowAfter(table.openCellRC(2 + i, 1));
+            }
+        }
+
+        if (type.equals("solid")) {
+            List<InspectSoild> soildList = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id=" + inspect.get("id"));
+            for (int i = 0; i < soildList.size(); i++) {
+                table.openCellRC(2 + i, 1).setValue(Sample.sampleDao.findById(soildList.get(i).get("sample_id")).getStr("identify"));
+                table.openCellRC(2 + i, 2).setValue(Element.elementDao.findById(MonitorProject.monitorProjectdao.findById(itemProject.get("project_id")).get("element_id")).getStr("name"));
+                table.insertRowAfter(table.openCellRC(2 + i, 1));
+            }
+        }
+
+        if (type.equals("air")) {
+            List<InspectAir> airList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id=" + inspect.get("id"));
+            for (int i = 0; i < airList.size(); i++) {
+                table.openCellRC(2 + i, 1).setValue(Sample.sampleDao.findById(airList.get(i).get("sample_id")).getStr("identify"));
+                table.openCellRC(2 + i, 2).setValue(Element.elementDao.findById(MonitorProject.monitorProjectdao.findById(itemProject.get("project_id")).get("element_id")).getStr("name"));
+                table.insertRowAfter(table.openCellRC(2 + i, 1));
+            }
+        }
+
+        if (type.equals("dysodia")) {
+            List<InspectDysodia> dysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id=" + inspect.get("id"));
+            for (int i = 0; i < dysodiaList.size(); i++) {
+                table.openCellRC(2 + i, 1).setValue(Sample.sampleDao.findById(dysodiaList.get(i).get("sample_id")).getStr("identify"));
+//                table.openCellRC(2 + i, 2).setValue(Element.elementDao.findById(MonitorProject.monitorProjectdao.findById(itemProject.get("project_id")).get("element_id")).getStr("name"));
+                table.insertRowAfter(table.openCellRC(2 + i, 1));
+            }
+        }
     }
     poCtrl1.setWriter(doc);
     poCtrl1.setServerPage(request.getContextPath() + "/poserver.zz");
     poCtrl1.setSaveFilePage("savefile.jsp");//如要保存文件，此行必须
     //打开文件
-    poCtrl1.webOpen("/doc/water.doc", OpenModeType.docNormalEdit, "张三");
+    poCtrl1.webOpen("/doc/"+inspect.get("type")+".doc", OpenModeType.docNormalEdit, "张三");
     poCtrl1.setTagId("PageOfficeCtrl1"); //此行必须
 %>
 <html>
