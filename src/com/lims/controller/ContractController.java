@@ -170,13 +170,13 @@ public class ContractController extends Controller {
                             param += "AND payment>50000";
                             break;
                         case "waitReviewBig":
-                            param += " AND (process = " + ProcessKit.getContractProcess("create") + ") AND payment>50000 ";
+                            param += " AND (process = " + ProcessKit.getContractProcess("create") + ") AND payment>=50000 ";
                             break;
                         case "afterReviewBig":
-                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment>50000 ";
+                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment>=50000 ";
                             break;
                         case "beforeReviewBig":
-                            param += " AND (process = " + ProcessKit.getContractProcess("change") + ") AND payment>50000 ";
+                            param += " AND (process = " + ProcessKit.getContractProcess("change") + ") AND payment>=50000 ";
                             break;
                         case "reviewSmall":
                             param += "AND payment<50000";

@@ -145,16 +145,16 @@ public class DispatchController extends Controller {
     /**
      * 获取执行中的派遣列表
      */
-    public void executingJobs() {
-        try {
-            List<Delivery> deliveryList = Delivery.deliverydao.find("SELECT * FROM `db_delivery` d WHERE d.process=0");
-            for (Delivery delivery : deliveryList) {
-
-            }
-
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
+//    public void executingJobs() {
+//        try {
+//            List<Delivery> deliveryList = Delivery.deliverydao.find("SELECT * FROM `db_delivery` d WHERE d.process=0");
+//            for (Delivery delivery : deliveryList) {
+//
+//            }
+//
+//
+//        } catch (Exception e) {
+//            renderError(500);
+//        }
+//    }
 }
