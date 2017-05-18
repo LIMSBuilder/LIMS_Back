@@ -203,7 +203,7 @@ public class QualityController extends Controller {
             int item_project_id = getParaToInt("id");
             ItemProject itemProject = ItemProject.itemprojectDao.findById(item_project_id);
             Boolean result = true;
-            result = result && itemProject.set("process", 0).update();
+            result = result && itemProject.set("process", null).update();
             if (itemProject != null) {
 
                 List<Lib> libList = Lib.libDao.find("SELECT * FROM `db_lib` WHERE item_project_id=" + item_project_id);
