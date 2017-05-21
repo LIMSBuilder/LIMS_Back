@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lims.model.Equipment;
+import com.lims.model.User;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
 
@@ -35,7 +36,7 @@ public class EquipmentController extends Controller {
                 Object value = condition.get(key);
                 param += (" AND " + key + " like \"%" + value + "%\"");
             }
-            Page<Equipment> equipmentPage = Equipment.equipmentDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_equipment`" + param);
+            Page<Equipment> equipmentPage = Equipment.equipmentDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_equipment`" + param + " ORDER BY finalTime DESC");
             List<Equipment> equipmentList = equipmentPage.getList();
             Map results = toJson(equipmentList);
             results.put("currentPage", currentPage);
@@ -86,7 +87,7 @@ public class EquipmentController extends Controller {
         equip.put("price", equipment.get("price"));
         equip.put("method", equipment.get("method"));
         equip.put("place", equipment.get("place"));
-        equip.put("people", equipment.get("people"));
+        equip.put("people", User.userDao.findById(equipment.get("people")).toSimpleJson());
         equip.put("finalTime", equipment.get("finalTime"));
         equip.put("time", equipment.get("time"));
         equip.put("certificate", equipment.get("certificate"));
@@ -178,25 +179,73 @@ public class EquipmentController extends Controller {
     public void findById() {
         try {
             int id = getParaToInt("id");
-             Equipment equipment =Equipment.equipmentDao.findById(id);
-             if(equipment!=null){
-                 renderJson(toJsonSingle(equipment));
-             }
-             else {
-                 renderJson(RenderUtils.CODE_EMPTY);
-             }
+            Equipment equipment = Equipment.equipmentDao.findById(id);
+            if (equipment != null) {
+                renderJson(toJsonSingle(equipment));
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
         } catch (Exception e) {
             renderError(500);
         }
     }
 
-    public  void total(){
-      try {
-          List<Equipment> equipmentList =Equipment.equipmentDao.find("select * from `db_equipment`");
-          renderJson(toJson(equipmentList));
-      }catch (Exception e){
-          renderError(500);
-      }
+
+    public void total() {
+        try {
+            List<Equipment> equipmentList = Equipment.equipmentDao.find("select * from `db_equipment`");
+            renderJson(toJson(equipmentList));
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 
+    public void findByGidentify() {
+        try {
+            List<Equipment> equipmentList = Equipment.equipmentDao.find("select * from `db_equipment` where Gidentify =" + getPara("identify"));
+            if (equipmentList != null) {
+                renderJson(toJson(equipmentList));
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void findByname() {
+        try {
+            List<Equipment> equipmentList = Equipment.equipmentDao.find("select * from `db_equipment` where name =" + getPara("name"));
+            if (equipmentList != null) {
+                renderJson(toJson(equipmentList));
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void findByFidentify() {
+        try {
+            List<Equipment> equipmentList = Equipment.equipmentDao.find("select * from `db_equipment` where factory =" + getPara("factory"));
+            if (equipmentList != null) {
+                renderJson(toJson(equipmentList));
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
+
+    public void findByPeople() {
+        try {
+            List<Equipment> equipmentList = Equipment.equipmentDao.find("select * from `db_equipment` where people =" + getParaToInt("people8"));
+            if (equipmentList != null) {
+                renderJson(toJson(equipmentList));
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+
+        }
+    }
 }

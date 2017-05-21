@@ -96,14 +96,37 @@ public class DispatchController extends Controller {
 
 
     /**
-     * 检查当前任务书是否已经允许流转
+     * 检查当前任务书是否已经允许流转到实验室
+     */
+    public void checkFlowLab() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                int size = Company.companydao.find("SELECT * FROM `db_company` c WHERE c.task_id=" + task_id + " AND c.process!=2").size();
+                if (size != 0) {
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                } else {
+                    Boolean result = task.set("process", ProcessKit.getTaskProcess("laboratory")).set("sample_time", ParaUtils.sdf2.format(new Date())).set("sample_creater", ParaUtils.getCurrentUser(getRequest()).get("id")).update();
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                }
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 检查当前任务书是否已经允许流转到质控室
      */
     public void checkFlow() {
         try {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
             if (task != null) {
-                int size = Company.companydao.find("SELECT * FROM `db_company` c WHERE c.task_id=" + task_id + " AND c.process!=2").size();
+                int size = Company.companydao.find("SELECT * FROM `db_company` c WHERE c.task_id=" + task_id + " AND c.process!=3").size();
                 if (size != 0) {
                     renderJson(RenderUtils.CODE_NOTEMPTY);
                 } else {
@@ -118,19 +141,20 @@ public class DispatchController extends Controller {
         }
     }
 
+
     /**
      * 获取执行中的派遣列表
      */
-    public void executingJobs() {
-        try {
-            List<Delivery> deliveryList = Delivery.deliverydao.find("SELECT * FROM `db_delivery` d WHERE d.process=0");
-            for (Delivery delivery : deliveryList) {
-
-            }
-
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
+//    public void executingJobs() {
+//        try {
+//            List<Delivery> deliveryList = Delivery.deliverydao.find("SELECT * FROM `db_delivery` d WHERE d.process=0");
+//            for (Delivery delivery : deliveryList) {
+//
+//            }
+//
+//
+//        } catch (Exception e) {
+//            renderError(500);
+//        }
+//    }
 }

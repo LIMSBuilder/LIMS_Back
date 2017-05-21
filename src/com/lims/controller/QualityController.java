@@ -1,5 +1,6 @@
 package com.lims.controller;
 
+import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
 import com.jfinal.json.Jackson;
 import com.jfinal.plugin.activerecord.Db;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by qulongjun on 2017/5/3.
@@ -154,27 +156,28 @@ public class QualityController extends Controller {
 
 
                         Blind blind = new Blind();
-                        blind.set("count", temp.get("blind")).set("item_project_id", temp.get("id"));
+                        blind.set("count", temp.get("blind")).set("item_project_id", temp.get("item_project_id"));
                         result = result && blind.save();
-                        Integer[] libList = getParaValuesToInt("labs[]");
+                        List<Integer> libList = (List<Integer>) temp.get("labs");
                         if (libList == null) {
                         } else {
                             for (int id : libList) {
                                 Lib lib = new Lib();
                                 lib.set("sample_id", id)
-                                        .set("item_project_id", temp.get("id"));
-                                result = result && lib.update();
+                                        .set("item_project_id", temp.get("item_project_id"));
+                                result = result && lib.save();
                                 if (!result) return false;
                             }
                         }
-                        Integer[] tagList = getParaValuesToInt("tags[]");
+
+                        List<Integer> tagList = (List<Integer>) temp.get("tags");
                         if (tagList == null) {
                         } else {
                             for (int id : tagList) {
                                 Tag tag = new Tag();
                                 tag.set("sample_id", id)
-                                        .set("item_project_id", temp.get("id"));
-                                result = result && tag.update();
+                                        .set("item_project_id", temp.get("item_project_id"));
+                                result = result && tag.save();
                                 if (!result) return false;
 
                             }
@@ -200,7 +203,7 @@ public class QualityController extends Controller {
             int item_project_id = getParaToInt("id");
             ItemProject itemProject = ItemProject.itemprojectDao.findById(item_project_id);
             Boolean result = true;
-            result = result && itemProject.set("process", 0).update();
+            result = result && itemProject.set("process", null).update();
             if (itemProject != null) {
 
                 List<Lib> libList = Lib.libDao.find("SELECT * FROM `db_lib` WHERE item_project_id=" + item_project_id);
@@ -287,4 +290,35 @@ public class QualityController extends Controller {
             renderError(500);
         }
     }
+
+    /**
+     * 是否完成质控
+     **/
+
+
+    public void finishQuality() {
+        try {
+            int company_id = getParaToInt("id");
+            Company company = Company.companydao.findById(company_id);
+            boolean result = true;
+            if (company != null) {
+                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_company` c,`db_item` i,`db_item_project` p WHERE c.id=" + company.get("id") + " AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
+                if (itemProjectSize != 0) {
+                    //还有没有质控
+                    renderJson(RenderUtils.CODE_UNIQUE);
+                    return;
+                } else {
+                    result = result && company.set("process", 3).update();
+
+                }
+            }
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
+
+
 }
+

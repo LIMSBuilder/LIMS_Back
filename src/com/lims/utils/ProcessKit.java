@@ -33,7 +33,9 @@ public class ProcessKit {
         this.put("create", 1);//创建任务完成，已下达 办公室派发给具体负责人待派遣
         this.put("dispatch", 2);//派遣任务，待样品登记
         this.put("apply", 3);//样品登记
-        this.put("quality", 4);//质控
+        this.put("laboratory",4);//实验室样品交接
+        this.put("quality", 5);//质控 质控表
+
 
     }};
 

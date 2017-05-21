@@ -170,13 +170,13 @@ public class ContractController extends Controller {
                             param += "AND payment>50000";
                             break;
                         case "waitReviewBig":
-                            param += " AND (process = " + ProcessKit.getContractProcess("create") + ") AND payment>50000 ";
+                            param += " AND (process = " + ProcessKit.getContractProcess("create") + ") AND payment>=50000 ";
                             break;
                         case "afterReviewBig":
-                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment>50000 ";
+                            param += " AND (process = " + ProcessKit.getContractProcess("review") + ") AND payment>=50000 ";
                             break;
                         case "beforeReviewBig":
-                            param += " AND (process = " + ProcessKit.getContractProcess("change") + ") AND payment>50000 ";
+                            param += " AND (process = " + ProcessKit.getContractProcess("change") + ") AND payment>=50000 ";
                             break;
                         case "reviewSmall":
                             param += "AND payment<50000";
@@ -771,8 +771,6 @@ public class ContractController extends Controller {
                     item.put("project", projectTemp);
                     items.add(item);
                 } else {
-                    //当前没有该公司的记录
-                    //创建db_company 创建db-contractItem  循环创建itemproject
                     List items = new ArrayList();
                     Map item = new HashMap();
                     item.put("element", element);

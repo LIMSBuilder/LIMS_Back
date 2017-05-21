@@ -31,5 +31,12 @@ public class Task extends Model<Task> {
         }
         return mapList;
     }
+    public Map toJsonSingle() {
+        Map result = new HashMap();
+        result.put("client_unit", this.get("client_unit"));
+        result.put("identify", this.get("identify"));
+        result.put("type", this.get("type"));
+        return result;
+    }
 }
 

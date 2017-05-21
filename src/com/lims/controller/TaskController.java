@@ -11,6 +11,7 @@ import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.junit.Test;
 
 import javax.xml.ws.Service;
@@ -38,6 +39,12 @@ public class TaskController extends Controller {
                         switch (key.toString()) {
                             case "id":
                                 break;//不知道为什么会传一个id过来，待观察
+                            case "serviceId":
+                                ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(getPara("serviceId"));
+                                if (serviceContract != null) {
+                                    task.set("identify", serviceContract.get("identify")).set("service_id", serviceContract.get("id"));
+                                }
+                                break;
                             default:
                                 if (key.toString().indexOf("item") != -1) {
                                     continue;
@@ -47,7 +54,10 @@ public class TaskController extends Controller {
 
                     }
                     User user = ParaUtils.getCurrentUser(getRequest());
-                    task.set("identify", createIdentify()).set("sample_type", getPara("sample_type")).set("create_time", ParaUtils.sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getTaskProcess("create"));
+                    if (task.get("identify") == null) {
+                        task.set("identify", createIdentify());
+                    }
+                    task.set("sample_type", getPara("sample_type")).set("importWrite", getPara("importWrite")).set("create_time", ParaUtils.sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getTaskProcess("create"));
                     result = result && task.save();
                     String[] items = getParaValues("project_items[]");
                     for (String item : items) {
@@ -113,6 +123,7 @@ public class TaskController extends Controller {
                                 .set("wayDesp", contract.get("wayDesp"))
                                 .set("other", contract.get("other"))
                                 .set("charge", getPara("charge"))
+                                .set("importWrite", contract.get("importWrite"))
                                 .save();
                         result = result && contract.set("process", ProcessKit.getContractProcess("review")).update();
                         //加入判定，即若当前合同创建了多个任务书，则需要将db_company复制一份新的
@@ -590,6 +601,86 @@ public class TaskController extends Controller {
             if (company != null) {
                 renderJson(company.toSimpleJSON());
             } else renderNull();
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void getInspectList() {
+        try {
+            int id = getParaToInt("task_id");
+            List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_task` t,`db_company` c,`db_item` i,`db_item_project` p\n" +
+                    "WHERE t.id=" + id + " AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id");
+            List<Map> result = new ArrayList<>();
+            for (ItemProject itemProject : itemProjectList) {
+                result.add(itemProject.toJsonSingle());
+            }
+            renderJson(result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 创建送检单
+     */
+    public void createInspect() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    int item_project_id = getParaToInt("item_project_id");
+                    Task task = Task.taskDao.findFirst("SELECT t.* FROM `db_item_project` p,`db_item` i,`db_company` c ,`db_task` t\n" +
+                            "WHERE p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND p.id=" + item_project_id);
+                    if (task != null) {
+                        Inspect inspect = new Inspect();
+                        Boolean result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", ParaUtils.getCurrentUser(getRequest()).get("id")).set("send_time", ParaUtils.sdf2.format(new Date())).set("sample_time", task.get("sample_time")).set("process", 0).save();
+                        if (getPara("type") != null) {
+                            List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT p.* FROM `db_sample_project` p WHERE p.item_project_id=" + item_project_id);
+                            for (SampleProject sampleProject : sampleProjectList) {
+                                switch (getPara("type")) {
+                                    case "water":
+                                        InspectWater water = new InspectWater();
+                                        result = result && water.set("sample_id", sampleProject.get("sample_id")).set("inspect_id", inspect.get("id")).set("process", 0).save();
+                                        break;
+                                    case "soil":
+                                        InspectSoil soil = new InspectSoil();
+                                        result = result && soil.set("sample_id", sampleProject.get("sample_id")).set("inspect_id", inspect.get("id")).set("process", 0).save();
+                                        break;
+                                    case "solid":
+                                        InspectSoild soild = new InspectSoild();
+                                        result = result && soild.set("sample_id", sampleProject.get("sample_id")).set("inspect_id", inspect.get("id")).set("process", 0).save();
+                                        break;
+                                    case "air":
+                                        InspectAir air = new InspectAir();
+                                        result = result && air.set("sample_id", sampleProject.get("sample_id")).set("inspect_id", inspect.get("id")).set("process", 0).save();
+                                        break;
+                                    case "dysodia":
+                                        InspectDysodia dysodia = new InspectDysodia();
+                                        result = result && dysodia.set("sample_id", sampleProject.get("sample_id")).set("inspect_id", inspect.get("id")).set("process", 0).save();
+                                        break;
+                                }
+                            }
+                            return result;
+                        } else return false;
+                    } else return false;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 导出送检单
+     */
+    public void exportInspect() {
+        try {
+            int inspect_id = getParaToInt("id");
+            Inspect inspect = Inspect.inspectDao.findById(inspect_id);
+            getRequest().setAttribute("inspect", inspect);
+            render("/template/create_inspect.jsp");
         } catch (Exception e) {
             renderError(500);
         }
