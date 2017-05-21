@@ -15,6 +15,7 @@ public class MonitorProject extends Model<MonitorProject> {
         Map temp = new HashMap();
         temp.put("id", this.get("id"));
         temp.put("name", this.get("name"));
+        temp.put("elementName",Element.elementDao.findById(this.get("element_id")).get("name"));
         // temp.put("desp", this.get("desp"));
         //temp.put("department", Department.departmentdao.findById(this.get("department_id")));
         // temp.put("element", Element.elementDao.findById("element_id"));
