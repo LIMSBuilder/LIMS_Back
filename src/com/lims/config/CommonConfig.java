@@ -101,6 +101,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_inspect_air",InspectAir.class);
         arp.addMapping("db_inspect_dysodia",InspectDysodia.class);
         arp.addMapping("db_lab_certificate",Certificate.class);
+        arp.addMapping("db_sample_descrption",Description.class);
         //addMap增加数据库树形
 
     }

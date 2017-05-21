@@ -4,6 +4,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.lims.model.*;
+import com.lims.utils.RenderUtils;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.util.ArrayList;
@@ -40,14 +41,12 @@ public class LabController extends Controller {
                     total.put("lastIdentify", last);
 //                    total.put("identify", first + "~" + last);
                 }
-
-
             }
 
             Map<List, List> back = new HashMap<>();
-            List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
+            List<Sample> sampleList1 = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
                     "WHERE t.id=" + task_id + " AND c.task_id=t.id AND s.company_id=c.id ORDER BY s.identify");
-            for (Sample sample : sampleList) {
+            for (Sample sample : sampleList1) {
                 List<MonitorProject> records = MonitorProject.monitorProjectdao.find("SELECT m.* FROM `db_sample` s,`db_sample_project` p,`db_item_project` i,`db_monitor_project` m\n" +
                         "WHERE s.id=" + sample.get("id") + " AND p.sample_id=s.id AND p.item_project_id=i.id AND i.project_id=m.id");
                 List<Map> b = new ArrayList<>();
@@ -66,37 +65,24 @@ public class LabController extends Controller {
             List<Map> mapList = new ArrayList<>();
             for (List s : back.keySet()) {
                 Map m = new HashMap();
-                m.put("projects",s);
-                m.put("samples",back.get(s));
+                m.put("projects", s);
+                m.put("samples", back.get(s));
                 mapList.add(m);
+            }
+            total.put("items", mapList);
+            List<Sample> sampleList2 = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
+                    "WHERE t.id=" + task_id + " AND c.task_id=t.id AND s.company_id=c.id ORDER BY s.identify");
+            for (Sample sample : sampleList2) {
+            List<Description> descriptionList =Description.descriptionDao.find("SELECT * FROM `db_sample_descrption` WHERE sample_id ="+sample.get("id"));
+            List<Map>  de=new ArrayList<>();
+            for (Description description:descriptionList){
+                de.add(description.toJsonSingle());
+            }
+                total.put("item",de);
             }
 
 
-            total.put("items", mapList);
 
-
-//            List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_task` t,`db_company` c,`db_item` i,`db_item_project` p\n" +
-//                    "WHERE t.id=" + task_id + " AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id");
-//            List result = new ArrayList();
-//            for (ItemProject itemProject : itemProjectList) {
-//                Map item = new HashMap();
-//                item.put("name", Element.elementDao.findById(MonitorProject.monitorProjectdao.findById(itemProject.get("project_id")).get("element_id")).get("name"));
-//                item.put("name2", MonitorProject.monitorProjectdao.findById(itemProject.get("project_id")).get("name"));
-//                int count1 = Sample.sampleDao.find("SELECT s.* FROM `db_sample` s ,`db_sample_project` p WHERE p.sample_id = s.id AND p.item_project_id=" + itemProject.get("id")).size();
-//                item.put("cou", count1);
-//                if (task.get("sample_type") == 0) {
-//                    List char1 = new ArrayList<>();
-//                    List<Sample> sampleList1 = Sample.sampleDao.find("SELECT s.* FROM `db_sample` s ,`db_sample_project` p WHERE   s.id=p.sample_id AND p.item_project_id =" + itemProject.get("id"));
-//                    for (Sample sample : sampleList1) {
-//                        Map ch = new HashMap();
-//                        ch.put("character", sample.get("character"));
-//                        char1.add(ch);
-//                        item.put("characterList", char1);
-//                    }
-//                }
-//                result.add(item);
-//            }
-//            total.put("items", result);
             renderJson(total);
 
         } catch (Exception e) {
@@ -104,5 +90,27 @@ public class LabController extends Controller {
         }
     }
 
+    /**
+     * 保存样品交接表
+     **/
+    public void saveReceipt() {
+        try {
+            Integer[] projectlist = getParaValuesToInt("samplesID[]");
+            String saveCharacter = getPara("saveCharacter");
+            String saveState = getPara("saveState");
+            Boolean result = true;
+            for (int id : projectlist) {
+                Description description = new Description();
+
+                description.set("sample_id", id)
+                        .set("saveCharacter", saveCharacter)
+                        .set("saveState", saveState);
+                result = result && description.save();
+            }
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 
 }
