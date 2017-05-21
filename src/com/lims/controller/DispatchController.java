@@ -96,9 +96,9 @@ public class DispatchController extends Controller {
 
 
     /**
-     * 检查当前任务书是否已经允许流转到质控室
+     * 检查当前任务书是否已经允许流转到实验室
      */
-    public void checkFlow() {
+    public void checkFlowLab() {
         try {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
@@ -107,7 +107,7 @@ public class DispatchController extends Controller {
                 if (size != 0) {
                     renderJson(RenderUtils.CODE_NOTEMPTY);
                 } else {
-                    Boolean result = task.set("process", ProcessKit.getTaskProcess("quality")).set("sample_time", ParaUtils.sdf2.format(new Date())).set("sample_creater", ParaUtils.getCurrentUser(getRequest()).get("id")).update();
+                    Boolean result = task.set("process", ProcessKit.getTaskProcess("laboratory")).set("sample_time", ParaUtils.sdf2.format(new Date())).set("sample_creater", ParaUtils.getCurrentUser(getRequest()).get("id")).update();
                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                 }
             } else {
@@ -119,9 +119,9 @@ public class DispatchController extends Controller {
     }
 
     /**
-     * 检查当前任务书是否已经允许流转到实验室
+     * 检查当前任务书是否已经允许流转到质控室
      */
-    public void checkFlowLab() {
+    public void checkFlow() {
         try {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
@@ -130,7 +130,7 @@ public class DispatchController extends Controller {
                 if (size != 0) {
                     renderJson(RenderUtils.CODE_NOTEMPTY);
                 } else {
-                    Boolean result = task.set("process", ProcessKit.getTaskProcess("laboratory")).update();
+                    Boolean result = task.set("process", ProcessKit.getTaskProcess("quality")).update();
                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                 }
             } else {
