@@ -4,13 +4,12 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.lims.model.*;
+import com.lims.utils.ParaUtils;
+import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
 import org.apache.poi.ss.formula.functions.T;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenyangyang on 2017/5/19.
@@ -67,20 +66,28 @@ public class LabController extends Controller {
                 Map m = new HashMap();
                 m.put("projects", s);
                 m.put("samples", back.get(s));
+                List<Sample> sampleList2 = Sample.sampleDao.find("select * from `db_sample` id");
+                for (Sample sample : sampleList2) {
+                    List<Description> descriptionList = Description.descriptionDao.find("SELECT * FROM `db_sample_deseription` WHERE sample_id =" + sample.get("id"));
+//                     List<Map> de = new ArrayList<>();
+//                    for (Description description : descriptionList) {
+//                        de.add(description.toJsonSingle());
+//                        m.put("item", de);
+//                    }
+
+                    if (descriptionList.size() != 0) {
+                        m.put("id", descriptionList.get(0).get("id"));
+                        m.put("process", descriptionList.get(0).get("process"));
+                        m.put("sample_id", descriptionList.get(0).get("sample_id"));
+                        m.put("saveState", descriptionList.get(0).get("saveState"));
+                        m.put("saveCharacter", descriptionList.get(0).get("saveCharacter"));
+                    }
+                }
+
                 mapList.add(m);
+
             }
             total.put("items", mapList);
-            List<Sample> sampleList2 = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
-                    "WHERE t.id=" + task_id + " AND c.task_id=t.id AND s.company_id=c.id ORDER BY s.identify");
-            for (Sample sample : sampleList2) {
-            List<Description> descriptionList =Description.descriptionDao.find("SELECT * FROM `db_sample_descrption` WHERE sample_id ="+sample.get("id"));
-            List<Map>  de=new ArrayList<>();
-            for (Description description:descriptionList){
-                de.add(description.toJsonSingle());
-            }
-                total.put("item",de);
-            }
-
 
 
             renderJson(total);
@@ -100,11 +107,17 @@ public class LabController extends Controller {
             String saveState = getPara("saveState");
             Boolean result = true;
             for (int id : projectlist) {
+                Sample sample =Sample.sampleDao.findById(id);
+                if(sample!=null){
+                    sample.set("process",3);
+                    result =result &&sample.update();
+                }
                 Description description = new Description();
-
                 description.set("sample_id", id)
                         .set("saveCharacter", saveCharacter)
-                        .set("saveState", saveState);
+                        .set("saveState", saveState)
+                          .set("process",1);
+
                 result = result && description.save();
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
@@ -113,4 +126,115 @@ public class LabController extends Controller {
         }
     }
 
+
+    /**
+     * 保存记录表
+     **/
+    public void saveAll() {
+        try {
+            int task_id = getParaToInt("id");
+            Task task = Task.taskDao.findById(task_id);
+            Boolean result = true;
+            if (task != null) {
+                int size = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s WHERE c.task_id=" + task_id + "  AND s.company_id =c.id AND s.process!=2").size();
+                if (size != 0) {
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                }
+               else {
+                    User user = ParaUtils.getCurrentUser(getRequest());
+                    task.set("package", getPara("package"))
+                            .set("receive_type", getPara("receive_type"))
+                            .set("additive", getPara("additive"))
+                            .set("sample_receiver", user.get("id"))
+                            .set("process", ProcessKit.getTaskProcess("lab"))
+                            .set("receive_time", ParaUtils.sdf2.format(new Date()));
+                    result = result && task.update();
+                }
+            }
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+    /***
+     * 修改
+     * */
+    public void changeReceipt() {
+        try {
+            Integer[] projectlist = getParaValuesToInt("samplesID[]");
+            String saveCharacter = getPara("saveCharacter");
+            String saveState = getPara("saveState");
+            Boolean result = true;
+            for (int id : projectlist) {
+                Description description = new Description();
+                description.set("sample_id", id)
+                        .set("saveCharacter", saveCharacter)
+                        .set("saveState", saveState);
+                result = result && description.update();
+            }
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    /**
+     * 返回可以做相对应项目人员名单
+     * **/
+    public  void labUserList(){
+        int itemId =getParaToInt("item_id");
+        List<Certificate> certificateList =Certificate.certificateDao.find("SELECT c.* FROM `db_lab_certificate` c ,`db_item_project` p WHERE  c.project_id =p.project_id  AND p.id = "+itemId);
+       if(certificateList!=null){
+           renderJson(toJson(certificateList));
+
+       }
+
+    }
+    public Map toJson(List<Certificate> entityList) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            List result = new ArrayList();
+            for (Certificate certificate : entityList) {
+                result.add(toJsonSingle(certificate));
+            }
+            json.put("results", result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+        return json;
+    }
+
+    public Map toJsonSingle(Certificate certificate) {
+        Map<String, Object> ce = new HashMap<>();
+        ce.put("id", certificate.get("id"));
+        ce.put("name",User.userDao.findById(certificate.get("lab")).get("name"));
+        return ce;
+    }
+
+    /***
+     * 将同一个任务书中分析项目相同的合并
+     * **/
+    public void projectList() {
+
+        try {
+            int task_id =getParaToInt("id");
+            Task task =Task.taskDao.findById(task_id);
+            if (task!=null){
+                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_task` t,`db_company` c,`db_item` i,`db_item_project` p\n" +
+                        "WHERE t.id=" + task_id + " AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id");
+                List result=new ArrayList();
+                for (ItemProject itemProject:itemProjectList){
+                    Map temp =new HashMap();
+                    temp = itemProject.toJsonSingle();
+
+
+                }
+                renderJson(result);
+            }
+            renderJson(RenderUtils.CODE_EMPTY);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }
