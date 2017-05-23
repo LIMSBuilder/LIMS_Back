@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.lims.model.*;
 import com.lims.utils.ParaUtils;
+import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
 import org.apache.poi.ss.formula.functions.T;
 
@@ -65,19 +66,28 @@ public class LabController extends Controller {
                 Map m = new HashMap();
                 m.put("projects", s);
                 m.put("samples", back.get(s));
+                List<Sample> sampleList2 = Sample.sampleDao.find("select * from `db_sample` id");
+                for (Sample sample : sampleList2) {
+                    List<Description> descriptionList = Description.descriptionDao.find("SELECT * FROM `db_sample_deseription` WHERE sample_id =" + sample.get("id"));
+//                     List<Map> de = new ArrayList<>();
+//                    for (Description description : descriptionList) {
+//                        de.add(description.toJsonSingle());
+//                        m.put("item", de);
+//                    }
+
+                    if (descriptionList.size() != 0) {
+                        m.put("id", descriptionList.get(0).get("id"));
+                        m.put("process", descriptionList.get(0).get("process"));
+                        m.put("sample_id", descriptionList.get(0).get("sample_id"));
+                        m.put("saveState", descriptionList.get(0).get("saveState"));
+                        m.put("saveCharacter", descriptionList.get(0).get("saveCharacter"));
+                    }
+                }
+
                 mapList.add(m);
+
             }
             total.put("items", mapList);
-            List<Sample> sampleList2 = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
-                    "WHERE t.id=" + task_id + " AND c.task_id=t.id AND s.company_id=c.id ORDER BY s.identify");
-            for (Sample sample : sampleList2) {
-                List<Description> descriptionList = Description.descriptionDao.find("SELECT * FROM `db_sample_descrption` WHERE sample_id =" + sample.get("id"));
-                List<Map> de = new ArrayList<>();
-                for (Description description : descriptionList) {
-                    de.add(description.toJsonSingle());
-                }
-                total.put("item", de);
-            }
 
 
             renderJson(total);
@@ -96,14 +106,18 @@ public class LabController extends Controller {
             String saveCharacter = getPara("saveCharacter");
             String saveState = getPara("saveState");
             Boolean result = true;
-            Sample sample = new Sample();
-            result = result && sample.set("process", 2).update();
             for (int id : projectlist) {
+                Sample sample =Sample.sampleDao.findById(id);
+                if(sample!=null){
+                    sample.set("process",3);
+                    result =result &&sample.update();
+                }
                 Description description = new Description();
-
                 description.set("sample_id", id)
                         .set("saveCharacter", saveCharacter)
-                        .set("saveState", saveState);
+                        .set("saveState", saveState)
+                          .set("process",1);
+
                 result = result && description.save();
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
@@ -118,17 +132,24 @@ public class LabController extends Controller {
      **/
     public void saveAll() {
         try {
-            int id = getParaToInt("id");
-            Task task = Task.taskDao.findById(id);
+            int task_id = getParaToInt("id");
+            Task task = Task.taskDao.findById(task_id);
             Boolean result = true;
             if (task != null) {
-                User user = ParaUtils.getCurrentUser(getRequest());
-                task.set("package", getPara("package"))
-                        .set("receive_type", getPara("receive_type"))
-                        .set("additive", getPara("additive"))
-                        .set("sample_receiver", user.get("id"))
-                        .set("receive_time", ParaUtils.sdf2.format(new Date()));
-                result = result && task.update();
+                int size = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s WHERE c.task_id=" + task_id + "  AND s.company_id =c.id AND s.process!=2").size();
+                if (size != 0) {
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                }
+               else {
+                    User user = ParaUtils.getCurrentUser(getRequest());
+                    task.set("package", getPara("package"))
+                            .set("receive_type", getPara("receive_type"))
+                            .set("additive", getPara("additive"))
+                            .set("sample_receiver", user.get("id"))
+                            .set("process", ProcessKit.getTaskProcess("lab"))
+                            .set("receive_time", ParaUtils.sdf2.format(new Date()));
+                    result = result && task.update();
+                }
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {

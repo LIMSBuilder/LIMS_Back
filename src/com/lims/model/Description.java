@@ -15,6 +15,7 @@ public class Description extends Model<Description> {
         result.put("id", this.getInt("id"));
         result.put("saveCharacter", this.get("saveCharacter"));
         result.put("saveState",this.get("saveState"));
+        result.put("process",this.get("process"));
         return result;
     }
 }

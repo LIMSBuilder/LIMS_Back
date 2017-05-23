@@ -43,7 +43,7 @@ public class CommonRouter extends Routes {
         add("/api/quality", QualityController.class);
         add("/api/lab",LabController.class);
         add("/api/certificate",CertificateController.class);
-        add("/api/certificate",ReviewController.class);
+        add("/api/review",ReviewController.class);
     }
 }
 
