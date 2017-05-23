@@ -66,23 +66,20 @@ public class LabController extends Controller {
                 Map m = new HashMap();
                 m.put("projects", s);
                 m.put("samples", back.get(s));
-                List<Sample> sampleList2 = Sample.sampleDao.find("select * from `db_sample` id");
-                for (Sample sample : sampleList2) {
-                    List<Description> descriptionList = Description.descriptionDao.find("SELECT * FROM `db_sample_deseription` WHERE sample_id =" + sample.get("id"));
-//                     List<Map> de = new ArrayList<>();
-//                    for (Description description : descriptionList) {
-//                        de.add(description.toJsonSingle());
-//                        m.put("item", de);
-//                    }
 
-                    if (descriptionList.size() != 0) {
-                        m.put("id", descriptionList.get(0).get("id"));
-                        m.put("process", descriptionList.get(0).get("process"));
-                        m.put("sample_id", descriptionList.get(0).get("sample_id"));
-                        m.put("saveState", descriptionList.get(0).get("saveState"));
-                        m.put("saveCharacter", descriptionList.get(0).get("saveCharacter"));
-                    }
-                }
+                 for (int i=0;i<back.get(s).size();i++){
+                     Map temp =new HashMap();
+                     List<Description> descriptionList = Description.descriptionDao.find("SELECT * FROM `db_sample_deseription` WHERE sample_id =" + ((Sample)(back.get(s).get(i))).get("id"));
+                     if (descriptionList.size() != 0) {
+                         temp.put("id", descriptionList.get(0).get("id"));
+                         temp.put("process", descriptionList.get(0).get("process"));
+                         temp.put("sample_id", descriptionList.get(0).get("sample_id"));
+                         temp.put("saveState", descriptionList.get(0).get("saveState"));
+                         temp.put("saveCharacter", descriptionList.get(0).get("saveCharacter"));
+                         m.put("item",temp);
+                     }
+                 }
+
 
                 mapList.add(m);
 
