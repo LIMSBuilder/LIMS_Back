@@ -6,6 +6,8 @@ import com.jfinal.json.Jackson;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.lims.model.*;
+import com.lims.utils.ParaUtils;
+import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
 import org.apache.poi.ss.formula.functions.T;
 
@@ -22,14 +24,14 @@ import java.util.Map;
 public class QualityController extends Controller {
     public void list() {
         try {
-            int company_id = getParaToInt("company_id");
-            List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_company` c,`db_item` i,`db_item_project` p \n" +
-                    "WHERE c.id=" + company_id + " AND i.company_id=c.id AND p.item_id=i.id");
+            int task_id = getParaToInt("task_id");
+            List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p \n" +
+                    "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id");
             List result = new ArrayList();
             for (ItemProject itemProject : itemProjectList) {
                 Map temp = new HashMap();
                 temp = itemProject.toJsonSingle();
-                List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_sample` s,`db_sample_project` p WHERE s.company_id=" + company_id + " AND p.sample_id=s.id AND p.item_project_id=" + itemProject.get("id"));
+                List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s,`db_sample_project` p WHERE c.task_id=" + task_id + "AND s.company_id =c.id AND p.sample_id=s.id AND p.item_project_id=" + itemProject.get("id"));
                 List<Map> re = new ArrayList<>();
                 int count = 0;
                 for (Sample sample : sampleList) {
@@ -292,32 +294,35 @@ public class QualityController extends Controller {
     }
 
     /**
-     * 是否完成质控
+     * 是否完成质控 ,流转到实验室进行拆分
      **/
 
 
     public void finishQuality() {
         try {
-            int company_id = getParaToInt("id");
-            Company company = Company.companydao.findById(company_id);
+            int task_id = getParaToInt("id");
+            Task task = Task.taskDao.findById(task_id);
             boolean result = true;
-            if (company != null) {
-                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_company` c,`db_item` i,`db_item_project` p WHERE c.id=" + company.get("id") + " AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
+            if (task != null) {
+                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_task` t,`db_company` c,`db_item` i,`db_item_project` p WHERE t.id=" + task_id + "AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
                 if (itemProjectSize != 0) {
                     //还有没有质控
                     renderJson(RenderUtils.CODE_UNIQUE);
                     return;
                 } else {
-                    result = result && company.set("process", 3).update();
+                    result = result && task.set("process", ProcessKit.getTaskProcess("lab")).update();
 
                 }
             }
+
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
 
     }
+
+
 
 
 }

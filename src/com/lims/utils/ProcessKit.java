@@ -35,6 +35,7 @@ public class ProcessKit {
         this.put("apply", 3);//样品登记
         this.put("laboratory",4);//实验室样品交接
         this.put("quality", 5);//质控 质控表
+        this.put("lab",6);//质控完成，重新流转到实验室
 
 
     }};
