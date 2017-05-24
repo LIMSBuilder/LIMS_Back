@@ -7,6 +7,7 @@ import com.lims.model.*;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.util.*;
@@ -30,6 +31,9 @@ public class LabController extends Controller {
                 total.put("type", Type.typeDao.findById(task.get("type")));
                 total.put("time", task.get("sample_time"));
                 total.put("sample_creater", User.userDao.findById(task.get("sample_creater")));
+                total.put("package",task.get("package"));
+                total.put("receive_type",task.get("receive_type"));
+                total.put("additive",task.get("additive"));
                 List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
                         "WHERE t.id=" + task_id + " AND c.task_id=t.id AND s.company_id=c.id ORDER BY s.identify");
                 total.put("count", sampleList.size());
@@ -66,20 +70,15 @@ public class LabController extends Controller {
                 Map m = new HashMap();
                 m.put("projects", s);
                 m.put("samples", back.get(s));
+                List<Map> de = new ArrayList();
+                for (int i = 0; i < back.get(s).size(); i++) {
+                    List<Description> descriptionList = Description.descriptionDao.find("SELECT * FROM `db_sample_deseription` WHERE sample_id =" + ((Sample) (back.get(s).get(i))).get("id"));
+                    for (Description description : descriptionList) {
+                        de.add(description.toJsonSingle());
+                    }
 
-                 for (int i=0;i<back.get(s).size();i++){
-                     Map temp =new HashMap();
-                     List<Description> descriptionList = Description.descriptionDao.find("SELECT * FROM `db_sample_deseription` WHERE sample_id =" + ((Sample)(back.get(s).get(i))).get("id"));
-                     if (descriptionList.size() != 0) {
-                         temp.put("id", descriptionList.get(0).get("id"));
-                         temp.put("process", descriptionList.get(0).get("process"));
-                         temp.put("sample_id", descriptionList.get(0).get("sample_id"));
-                         temp.put("saveState", descriptionList.get(0).get("saveState"));
-                         temp.put("saveCharacter", descriptionList.get(0).get("saveCharacter"));
-                         m.put("item",temp);
-                     }
-                 }
-
+                }
+                m.put("item", de);
 
                 mapList.add(m);
 
@@ -103,25 +102,41 @@ public class LabController extends Controller {
             String saveCharacter = getPara("saveCharacter");
             String saveState = getPara("saveState");
             Boolean result = true;
-            for (int id : projectlist) {
-                Sample sample =Sample.sampleDao.findById(id);
-                if(sample!=null){
-                    sample.set("process",3);
-                    result =result &&sample.update();
-                }
-                Description description = new Description();
-                description.set("sample_id", id)
-                        .set("saveCharacter", saveCharacter)
-                        .set("saveState", saveState)
-                          .set("process",1);
+                for (int id : projectlist) {
+                    Sample sample = Sample.sampleDao.findById(id);
+                    if (sample != null) {
+                        sample.set("process", 3);
+                        result = result && sample.update();
+                    }
+                    Description description = Description.descriptionDao.findFirst("select * from `db_sample_deseription` where sample_id =" + id);
+                    if (description == null) {
+                        Description description1 =new Description();
+                        description1.set("sample_id", id)
+                                .set("saveCharacter", saveCharacter)
+                                .set("saveState", saveState)
+                                .set("process", 1);
 
-                result = result && description.save();
-            }
+                        result = result && description1.save();
+                    }else {
+                            result =result && Description.descriptionDao.deleteById(description.get("id"));
+                          Description description2 =new Description();
+                            description2.set("sample_id", id)
+                                    .set("saveCharacter", saveCharacter)
+                                    .set("saveState", saveState)
+                                    .set("process", 1);
+                            result = result && description2.save();
+
+
+                    }
+
+                }
+
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
     }
+
 
 
     /**
@@ -133,61 +148,41 @@ public class LabController extends Controller {
             Task task = Task.taskDao.findById(task_id);
             Boolean result = true;
             if (task != null) {
-                int size = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s WHERE c.task_id=" + task_id + "  AND s.company_id =c.id AND s.process!=2").size();
+                int size = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s WHERE c.task_id=" + task_id + "  AND s.company_id =c.id AND s.process!=3").size();
                 if (size != 0) {
                     renderJson(RenderUtils.CODE_NOTEMPTY);
-                }
-               else {
+                } else {
                     User user = ParaUtils.getCurrentUser(getRequest());
                     task.set("package", getPara("package"))
                             .set("receive_type", getPara("receive_type"))
                             .set("additive", getPara("additive"))
                             .set("sample_receiver", user.get("id"))
-                            .set("process", ProcessKit.getTaskProcess("lab"))
                             .set("receive_time", ParaUtils.sdf2.format(new Date()));
                     result = result && task.update();
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                 }
             }
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
         } catch (Exception e) {
             renderError(500);
         }
     }
-    /***
-     * 修改
-     * */
-    public void changeReceipt() {
-        try {
-            Integer[] projectlist = getParaValuesToInt("samplesID[]");
-            String saveCharacter = getPara("saveCharacter");
-            String saveState = getPara("saveState");
-            Boolean result = true;
-            for (int id : projectlist) {
-                Description description = new Description();
-                description.set("sample_id", id)
-                        .set("saveCharacter", saveCharacter)
-                        .set("saveState", saveState);
-                result = result && description.update();
-            }
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
+
 
 
     /**
      * 返回可以做相对应项目人员名单
-     * **/
-    public  void labUserList(){
-        int itemId =getParaToInt("item_id");
-        List<Certificate> certificateList =Certificate.certificateDao.find("SELECT c.* FROM `db_lab_certificate` c ,`db_item_project` p WHERE  c.project_id =p.project_id  AND p.id = "+itemId);
-       if(certificateList!=null){
-           renderJson(toJson(certificateList));
+     **/
+    public void labUserList() {
+        int itemId = getParaToInt("item_id");
+        List<Certificate> certificateList = Certificate.certificateDao.find("SELECT c.* FROM `db_lab_certificate` c ,`db_item_project` p WHERE  c.project_id =p.project_id  AND p.id = " + itemId);
+        if (certificateList != null) {
+            renderJson(toJson(certificateList));
 
-       }
+        }
 
     }
+
     public Map toJson(List<Certificate> entityList) {
         Map<String, Object> json = new HashMap<>();
         try {
@@ -205,7 +200,7 @@ public class LabController extends Controller {
     public Map toJsonSingle(Certificate certificate) {
         Map<String, Object> ce = new HashMap<>();
         ce.put("id", certificate.get("id"));
-        ce.put("name",User.userDao.findById(certificate.get("lab")).get("name"));
+        ce.put("name", User.userDao.findById(certificate.get("lab")).get("name"));
         return ce;
     }
 
@@ -215,14 +210,14 @@ public class LabController extends Controller {
     public void projectList() {
 
         try {
-            int task_id =getParaToInt("id");
-            Task task =Task.taskDao.findById(task_id);
-            if (task!=null){
+            int task_id = getParaToInt("id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
                 List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_task` t,`db_company` c,`db_item` i,`db_item_project` p\n" +
                         "WHERE t.id=" + task_id + " AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id");
-                List result=new ArrayList();
-                for (ItemProject itemProject:itemProjectList){
-                    Map temp =new HashMap();
+                List result = new ArrayList();
+                for (ItemProject itemProject : itemProjectList) {
+                    Map temp = new HashMap();
                     temp = itemProject.toJsonSingle();
 
 

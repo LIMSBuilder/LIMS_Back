@@ -126,7 +126,7 @@ public class DispatchController extends Controller {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
             if (task != null) {
-                int size = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s WHERE c.task_id=" + task_id + "  AND s.company_id =c.id AND s.process!=2").size();
+                int size = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s WHERE c.task_id=" + task_id + "  AND s.company_id =c.id AND s.process!=3").size();
                 if (size != 0) {
                     renderJson(RenderUtils.CODE_NOTEMPTY);
                 } else {
