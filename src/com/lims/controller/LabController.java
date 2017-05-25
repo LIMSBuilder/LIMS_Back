@@ -31,9 +31,9 @@ public class LabController extends Controller {
                 total.put("type", Type.typeDao.findById(task.get("type")));
                 total.put("time", task.get("sample_time"));
                 total.put("sample_creater", User.userDao.findById(task.get("sample_creater")));
-                total.put("package",task.get("package"));
-                total.put("receive_type",task.get("receive_type"));
-                total.put("additive",task.get("additive"));
+                total.put("package", task.get("package"));
+                total.put("receive_type", task.get("receive_type"));
+                total.put("additive", task.get("additive"));
                 List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
                         "WHERE t.id=" + task_id + " AND c.task_id=t.id AND s.company_id=c.id ORDER BY s.identify");
                 total.put("count", sampleList.size());
@@ -93,6 +93,7 @@ public class LabController extends Controller {
         }
     }
 
+
     /**
      * 保存样品交接表
      **/
@@ -102,41 +103,40 @@ public class LabController extends Controller {
             String saveCharacter = getPara("saveCharacter");
             String saveState = getPara("saveState");
             Boolean result = true;
-                for (int id : projectlist) {
-                    Sample sample = Sample.sampleDao.findById(id);
-                    if (sample != null) {
-                        sample.set("process", 3);
-                        result = result && sample.update();
-                    }
-                    Description description = Description.descriptionDao.findFirst("select * from `db_sample_deseription` where sample_id =" + id);
-                    if (description == null) {
-                        Description description1 =new Description();
-                        description1.set("sample_id", id)
-                                .set("saveCharacter", saveCharacter)
-                                .set("saveState", saveState)
-                                .set("process", 1);
+            for (int id : projectlist) {
+                Sample sample = Sample.sampleDao.findById(id);
+                if (sample != null) {
+                    sample.set("process", 3);
+                    result = result && sample.update();
+                }
+                Description description = Description.descriptionDao.findFirst("select * from `db_sample_deseription` where sample_id =" + id);
+                if (description == null) {
+                    Description description1 = new Description();
+                    description1.set("sample_id", id)
+                            .set("saveCharacter", saveCharacter)
+                            .set("saveState", saveState)
+                            .set("process", 1);
 
-                        result = result && description1.save();
-                    }else {
-                            result =result && Description.descriptionDao.deleteById(description.get("id"));
-                          Description description2 =new Description();
-                            description2.set("sample_id", id)
-                                    .set("saveCharacter", saveCharacter)
-                                    .set("saveState", saveState)
-                                    .set("process", 1);
-                            result = result && description2.save();
+                    result = result && description1.save();
+                } else {
+                    result = result && Description.descriptionDao.deleteById(description.get("id"));
+                    Description description2 = new Description();
+                    description2.set("sample_id", id)
+                            .set("saveCharacter", saveCharacter)
+                            .set("saveState", saveState)
+                            .set("process", 1);
+                    result = result && description2.save();
 
-
-                    }
 
                 }
+
+            }
 
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
     }
-
 
 
     /**
@@ -167,7 +167,6 @@ public class LabController extends Controller {
             renderError(500);
         }
     }
-
 
 
     /**
@@ -203,30 +202,54 @@ public class LabController extends Controller {
         ce.put("name", User.userDao.findById(certificate.get("lab")).get("name"));
         return ce;
     }
-
+}
     /***
      * 将同一个任务书中分析项目相同的合并
      * **/
-    public void projectList() {
-
-        try {
-            int task_id = getParaToInt("id");
-            Task task = Task.taskDao.findById(task_id);
-            if (task != null) {
-                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_task` t,`db_company` c,`db_item` i,`db_item_project` p\n" +
-                        "WHERE t.id=" + task_id + " AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id");
-                List result = new ArrayList();
-                for (ItemProject itemProject : itemProjectList) {
-                    Map temp = new HashMap();
-                    temp = itemProject.toJsonSingle();
-
-
-                }
-                renderJson(result);
-            }
-            renderJson(RenderUtils.CODE_EMPTY);
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
-}
+//    public void projectList() {
+//
+//        try {
+//            int task_id = getParaToInt("id");
+//            Task task = Task.taskDao.findById(task_id);
+//            Map total = new HashMap();
+//            if (task != null) {
+//                Map<Object, List> back = new HashMap<>();
+//                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_task` t,`db_company` c,`db_item` i,`db_item_project` p\n" +
+//                        "WHERE t.id=" + task_id + " AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id");
+//                for (ItemProject itemProject : itemProjectList)
+//                {
+//                    if(back.containsKey(itemProject)){
+//                        List items =back.get(itemProject);
+//                        Map b=new HashMap();
+//                        b.put("name",MonitorProject.monitorProjectdao.findById(itemProject.get("project_id")).get("name"));
+//                       List de =new ArrayList();
+//                        List<Sample> sampleList = Sample.sampleDao.find("SELECT * FROM `db_task` t,`db_company` c,`db_sample` s,`db_sample_project` p, WHERE t.id ='" + task_id + "' AND c.task_id = t.id AND s.company_id =c.id AND s.id= p.sample_id AND p.item_project_id= "+itemProject.get("id"));
+//                        for (Sample sample:sampleList){
+//                            de.add(sample.toSimpleJson());
+//                        }
+//                        b.put("item",de);
+//                        items.add(b);
+//                    }
+//                    else{
+//                        List items =new ArrayList();
+//                        Map b=new HashMap();
+//                        b.put("name",MonitorProject.monitorProjectdao.findById(itemProject.get("project_id")).get("name"));
+//                        List de =new ArrayList();
+//                        List<Sample> sampleList = Sample.sampleDao.find("SELECT * FROM `db_task` t,`db_company` c,`db_sample` s,`db_sample_project` p, WHERE t.id ='" + task_id + "' AND c.task_id = t.id AND s.company_id =c.id AND s.id= p.sample_id AND p.item_project_id= "+itemProject.get("id"));
+//                        for (Sample sample:sampleList){
+//                            de.add(sample.toSimpleJson());
+//                        }
+//                        b.put("item",de);
+//                        items.add(b);
+//                        back.put(itemProject,items);
+//                    }
+//
+//                }
+//
+//            }
+//            renderJson(total);
+//        } catch (Exception e) {
+//            renderError(500);
+//        }
+//    }
+//}

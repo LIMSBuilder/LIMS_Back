@@ -25,28 +25,89 @@ public class QualityController extends Controller {
     public void list() {
         try {
             int task_id = getParaToInt("task_id");
+            Task task=Task.taskDao.findById(task_id);
+            Map total =new HashMap();
+            total.put("client_unit",task.get("client_unit"));
+            total.put("identify",task.get("identify"));
+            total.put("flag",task.get("flag"));
+//            total.put("client_unit", task.get("client_unit"));
+//            total.put("type", Type.typeDao.findById(task.get("type")));
+//            total.put("time", task.get("sample_time"));
+//            total.put("sample_creater", User.userDao.findById(task.get("sample_creater")));
+//            total.put("package", task.get("package"));
+//            total.put("receive_type", task.get("receive_type"));
+//            total.put("additive", task.get("additive"));
+//            List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
+//                    "WHERE t.id=" + task_id + " AND c.task_id=t.id AND s.company_id=c.id ORDER BY s.identify");
+//            total.put("count", sampleList.size());
+//            if (sampleList.size() != 0) {
+//                String first = sampleList.get(0).getStr("identify");
+//                String last = sampleList.get(sampleList.size() - 1).getStr("identify");
+//                total.put("firstIdentify", first);
+//                total.put("lastIdentify", last);
+//                    total.put("identify", first + "~" + last);
+//            }
+//            Map<List, List> back = new HashMap<>();
+//            List<Sample> sampleList1 = Sample.sampleDao.find("SELECT s.* FROM `db_task` t,`db_company` c,`db_sample` s \n" +
+//                    "WHERE t.id=" + task_id + " AND c.task_id=t.id AND s.company_id=c.id ORDER BY s.identify");
+//            for (Sample sample : sampleList1) {
+//                List<MonitorProject> records = MonitorProject.monitorProjectdao.find("SELECT m.* FROM `db_sample` s,`db_sample_project` p,`db_item_project` i,`db_monitor_project` m\n" +
+//                        "WHERE s.id=" + sample.get("id") + " AND p.sample_id=s.id AND p.item_project_id=i.id AND i.project_id=m.id");
+//                List<Map> b = new ArrayList<>();
+//                for (MonitorProject monitorProject : records) {
+//                    b.add(monitorProject.toJsonSingle());
+//                }
+//                if (back.containsKey(b)) {
+//                    当前已经存在这分析项目的组合
+//                    back.get(b).add(sample);
+//                } else {
+//                    List t = new ArrayList();
+//                    t.add(sample);
+//                    back.put(b, t);
+//                }
+//            }
+//            List<Map> mapList = new ArrayList<>();
+//            for (List s : back.keySet()) {
+//                Map m = new HashMap();
+//                m.put("projects", s);
+//                m.put("samples", back.get(s));
+//                List<Map> de = new ArrayList();
+//                for (int i = 0; i < back.get(s).size(); i++) {
+//                    List<Description> descriptionList = Description.descriptionDao.find("SELECT * FROM `db_sample_deseription` WHERE sample_id =" + ((Sample) (back.get(s).get(i))).get("id"));
+//                    for (Description description : descriptionList) {
+//                        de.add(description.toJsonSingle());
+//                    }
+//
+//                }
+//                m.put("item", de);
+//
+//                mapList.add(m);
+//
+//            }
+//            total.put("results",mapList);
+
             List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p \n" +
                     "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id");
             List result = new ArrayList();
             for (ItemProject itemProject : itemProjectList) {
                 Map temp = new HashMap();
                 temp = itemProject.toJsonSingle();
-                List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s,`db_sample_project` p WHERE c.task_id=" + task_id + "AND s.company_id =c.id AND p.sample_id=s.id AND p.item_project_id=" + itemProject.get("id"));
+                List<Sample> sampleList2 = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s,`db_sample_project` p WHERE c.task_id='" + task_id + "'AND s.company_id =c.id AND p.sample_id=s.id AND p.item_project_id=" + itemProject.get("id"));
                 List<Map> re = new ArrayList<>();
                 int count = 0;
-                for (Sample sample : sampleList) {
+                for (Sample sample : sampleList2) {
                     re.add(sample.toSimpleJson());
                     if (sample.get("balance") != null) {
                         count++;
                     }
                 }
                 List<Lib> libList = Lib.libDao.find("SELECT * FROM `db_lib` WHERE item_project_id=" + itemProject.get("id"));
-                List<Map> mapList = new ArrayList<>();
+                List<Map> mapList1 = new ArrayList<>();
                 for (Lib lib : libList) {
                     Sample sample = Sample.sampleDao.findById(lib.get("sample_id"));
-                    mapList.add(sample.toSimpleJson());
+                    mapList1.add(sample.toSimpleJson());
                 }
-                temp.put("lab", mapList);
+                temp.put("lab", mapList1);
 
                 List<Tag> tagList = Tag.tagDao.find("select * from `db_tag` where item_project_id=" + itemProject.get("id"));
                 List<Map> ta = new ArrayList<>();
@@ -60,10 +121,10 @@ public class QualityController extends Controller {
                 temp.put("sample", re);
                 temp.put("item_project_id", itemProject.getInt("id"));
                 temp.put("sceneCount", count);
-
                 result.add(temp);
             }
-            renderJson(result);
+            total.put("items",result);
+            renderJson(total);
         } catch (Exception e) {
             renderError(500);
         }
@@ -300,29 +361,24 @@ public class QualityController extends Controller {
 
     public void finishQuality() {
         try {
-            int task_id = getParaToInt("id");
+            int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
             boolean result = true;
             if (task != null) {
-                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_task` t,`db_company` c,`db_item` i,`db_item_project` p WHERE t.id=" + task_id + "AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
+                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_task` t,`db_company` c,`db_item` i,`db_item_project` p WHERE t.id= '" + task_id + "' AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
                 if (itemProjectSize != 0) {
                     //还有没有质控
                     renderJson(RenderUtils.CODE_UNIQUE);
-                    return;
                 } else {
-                    result = result && task.set("process", ProcessKit.getTaskProcess("lab")).update();
-
+                    result = result && task.set("process", ProcessKit.getTaskProcess("quality")).set("flag",1).update();
                 }
             }
-
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
 
     }
-
-
 
 
 }
