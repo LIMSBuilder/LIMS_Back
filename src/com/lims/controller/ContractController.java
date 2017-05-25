@@ -748,13 +748,9 @@ public class ContractController extends Controller {
                 String[] projectList = temp.get("projectList").toString().split(" ");
                 String[] pointList = temp.get("pointList").toString().split(" ");
 
-                //flag ==1 company="xxx" AND task_id ="xxxx"  flag==0  company="xxx" AND contract_id =xxx  List<COmpany>
-
-
 
                 if (obj.containsKey(companyStr)) {
-                    //当前已经存在该公司的记录
-                    //读取db_company 获取到company_id,db_contractItem  遍历itemProject
+
                     List items = obj.get(companyStr);
                     Map item = new HashMap();
                     item.put("element", element);

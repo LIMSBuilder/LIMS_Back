@@ -141,5 +141,33 @@ public class DispatchController extends Controller {
         }
     }
 
+    /**
+     * 质控完成，重新将任务流转到实验室
+     **/
+    public void checkFlowLabtorary() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            boolean result = true;
+            if (task != null) {
+                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_task` t,`db_company` c,`db_item` i,`db_item_project` p WHERE t.id=" + task_id + "AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
+                if (itemProjectSize != 0) {
+                    //还有没有质控
+                    renderJson(RenderUtils.CODE_UNIQUE);
+                    return;
+                } else {
+                    result = result && task.set("process", ProcessKit.getTaskProcess("lab")).update();
+
+                }
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 
 }
