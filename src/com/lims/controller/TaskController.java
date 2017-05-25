@@ -310,7 +310,7 @@ public class TaskController extends Controller {
         temp.put("identify", entry.get("identify"));
         temp.put("process", entry.get("process"));
         temp.put("sample_type", entry.get("sample_type"));
-
+        temp.put("flag",entry.get("flag"));
         return temp;
     }
 
@@ -685,5 +685,6 @@ public class TaskController extends Controller {
             renderError(500);
         }
     }
+
 
 }

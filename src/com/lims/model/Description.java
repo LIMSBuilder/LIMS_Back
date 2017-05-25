@@ -14,7 +14,9 @@ public class Description extends Model<Description> {
         Map result = new HashMap();
         result.put("id", this.getInt("id"));
         result.put("saveCharacter", this.get("saveCharacter"));
+        result.put("sample_id",this.get("sample_id"));
         result.put("saveState",this.get("saveState"));
+        result.put("process",this.get("process"));
         return result;
     }
 }

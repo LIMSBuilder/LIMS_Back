@@ -96,7 +96,7 @@ public class DispatchController extends Controller {
 
 
     /**
-     * 检查当前任务书是否已经允许流转到实验室
+     * 检查当前任务书是否已经允许流转到实验室(样品交接表)
      */
     public void checkFlowLab() {
         try {
@@ -119,14 +119,14 @@ public class DispatchController extends Controller {
     }
 
     /**
-     * 检查当前任务书是否已经允许流转到质控室
+     * 检查当前任务书是否已经允许流转到质控室（质控表）
      */
     public void checkFlow() {
         try {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
             if (task != null) {
-                int size = Company.companydao.find("SELECT * FROM `db_company` c WHERE c.task_id=" + task_id + " AND c.process!=3").size();
+                int size = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s WHERE c.task_id=" + task_id + "  AND s.company_id =c.id AND s.process!=3").size();
                 if (size != 0) {
                     renderJson(RenderUtils.CODE_NOTEMPTY);
                 } else {
@@ -141,20 +141,33 @@ public class DispatchController extends Controller {
         }
     }
 
-
     /**
-     * 获取执行中的派遣列表
-     */
-//    public void executingJobs() {
-//        try {
-//            List<Delivery> deliveryList = Delivery.deliverydao.find("SELECT * FROM `db_delivery` d WHERE d.process=0");
-//            for (Delivery delivery : deliveryList) {
-//
-//            }
-//
-//
-//        } catch (Exception e) {
-//            renderError(500);
-//        }
-//    }
+     * 质控完成，重新将任务流转到实验室
+     **/
+    public void checkFlowLabtorary() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            boolean result = true;
+            if (task != null) {
+                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_task` t,`db_company` c,`db_item` i,`db_item_project` p WHERE t.id=" + task_id + "AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
+                if (itemProjectSize != 0) {
+                    //还有没有质控
+                    renderJson(RenderUtils.CODE_UNIQUE);
+                    return;
+                } else {
+                    result = result && task.set("process", ProcessKit.getTaskProcess("lab")).update();
+
+                }
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
 }
