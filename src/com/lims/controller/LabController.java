@@ -199,6 +199,7 @@ public class LabController extends Controller {
     public Map toJsonSingle(Certificate certificate) {
         Map<String, Object> ce = new HashMap<>();
         ce.put("id", certificate.get("id"));
+        ce.put("lab",certificate.get("lab"));
         ce.put("name", User.userDao.findById(certificate.get("lab")).get("name"));
         return ce;
     }
