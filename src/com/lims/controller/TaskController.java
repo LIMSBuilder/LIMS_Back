@@ -72,7 +72,7 @@ public class TaskController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process",null).set("flag",null).set("assayer",null).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -143,7 +143,7 @@ public class TaskController extends Controller {
                                     if (!result) return false;
                                     List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item_id);
                                     for (ItemProject itemProject : itemProjectList) {
-                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).save();
+                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process",null).set("flag",null).set("assayer",null).save();
                                         if (!result) return false;
                                     }
 
@@ -212,7 +212,7 @@ public class TaskController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process",null).set("flag",null).set("assayer",null).save();
                                 if (!result) break;
                             }
                             if (!result) break;
