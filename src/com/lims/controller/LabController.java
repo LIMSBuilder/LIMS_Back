@@ -199,7 +199,7 @@ public class LabController extends Controller {
     public Map toJsonSingle(Certificate certificate) {
         Map<String, Object> ce = new HashMap<>();
         ce.put("id", certificate.get("id"));
-        ce.put("lab",certificate.get("lab"));
+        ce.put("lab", certificate.get("lab"));
         ce.put("name", User.userDao.findById(certificate.get("lab")).get("name"));
         return ce;
     }
@@ -237,7 +237,7 @@ public class LabController extends Controller {
 
     /**
      * 保存分析者
-     * **/
+     **/
     public void saveAnalysis() {
         try {
             int task_id = getParaToInt("task_id");
@@ -246,7 +246,7 @@ public class LabController extends Controller {
             Boolean result = true;
             if (task != null) {
                 List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p \n" +
-                        "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND p.project_id="+project_id);
+                        "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND p.project_id=" + project_id);
                 for (ItemProject itemProject : itemProjectList) {
                     itemProject.set("flag", 1).set("assayer", getPara("user_id"));
                     result = result && itemProject.update();
@@ -260,10 +260,27 @@ public class LabController extends Controller {
     }
 
     /**
-     *
-     * 分析是否完成
-     * **/
-    public  void  assayerFinish(){
+     * 保存分析数据
+     **/
+    public void saveData() {
+        try {
+            int itemProjectId =getParaToInt("item_project_id");
+            ItemProject itemProject=ItemProject.itemprojectDao.findById(itemProjectId);
+            Boolean result =true;
+            if(itemProject!=null){
+                result=result &&itemProject.set("data",getPara("data")).set("IsAssay",1).update();
+                renderJson(result?RenderUtils.CODE_SUCCESS:RenderUtils.CODE_ERROR);
+            }
+            else {renderNull();}
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 分析是否完成,完成流转到复核者
+     **/
+    public void assayerFinish() {
         try {
             int task_id = getParaToInt("task_id");
             int project_id = getParaToInt("project_id");
@@ -271,24 +288,22 @@ public class LabController extends Controller {
             Boolean result = true;
             if (task != null) {
                 List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p \n" +
-                        "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND p.project_id="+project_id);
-                if(itemProjectList!=null){
+                        "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND p.IsAssay  is Null AND p.project_id=" + project_id);
+                if (itemProjectList != null) {
                     renderJson(RenderUtils.CODE_UNIQUE);
-                }
-                else {
-                    for (ItemProject itemProject:itemProjectList){
+                } else {
+                    for (ItemProject itemProject : itemProjectList) {
                         itemProject.set("flag", 2).set("assayer", getPara("user_id"));
                         result = result && itemProject.update();
                     }
                 }
-
-
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             renderError(500);
         }
     }
+
 }
