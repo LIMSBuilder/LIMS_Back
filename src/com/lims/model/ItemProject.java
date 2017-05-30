@@ -28,6 +28,7 @@ public class ItemProject extends Model<ItemProject> {
         temp.put("flag",this.get("flag"));
         Inspect inspect = Inspect.inspectDao.findFirst("SELECT * FROM `db_inspect` WHERE item_project_id=" + this.get("id"));
         temp.put("inspect", inspect);
+        temp.put("data",this.get("data"));
 //        return monitorProject.toJsonSingle();
         return temp;
     }
