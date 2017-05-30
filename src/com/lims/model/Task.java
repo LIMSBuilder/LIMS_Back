@@ -1,6 +1,7 @@
 package com.lims.model;
 
 import com.jfinal.plugin.activerecord.Model;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +34,10 @@ public class Task extends Model<Task> {
     }
     public Map toJsonSingle() {
         Map result = new HashMap();
-        result.put("id",this.get("id"));
+        result.put("id", this.get("id"));
         result.put("client_unit", this.get("client_unit"));
         result.put("identify", this.get("identify"));
-        result.put("type", Type.typeDao.findById(this.get("type")).get("name"));
+        result.put("type", this.get("id") == null ? " " : Type.typeDao.findById(this.get("type")).get("name"));
         return result;
     }
 }
