@@ -33,9 +33,10 @@ public class Task extends Model<Task> {
     }
     public Map toJsonSingle() {
         Map result = new HashMap();
+        result.put("id",this.get("id"));
         result.put("client_unit", this.get("client_unit"));
         result.put("identify", this.get("identify"));
-        result.put("type", this.get("type"));
+        result.put("type", Type.typeDao.findById(this.get("type")).get("name"));
         return result;
     }
 }

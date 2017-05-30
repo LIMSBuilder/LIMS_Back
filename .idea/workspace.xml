@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7adb65de-9683-469f-b0c3-f3c1cc41e101" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/DispatchController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/DispatchController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" afterPath="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Task.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Task.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,11 +53,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DispatchController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DispatchController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/DispatchController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="176" column="23" lean-forward="true" selection-start-line="176" selection-start-column="16" selection-end-line="176" selection-end-column="23" />
+            <state relative-caret-position="493">
+              <caret line="126" column="34" lean-forward="true" selection-start-line="126" selection-start-column="34" selection-end-line="126" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Task.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/model/Task.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="35" column="40" lean-forward="false" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -153,7 +161,6 @@
         <option value="$PROJECT_DIR$/web/template/create_delivery.jsp" />
         <option value="$PROJECT_DIR$/web/template/create_contract.jsp" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Contractitem.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/model/Task.java" />
         <option value="$PROJECT_DIR$/web/template/create_selfsample.jsp" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/CompanyController.java" />
         <option value="$PROJECT_DIR$/web/template/create_quality.jsp" />
@@ -175,6 +182,7 @@
         <option value="$PROJECT_DIR$/src/com/lims/controller/LabController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/DispatchController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/model/Task.java" />
       </list>
     </option>
   </component>
@@ -921,12 +929,12 @@
       <workItem from="1495850202251" duration="22871000" />
       <workItem from="1495932964685" duration="3360000" />
       <workItem from="1495980347724" duration="69000" />
-      <workItem from="1496039672813" duration="5194000" />
+      <workItem from="1496039672813" duration="5368000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="392185000" />
+    <option name="totallyTimeSpent" value="392359000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -1352,14 +1360,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/model/Task.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="37" column="45" lean-forward="true" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1110">
@@ -1407,8 +1407,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/DispatchController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="176" column="23" lean-forward="true" selection-start-line="176" selection-start-column="16" selection-end-line="176" selection-end-column="23" />
+        <state relative-caret-position="493">
+          <caret line="126" column="34" lean-forward="true" selection-start-line="126" selection-start-column="34" selection-end-line="126" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/model/Task.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="35" column="40" lean-forward="false" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
           <folding />
         </state>
       </provider>
