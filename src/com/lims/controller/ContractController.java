@@ -379,6 +379,7 @@ public class ContractController extends Controller {
                         User user = ParaUtils.getCurrentUser(getRequest());
                         ContractReview contractReview = new ContractReview();
                         Boolean result = true;
+
                         result = result && contractReview.set("contract_id", contract.get("id")).set("reject_msg", getPara("msg")).set("reviewer", user.get("id")).set("review_time", ParaUtils.sdf.format(new Date())).set("same", same).set("contract", contract1).set("guest", guest).set("package", pack).set("company", company).set("money", money).set("time", time).set("result", result1).save();
                         if (!result) return false;
                         if (getParaToInt("result") == 1) {

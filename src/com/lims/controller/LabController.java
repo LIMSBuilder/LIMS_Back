@@ -157,7 +157,7 @@ public class LabController extends Controller {
                             .set("receive_type", getPara("receive_type"))
                             .set("additive", getPara("additive"))
                             .set("sample_receiver", user.get("id"))
-                            .set("receive_time", ParaUtils.sdf2.format(new Date()));
+                            .set("receive_time", ParaUtils.sdf2.format(new Date())).set("flag2", 1);
                     result = result && task.update();
                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                 }
@@ -173,8 +173,8 @@ public class LabController extends Controller {
      * 返回可以做相对应项目人员名单
      **/
     public void labUserList() {
-        int itemId = getParaToInt("item_project_id");
-        List<Certificate> certificateList = Certificate.certificateDao.find("SELECT c.* FROM `db_lab_certificate` c ,`db_item_project` p WHERE  c.project_id =p.project_id  AND p.id = " + itemId);
+        int itemId = getParaToInt("");
+        List<Certificate> certificateList = Certificate.certificateDao.find("SELECT c.* FROM `db_lab_certificate` WHERE project_id =" + itemId);
         if (certificateList != null) {
             renderJson(toJson(certificateList));
 
@@ -214,16 +214,28 @@ public class LabController extends Controller {
             Task task = Task.taskDao.findById(task_id);
             Map total = new HashMap();
             if (task != null) {
-                total.put("id", task.get("id"));
+                total.put("task_id", task.get("id"));
                 total.put("task_identify", task.get("identify"));
-                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p \n" +
-                        "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id");
+                List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT DISTINCT  m.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p ,`db_monitor_project` m\n" +
+                        "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND m.id = p.project_id");
                 List result = new ArrayList();
-                for (ItemProject itemProject : itemProjectList) {
+                for (MonitorProject monitorProject : monitorProjectList) {
                     Map temp = new HashMap();
-                    temp = itemProject.toJsonSingle();
+                    temp.put("project", monitorProject.toJsonSingle());
+//                    List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_company` c,`db_item` i,`db_item_project` p  WHERE p.project_id = '" + monitorProject.get("id") + "'AND c.task_id= '" + task_id + "'AND i.company_id =c.id AND p.item_id = i.id");
+//                   for (ItemProject itemProject:itemProjectList) {
+//                       List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + itemProject.get("id"));
+//                       List<Map> item = new ArrayList<>();
+//                       for (Inspect inspect : inspectList) {
+//                           Map i = new HashMap();
+//                           i = inspect.toSingleJson();
+//                           item.add(i);
+//                       }
+//                       temp.put("item", item);
+//                   }
                     result.add(temp);
                 }
+
 
                 total.put("items", result);
             }
@@ -248,8 +260,11 @@ public class LabController extends Controller {
                 List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p \n" +
                         "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND p.project_id=" + project_id);
                 for (ItemProject itemProject : itemProjectList) {
-                    itemProject.set("flag", 1).set("assayer", getPara("user_id"));
-                    result = result && itemProject.update();
+                    result = result && itemProject.set("flag", 1).update();
+                    List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + itemProject.get("id"));
+                    for (Inspect inspect : inspectList) {
+                        result = result && inspect.set("analyst", getPara("user_id")).set("process", 1).update();
+                    }
 
                 }
             }
@@ -259,23 +274,6 @@ public class LabController extends Controller {
         }
     }
 
-    /**
-     * 保存分析数据
-     **/
-    public void saveData() {
-        try {
-            int itemProjectId =getParaToInt("item_project_id");
-            ItemProject itemProject=ItemProject.itemprojectDao.findById(itemProjectId);
-            Boolean result =true;
-            if(itemProject!=null){
-                result=result &&itemProject.set("data",getPara("data")).set("IsAssay",1).update();
-                renderJson(result?RenderUtils.CODE_SUCCESS:RenderUtils.CODE_ERROR);
-            }
-            else {renderNull();}
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
 
     /**
      * 分析是否完成,完成流转到复核者
@@ -305,5 +303,6 @@ public class LabController extends Controller {
             renderError(500);
         }
     }
+
 
 }

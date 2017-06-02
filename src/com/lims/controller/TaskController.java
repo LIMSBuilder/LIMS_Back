@@ -72,7 +72,7 @@ public class TaskController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process",null).set("flag",null).set("assayer",null).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process",null).set("flag",null).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -143,7 +143,7 @@ public class TaskController extends Controller {
                                     if (!result) return false;
                                     List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item_id);
                                     for (ItemProject itemProject : itemProjectList) {
-                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process",null).set("flag",null).set("assayer",null).save();
+                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process",null).set("flag",null).save();
                                         if (!result) return false;
                                     }
 
@@ -212,7 +212,7 @@ public class TaskController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process",null).set("flag",null).set("assayer",null).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process",null).set("flag",null).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -634,7 +634,7 @@ public class TaskController extends Controller {
                             "WHERE p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND p.id=" + item_project_id);
                     if (task != null) {
                         Inspect inspect = new Inspect();
-                        Boolean result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", ParaUtils.getCurrentUser(getRequest()).get("id")).set("send_time", ParaUtils.sdf2.format(new Date())).set("sample_time", task.get("sample_time")).set("process", 0).save();
+                        Boolean result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", task.get("sample_creater")).set("receive_time",task.get("receive_time")).set("receiver",task.get("sample_receiver")).set("sample_time", task.get("sample_time")).set("process", 0).save();
                         if (getPara("type") != null) {
                             List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT p.* FROM `db_sample_project` p WHERE p.item_project_id=" + item_project_id);
                             for (SampleProject sampleProject : sampleProjectList) {
