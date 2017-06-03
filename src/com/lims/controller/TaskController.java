@@ -630,11 +630,15 @@ public class TaskController extends Controller {
                 @Override
                 public boolean run() throws SQLException {
                     int item_project_id = getParaToInt("item_project_id");
+                    ItemProject itemProject =ItemProject.itemprojectDao.findById(item_project_id);
+                    Boolean result = true;
+                    result =result && itemProject.set("inspect",1).update();
+
                     Task task = Task.taskDao.findFirst("SELECT t.* FROM `db_item_project` p,`db_item` i,`db_company` c ,`db_task` t\n" +
                             "WHERE p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND p.id=" + item_project_id);
                     if (task != null) {
                         Inspect inspect = new Inspect();
-                        Boolean result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", task.get("sample_creater")).set("receive_time",task.get("receive_time")).set("receiver",task.get("sample_receiver")).set("sample_time", task.get("sample_time")).set("process", 0).save();
+                       result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", task.get("sample_creater")).set("receive_time",task.get("receive_time")).set("receiver",task.get("sample_receiver")).set("sample_time", task.get("sample_time")).set("process", 0).save();
                         if (getPara("type") != null) {
                             List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT p.* FROM `db_sample_project` p WHERE p.item_project_id=" + item_project_id);
                             for (SampleProject sampleProject : sampleProjectList) {

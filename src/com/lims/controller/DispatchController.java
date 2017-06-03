@@ -141,25 +141,17 @@ public class DispatchController extends Controller {
             Task task = Task.taskDao.findById(task_id);
             Map total = new HashMap();
             if (task != null) {
-                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_item_project` p,`db_item` i,`db_company` c,`db_task` t,`db_inspect` s \n" +
-                        "WHERE s.analyst='" + user.get("id") + "'AND p.id=s.item_project_id  AND p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND task_id=" + task.get("id"));
-                Map<Object, List> obj = new HashMap<>();
-                List<Map> result = new ArrayList<>();
-                for (ItemProject itemProject : itemProjectList) {
-                    Map temp = new HashMap();
-                    temp = itemProject.toJsonSingle();
-                    if (obj.containsKey(itemProject)) {
-                        List item = obj.get(itemProject);
-                        item.add(temp);
-                        result.addAll(item);
-                    } else {
-                        List item = new ArrayList();
-                        item.add(temp);
-                        result.addAll(item);
-                    }
-                    total.put("results", result);
-                }
-                renderJson(total);
+                List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT DISTINCT  m.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p ,`db_monitor_project` m ,`db_inspect` s\n" +
+                        "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND m.id = p.project_id AND s.analyst='" + user.get("id") + "'AND p.id = s.item_project_id");
+                List<Map>  result =new ArrayList<>();
+              for (MonitorProject monitorProject:monitorProjectList){
+                  Map temp = new HashMap();
+                  temp.put("project", monitorProject.toJsonSingle());
+                  result.add(temp);
+
+              }
+              total.put("items",result);
+              renderJson(total);
             } else {
                 renderNull();
             }
@@ -180,46 +172,40 @@ public class DispatchController extends Controller {
             int monitor_id = getParaToInt("project_id");
             Task task = Task.taskDao.findById(task_id);
             Map total = new HashMap();
+            total.put("identify",task.get("identify"));
             List result = new ArrayList();
             if (task != null) {
                 List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_item_project` p,`db_item` i,`db_company` c,`db_task` t \n" +
                         "WHERE p.project_id='" + monitor_id + "' AND p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND task_id=" + task.get("id"));
-                Map temp =new HashMap();
+                Map temp = new HashMap();
                 for (ItemProject itemProject : itemProjectList) {
-                    Map t = new HashMap();
+
                     List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id =" + itemProject.get("id"));
                     List<Map> mapList3 = new ArrayList<>();
                     for (Inspect inspect : inspectList) {
                         mapList3.add(inspect.toSingleJson());
                     }
-                    t.put("Inspect", mapList3);
-                    result.add(t);
-                }
-                String in = "(";
-                for (int i = 0; i < itemProjectList.size(); i++) {
-                    in += itemProjectList.get(i).get("id");
-                    if (i != itemProjectList.size() - 1) {
-                        in += ",";
+                    total.put("Inspect", mapList3);
+
+
+                    String in = "(";
+                    for (int i = 0; i < itemProjectList.size(); i++) {
+                        in += itemProjectList.get(i).get("id");
+                        if (i != itemProjectList.size() - 1) {
+                            in += ",";
+                        }
                     }
+                    in += ")";
+                    List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_sample_project` p,`db_sample` s WHERE p.item_project_id in " + in + " AND p.sample_id=s.id");
+                    temp.put("sampleList", toJson(sampleList));
+                    List<Sample> lib = Sample.sampleDao.find("SELECT * FROM `db_sample` s \n" +
+                            "WHERE s.id in (SELECT l.sample_id FROM `db_lib` l WHERE  l.task_id =' " + task_id + "'AND l.project_id ='" + monitor_id + "') ");
+                    temp.put("libList", toJson(lib));
+                    List<Sample> tag = Sample.sampleDao.find("SELECT * FROM `db_sample` s \n" +
+                            "WHERE s.id in (SELECT l.sample_id FROM `db_tag` l WHERE  l.task_id =' " + task_id + "'AND l.project_id ='" + monitor_id + "') ");
+                    temp.put("tagList", toJson(tag));
+                    result.add(temp);
                 }
-                in += ")";
-                List<Sample> sampleList = Sample.sampleDao.find("SELECT s.* FROM `db_sample_project` p,`db_sample` s WHERE p.item_project_id in " + in + " AND p.sample_id=s.id");
-                temp.put("sampleList", toJson(sampleList));
-                int count1 = 0;
-                for (Sample sample : sampleList) {
-                    if (sample.get("balance") != null) {
-                        count1++;
-                    }
-
-                }
-                List<Sample> lib = Sample.sampleDao.find("SELECT * FROM `db_sample` s \n" +
-                        "WHERE s.id in (SELECT l.sample_id FROM `db_lib` l WHERE  l.task_id =' " + task_id + "'AND l.project_id ='" + monitor_id + "') ");
-
-                temp.put("libList",toJson(lib));
-
-                List<Sample> tag = Sample.sampleDao.find("SELECT * FROM `db_sample` s \n" +
-                        "WHERE s.id in (SELECT l.sample_id FROM `db_tag` l WHERE  l.task_id =' " + task_id + "'AND l.project_id ='" + monitor_id + "') ");
-                temp.put("tagList", toJson(tag));
                 total.put("items", result);
                 renderJson(total);
             } else {
@@ -247,21 +233,21 @@ public class DispatchController extends Controller {
 
     public Map toJsonSingle(Sample sample) {
         Map<String, Object> types = new HashMap<>();
-        types.put("id", sample.getInt("id"));
+//        types.put("id", sample.getInt("id"));
         types.put("identify", sample.get("identify"));
-        List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample.get("id"));
-        List project = new ArrayList();
-        List temp = new ArrayList();
-        for (SampleProject sp : sampleProjectList) {
-            Map m = new HashMap();
-            m.put("id", sp.get("item_project_id"));
-            m.put("name", MonitorProject.monitorProjectdao.findById(ItemProject.itemprojectDao.findById(sp.get("item_project_id")).get("project_id")).get("name"));
-            project.add(sp.get("item_project_id"));
-            temp.add(m);
-
-        }
-        types.put("project", project);
-        types.put("projectList", temp);
+//        List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample.get("id"));
+//        List project = new ArrayList();
+//        List temp = new ArrayList();
+//        for (SampleProject sp : sampleProjectList) {
+//            Map m = new HashMap();
+//            m.put("id", sp.get("item_project_id"));
+//            m.put("name", MonitorProject.monitorProjectdao.findById(ItemProject.itemprojectDao.findById(sp.get("item_project_id")).get("project_id")).get("name"));
+//            project.add(sp.get("item_project_id"));
+//            temp.add(m);
+//
+//        }
+//        types.put("project", project);
+//        types.put("projectList", temp);
         return types;
     }
 
@@ -297,7 +283,7 @@ public class DispatchController extends Controller {
             Task task = Task.taskDao.findById(task_id);
             if (task != null) {
                 int size = Sample.sampleDao.find("SELECT s.* FROM `db_company` c,`db_sample` s WHERE c.task_id=" + task_id + "  AND s.company_id =c.id AND s.process!=3").size();
-                if (size != 0|| task.get("flag2")!=1) {
+                if (size != 0 || task.get("flag2") != 1) {
                     renderJson(RenderUtils.CODE_NOTEMPTY);
                 } else {
                     Boolean result = task.set("process", ProcessKit.getTaskProcess("quality")).update();
@@ -320,7 +306,8 @@ public class DispatchController extends Controller {
             Task task = Task.taskDao.findById(task_id);
             boolean result = true;
             if (task != null) {
-                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_task` t,`db_company` c,`db_item` i,`db_item_project` p WHERE t.id='" + task_id + "'AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND p.process is NULL").size();
+                int itemProjectSize = ItemProject.itemprojectDao.find("SELECT p.* From `db_task` t,`db_company` c,`db_item` i,`db_item_project` p WHERE t.id='" + task_id + "'AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND (p.process is NULL OR p.inspect is null)").size();
+
                 if (itemProjectSize != 0) {
                     //还有没有质控
                     renderJson(RenderUtils.CODE_UNIQUE);

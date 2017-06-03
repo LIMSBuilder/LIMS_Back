@@ -20,15 +20,16 @@ public class ItemProject extends Model<ItemProject> {
             }
             temp.put(name, monitorProject.get(name));
         }
-        temp.put("project_id",this.get("project_id"));
-        temp.put("id",this.get("id"));
+        temp.put("project_id", this.get("project_id"));
+        temp.put("id", this.get("id"));
         temp.put("isPackage", this.get("isPackage"));
         temp.put("item_project_id", this.get("id"));
         temp.put("process", this.get("process"));
-        temp.put("flag",this.get("flag"));
+        temp.put("flag", this.get("flag"));
+        temp.put("labFlag",this.get("labFlag"));
         Inspect inspect = Inspect.inspectDao.findFirst("SELECT * FROM `db_inspect` WHERE item_project_id=" + this.get("id"));
         temp.put("inspect", inspect);
-        temp.put("data",this.get("data"));
+        //      temp.put("type", inspect.get("type")==null?null:inspect.get("type"));
 //        return monitorProject.toJsonSingle();
         return temp;
     }
