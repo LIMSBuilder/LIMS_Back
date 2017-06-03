@@ -173,8 +173,8 @@ public class LabController extends Controller {
      * 返回可以做相对应项目人员名单
      **/
     public void labUserList() {
-        int itemId = getParaToInt("");
-        List<Certificate> certificateList = Certificate.certificateDao.find("SELECT c.* FROM `db_lab_certificate` WHERE project_id =" + itemId);
+        int itemId = getParaToInt("project_id");
+        List<Certificate> certificateList = Certificate.certificateDao.find("SELECT * FROM `db_lab_certificate` WHERE project_id =" + itemId);
         if (certificateList != null) {
             renderJson(toJson(certificateList));
 
@@ -222,18 +222,13 @@ public class LabController extends Controller {
                 for (MonitorProject monitorProject : monitorProjectList) {
                     Map temp = new HashMap();
                     temp.put("project", monitorProject.toJsonSingle());
-//                    List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_company` c,`db_item` i,`db_item_project` p  WHERE p.project_id = '" + monitorProject.get("id") + "'AND c.task_id= '" + task_id + "'AND i.company_id =c.id AND p.item_id = i.id");
-//                   for (ItemProject itemProject:itemProjectList) {
-//                       List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + itemProject.get("id"));
-//                       List<Map> item = new ArrayList<>();
-//                       for (Inspect inspect : inspectList) {
-//                           Map i = new HashMap();
-//                           i = inspect.toSingleJson();
-//                           item.add(i);
-//                       }
-//                       temp.put("item", item);
-//                   }
-                    result.add(temp);
+                    List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_company` c,`db_item` i,`db_item_project` p  WHERE p.project_id = '" + monitorProject.get("id") + "'AND c.task_id= '" + task_id + "'AND i.company_id =c.id AND p.item_id = i.id");
+                    List<Map> mapList =new ArrayList<>();
+                   for (ItemProject itemProject:itemProjectList) {
+                     mapList.add(itemProject.toJsonSingle());
+                   }
+                   temp.put("item",mapList);
+                   result.add(temp);
                 }
 
 
@@ -260,7 +255,7 @@ public class LabController extends Controller {
                 List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p \n" +
                         "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND p.project_id=" + project_id);
                 for (ItemProject itemProject : itemProjectList) {
-                    result = result && itemProject.set("flag", 1).update();
+                    result = result && itemProject.set("labFlag", 1).update();
                     List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + itemProject.get("id"));
                     for (Inspect inspect : inspectList) {
                         result = result && inspect.set("analyst", getPara("user_id")).set("process", 1).update();
@@ -285,16 +280,7 @@ public class LabController extends Controller {
             Task task = Task.taskDao.findById(task_id);
             Boolean result = true;
             if (task != null) {
-                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM`db_task`t, `db_company` c,`db_item` i,`db_item_project` p \n" +
-                        "WHERE t.id=" + task_id + " AND c.task_id = t.id AND i.company_id=c.id AND p.item_id=i.id AND p.IsAssay  is Null AND p.project_id=" + project_id);
-                if (itemProjectList != null) {
-                    renderJson(RenderUtils.CODE_UNIQUE);
-                } else {
-                    for (ItemProject itemProject : itemProjectList) {
-                        itemProject.set("flag", 2).set("assayer", getPara("user_id"));
-                        result = result && itemProject.update();
-                    }
-                }
+
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 

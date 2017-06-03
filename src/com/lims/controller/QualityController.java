@@ -41,9 +41,7 @@ public class QualityController extends Controller {
                 List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_company` c,`db_item` i,`db_item_project` p  WHERE p.project_id = '" + monitorProject.get("id") + "'AND c.task_id= '" + task_id + "'AND i.company_id =c.id AND p.item_id = i.id");
                 List<Map> map=new ArrayList<>();
                 for (ItemProject itemProject:itemProjectList){
-                    Map t =new HashMap();
-                    t=itemProject.toJsonSingle();
-                    map.add(t);
+                    map.add(itemProject.toJsonSingle());
                 }
                 temp.put("items",map);
                 String in = "(";
@@ -225,11 +223,11 @@ public class QualityController extends Controller {
             List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_company` c,`db_item` i,`db_item_project` p WHERE c.task_id='" + task_id + "' AND i.company_id =c.id AND p.item_id =i.id AND p.project_id =" + project_id);
             for (ItemProject itemProject : itemProjectList) {
                 result = result && itemProject.set("process", null).update();
-                List<Sample> sampleList =Sample.sampleDao.find("SELECT * FROM `db_sample` s,`db_sample_project`p WHERE s.id = p.sample_id AND p.item_project_id ="+itemProject.get("id"));
-                for (Sample sample:sampleList)
-                {
-                    result = result && sample.set("process",4).update();
-                }
+//                List<Sample> sampleList =Sample.sampleDao.find("SELECT * FROM `db_sample` s,`db_sample_project`p WHERE s.id = p.sample_id AND p.item_project_id ="+itemProject.get("id"));
+//                for (Sample sample:sampleList)
+//                {
+//                    result = result && sample.set("process",4).update();
+//                }
             }
             if (itemProjectList != null) {
 
@@ -268,11 +266,11 @@ public class QualityController extends Controller {
                     List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_company` c,`db_item` i,`db_item_project` p WHERE c.task_id ='" + task_id + "' AND i.company_id =c.id AND p.item_id =i.id AND p.project_id =" + project_id);
                     for (ItemProject itemProject : itemProjectList) {
                         result = result && itemProject.set("process", 1).update();
-                        List<Sample> sampleList =Sample.sampleDao.find("SELECT * FROM `db_sample` s,`db_sample_project`p WHERE s.id = p.sample_id AND p.item_project_id ="+itemProject.get("id"));
-                        for (Sample sample:sampleList)
-                        {
-                            result = result && sample.set("process",4).update();
-                        }
+//                        List<Sample> sampleList =Sample.sampleDao.find("SELECT * FROM `db_sample` s,`db_sample_project`p WHERE s.id = p.sample_id AND p.item_project_id ="+itemProject.get("id"));
+//                        for (Sample sample:sampleList)
+//                        {
+//                            result = result && sample.set("process",4).update();
+//                        }
 
                     }
                     if (itemProjectList != null) {
