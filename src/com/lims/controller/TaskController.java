@@ -72,7 +72,7 @@ public class TaskController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process",null).set("flag",null).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process", null).set("flag", null).set("labFlag",null).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -143,7 +143,7 @@ public class TaskController extends Controller {
                                     if (!result) return false;
                                     List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item_id);
                                     for (ItemProject itemProject : itemProjectList) {
-                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process",null).set("flag",null).save();
+                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process", null).set("flag", null).set("labFlag",null).save();
                                         if (!result) return false;
                                     }
 
@@ -212,7 +212,7 @@ public class TaskController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process",null).set("flag",null).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process", null).set("flag", null).set("labFlag",null).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -310,7 +310,7 @@ public class TaskController extends Controller {
         temp.put("identify", entry.get("identify"));
         temp.put("process", entry.get("process"));
         temp.put("sample_type", entry.get("sample_type"));
-        temp.put("flag",entry.get("flag"));
+        temp.put("flag", entry.get("flag"));
         return temp;
     }
 
@@ -630,15 +630,18 @@ public class TaskController extends Controller {
                 @Override
                 public boolean run() throws SQLException {
                     int item_project_id = getParaToInt("item_project_id");
-                    ItemProject itemProject =ItemProject.itemprojectDao.findById(item_project_id);
+                    ItemProject itemProject = ItemProject.itemprojectDao.findById(item_project_id);
                     Boolean result = true;
-                    result =result && itemProject.set("inspect",1).update();
+                    result = result && itemProject.set("inspect", 1).update();
 
                     Task task = Task.taskDao.findFirst("SELECT t.* FROM `db_item_project` p,`db_item` i,`db_company` c ,`db_task` t\n" +
                             "WHERE p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND p.id=" + item_project_id);
                     if (task != null) {
                         Inspect inspect = new Inspect();
-                       result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", task.get("sample_creater")).set("receive_time",task.get("receive_time")).set("receiver",task.get("sample_receiver")).set("sample_time", task.get("sample_time")).set("process", 0).save();
+                        if (Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + item_project_id).size()!=0){
+                            renderJson(RenderUtils.CODE_REPEAT);
+                        }else
+                        { result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", task.get("sample_creater")).set("receive_time", task.get("receive_time")).set("receiver", task.get("sample_receiver")).set("sample_time", task.get("sample_time")).set("process", 0).save();}
                         if (getPara("type") != null) {
                             List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT p.* FROM `db_sample_project` p WHERE p.item_project_id=" + item_project_id);
                             for (SampleProject sampleProject : sampleProjectList) {
@@ -667,7 +670,10 @@ public class TaskController extends Controller {
                             }
                             return result;
                         } else return false;
-                    } else return false;
+                    } else {
+                        return false;
+                    }
+
                 }
             });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
