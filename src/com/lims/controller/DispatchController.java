@@ -311,7 +311,6 @@ public class DispatchController extends Controller {
                 if (itemProjectSize != 0) {
                     //还有没有质控
                     renderJson(RenderUtils.CODE_UNIQUE);
-                    return;
                 } else {
                     result = result && task.set("process", ProcessKit.getTaskProcess("lab")).update();
 
