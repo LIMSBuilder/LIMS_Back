@@ -17,58 +17,51 @@ public class InspectController extends Controller {
      * 保存送检单数据
      **/
     public void save() {
-        boolean result = Db.tx(new IAtom() {
-            @Override
-            public boolean run() throws SQLException {
-                String type = getPara("type");
-                Integer[] inspect = getParaValuesToInt("inspect[]");
-                Boolean result = true;
-                switch (type) {
-                    case "water":
-                        for (int id : inspect) {
-                            List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * `db_inspect_water` WHERE inspect_id =" + id);
-                            for (InspectWater water : inspectWaterList) {
-                                result = result && water.set("result", getPara("result")).set("process", 1).update();
-                            }
-                        }
-                        break;
-                    case "soil":
-                        for (int id : inspect) {
-                            List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * `db_inspect_soil` WHERE inspect_id =" + id);
-                            for (InspectSoil soil : inspectSoilList) {
-                                result = result && soil.set("result", getPara("result")).set("process", 1).update();
-                            }
-                        }
-                        break;
-                    case "solid":
-                        for (int id : inspect) {
-                           List<InspectSoild> inspectSoildList = InspectSoild.inspectSoildDao.find("SELECT * `db_inspect_solid` WHERE inspect_id =" + id);
-                           for (InspectSoild soild:inspectSoildList){
-                           result = result && soild.set("result", getPara("result")).set("process", 1).update();
-                           }
-                        }
-                        break;
-                    case "air":
-                        for (int id : inspect) {
-                            List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * `db_inspect_air` WHERE inspect_id =" + id);
-                            for (InspectAir air:inspectAirList){
-                            result = result && air.set("result", getPara("result")).set("process", 1).update();}
-                        }
-                        break;
-                    case "dysodia":
-                        for (int id : inspect) {
-                            List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * `db_inspect_dysodia` WHERE inspect_id =" + id);
-                            for (InspectDysodia dysodia:inspectDysodiaList) {
-                                result = result && dysodia.set("result", getPara("result")).set("process", 1).update();
-                            }
-                        }
-                        break;
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    String type = getPara("type");
+                    Boolean result = true;
+                    switch (type) {
+                        case "water":
+                            InspectWater inspectWater = InspectWater.inspectWaterDao.findById(getPara("id"));
+                            if (inspectWater != null) {
+                                result = result && inspectWater.set("result", getPara("result")).set("process", 1).update();
+                            } else return false;
+                            break;
+                        case "soil":
+                            InspectSoil inspectSoil = InspectSoil.inspectSoilDao.findById(getPara("id"));
+                            if (inspectSoil != null) {
+                                result = result && inspectSoil.set("result", getPara("result")).set("point", getPara("point")).set("remark", getPara("remark")).set("process", 1).update();
+                            } else return false;
+                            break;
+                        case "solid":
+                            InspectSoild inspectSoild = InspectSoild.inspectSoildDao.findById(getPara("id"));
+                            if (inspectSoild != null) {
+                                result = result && inspectSoild.set("result", getPara("result")).set("volume", getPara("volume")).set("flow", getPara("flow")).set("concentration", getPara("concentration")).set("discharge", getPara("discharge")).set("process", 1).update();
+                            } else return false;
+                            break;
+                        case "air":
+                            InspectAir inspectAir = InspectAir.inspectAir.findById(getPara("id"));
+                            if (inspectAir != null) {
+                                result = result && inspectAir.set("result", getPara("result")).set("volume", getPara("volume")).set("concentration", getPara("concentration")).set("process", 1).update();
+                            } else return false;
+                            break;
+                        case "dysodia":
+                            InspectDysodia inspectDysodia = InspectDysodia.inspectDysodiaDao.findById(getPara("id"));
+                            if (inspectDysodia != null) {
+                                result = result && inspectDysodia.set("result", getPara("result")).set("concentration", getPara("concentration")).set("process", 1).update();
+                            } else return false;
+                            break;
+                    }
+                    return result;
                 }
-
-                return false;
-            }
-        });
-        renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 
 
