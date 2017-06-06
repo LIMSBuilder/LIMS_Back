@@ -95,15 +95,16 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_tag", Tag.class);
         arp.addMapping("db_blind", Blind.class);
         arp.addMapping("db_inspect", Inspect.class);
-        arp.addMapping("db_inspect_water",InspectWater.class);
-        arp.addMapping("db_inspect_solid",InspectSoild.class);
-        arp.addMapping("db_inspect_soil",InspectSoil.class);
-        arp.addMapping("db_inspect_air",InspectAir.class);
-        arp.addMapping("db_inspect_dysodia",InspectDysodia.class);
-        arp.addMapping("db_lab_certificate",Certificate.class);
-        arp.addMapping("db_sample_deseription",Description.class);
-        arp.addMapping("db_first_review",FirstReview.class);
-        arp.addMapping("db_second_review",SecondReview.class);
+        arp.addMapping("db_inspect_water", InspectWater.class);
+        arp.addMapping("db_inspect_solid", InspectSoild.class);
+        arp.addMapping("db_inspect_soil", InspectSoil.class);
+        arp.addMapping("db_inspect_air", InspectAir.class);
+        arp.addMapping("db_inspect_dysodia", InspectDysodia.class);
+        arp.addMapping("db_lab_certificate", Certificate.class);
+        arp.addMapping("db_sample_deseription", Description.class);
+        arp.addMapping("db_first_review", FirstReview.class);
+        arp.addMapping("db_second_review", SecondReview.class);
+        arp.addMapping("db_inspect_attachment",InspectAttachment.class);
         //addMap增加数据库树形
 
     }
