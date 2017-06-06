@@ -64,5 +64,38 @@ public class InspectController extends Controller {
         }
     }
 
+    public void saveAttachment() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Boolean result = true;
+                    int task_id = getParaToInt("task_id");
+                    int project_id = getParaToInt("project_id");
+                    String path = getPara("path");
+
+                    String fileName = path.trim().substring(path.trim().lastIndexOf("\\") + 1);
+                    InspectAttachment attachment = new InspectAttachment();
+                    result = result && attachment.set("task_id", task_id).set("project_id", project_id).set("path", path).set("name", fileName).save();
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    public void deleteAttachment() {
+        try {
+            int id = getParaToInt("id");
+            Boolean result = InspectAttachment.inspectAttachmentDao.deleteById(id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 
 }

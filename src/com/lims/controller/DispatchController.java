@@ -248,6 +248,16 @@ public class DispatchController extends Controller {
         }
     }
 
+    public void inspectAttachment() {
+        try {
+            int task_id = getParaToInt("task_id");
+            int monitor_id = getParaToInt("project_id");
+            List<InspectAttachment> inspectAttachmentList = InspectAttachment.inspectAttachmentDao.find("SELECT * FROM `db_inspect_attachment` WHERE task_id=" + task_id + " AND project_id=" + monitor_id);
+            renderJson(inspectAttachmentList);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 
     public List toJson(List<Sample> entityList) {
         List result = new ArrayList();
