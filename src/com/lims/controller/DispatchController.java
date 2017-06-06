@@ -233,9 +233,10 @@ public class DispatchController extends Controller {
 
     public Map toJsonSingle(Sample sample) {
         Map<String, Object> types = new HashMap<>();
-//        types.put("id", sample.getInt("id"));
+        types.put("id", sample.getInt("id"));
         types.put("identify", sample.get("identify"));
-//        List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample.get("id"));
+        types.put("result",sample.get("result"));
+        //        List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample.get("id"));
 //        List project = new ArrayList();
 //        List temp = new ArrayList();
 //        for (SampleProject sp : sampleProjectList) {
