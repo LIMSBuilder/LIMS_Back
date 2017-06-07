@@ -98,4 +98,12 @@ public class InspectController extends Controller {
     }
 
 
+    public void flowWord() {
+        try {
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }
