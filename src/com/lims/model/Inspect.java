@@ -19,6 +19,7 @@ public class Inspect extends Model<Inspect> {
         result.put("receive_time",this.get("receive_time"));
         result.put("send_time",this.get("sample_time"));
         result.put("type",this.get("type"));
+        result.put("process",this.get("process"));
         return result;
     }
 }
