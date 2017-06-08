@@ -100,11 +100,17 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_inspect_soil", InspectSoil.class);
         arp.addMapping("db_inspect_air", InspectAir.class);
         arp.addMapping("db_inspect_dysodia", InspectDysodia.class);
+        arp.addMapping("db_inspect_air_review",InspectAirReview.class);
+        arp.addMapping("db_inspect_dysodia_review",InspectDysodiaReview.class);
+        arp.addMapping("db_inspect_solid_review",InspectSoildReview.class);
+        arp.addMapping("db_inspect_soil_review",InspectSoilReview.class);
+        arp.addMapping("db_inspect_water_review",InspectWaterReview.class);
         arp.addMapping("db_lab_certificate", Certificate.class);
         arp.addMapping("db_sample_deseription", Description.class);
         arp.addMapping("db_first_review", FirstReview.class);
         arp.addMapping("db_second_review", SecondReview.class);
         arp.addMapping("db_inspect_attachment",InspectAttachment.class);
+
         //addMap增加数据库树形
 
     }

@@ -258,7 +258,7 @@ public class LabController extends Controller {
                     result = result && itemProject.set("labFlag", 1).update();
                     List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + itemProject.get("id"));
                     for (Inspect inspect : inspectList) {
-                        result = result && inspect.set("analyst", getPara("user_id")).set("process", 1).update();
+                        result = result && inspect.set("analyst", getPara("user_id")).set("process", 1).set("checker",getPara("user_id")).update();
                     }
 
                 }
@@ -269,26 +269,6 @@ public class LabController extends Controller {
         }
     }
 
-
-    /**
-     * 分析是否完成,完成流转到复核者
-     **/
-    public void assayerFinish() {
-        try {
-            int task_id = getParaToInt("task_id");
-            int project_id = getParaToInt("project_id");
-            Task task = Task.taskDao.findById(task_id);
-            Boolean result = true;
-            if (task != null) {
-
-            }
-            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-
-
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
 
 
 }
