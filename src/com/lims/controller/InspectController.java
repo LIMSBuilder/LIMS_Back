@@ -97,6 +97,20 @@ public class InspectController extends Controller {
         }
     }
 
+    /***
+     * 实验室原始记录表附件文件在线查看
+     * **/
+    public void download() {
+        try {
+            int id = getParaToInt("id");
+            InspectAttachment inspectAttachment = InspectAttachment.inspectAttachmentDao.findById(id);
+            getRequest().setAttribute("inspectAttachment", inspectAttachment);
+            render("/template/labOrigin.jsp");
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
 
     public void flowWord() {
         try {
