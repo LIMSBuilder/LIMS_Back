@@ -72,7 +72,7 @@ public class TaskController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process", null).set("flag", null).set("labFlag",null).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process", null).set("flag", null).set("labFlag", null).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -143,7 +143,7 @@ public class TaskController extends Controller {
                                     if (!result) return false;
                                     List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item_id);
                                     for (ItemProject itemProject : itemProjectList) {
-                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process", null).set("flag", null).set("labFlag",null).save();
+                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process", null).set("flag", null).set("labFlag", null).save();
                                         if (!result) return false;
                                     }
 
@@ -212,7 +212,7 @@ public class TaskController extends Controller {
                             List<Map> project = (List<Map>) itemMap.get("project");
                             for (Map pro : project) {
                                 ItemProject itemProject = new ItemProject();
-                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process", null).set("flag", null).set("labFlag",null).save();
+                                result = result && itemProject.set("project_id", pro.get("id")).set("item_id", contractitem.get("id")).set("process", null).set("flag", null).set("labFlag", null).save();
                                 if (!result) break;
                             }
                             if (!result) break;
@@ -286,6 +286,33 @@ public class TaskController extends Controller {
     }
 
 
+    /**
+     * 实验结果一审列表
+     */
+    public void firstReviewList() {
+        try {
+            int rowCount = getParaToInt("rowCount");
+            int currentPage = getParaToInt("currentPage");
+            String condition_temp = getPara("condition");
+            Map condition = ParaUtils.getSplitCondition(condition_temp);
+            if (rowCount == 0) {
+                rowCount = ParaUtils.getRowCount();
+            }
+            String param = " WHERE process=" + ProcessKit.getTaskProcess("firstReview");
+            Page<Task> taskPage = Task.taskDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_task` " + param + " ORDER BY create_time DESC");
+            List<Task> taskList = taskPage.getList();
+            Map results = toJson(taskList);
+            results.put("currentPage", currentPage);
+            results.put("totalPage", taskPage.getTotalPage());
+            results.put("rowCount", rowCount);
+            results.put("condition", condition_temp);
+            renderJson(results);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
     public Map toJson(List<Task> entityList) {
         Map<String, Object> json = new HashMap<>();
         try {
@@ -334,54 +361,10 @@ public class TaskController extends Controller {
         }
     }
 
-//    public void delivery() {
-//        try {
-//            Boolean result = Db.tx(new IAtom() {
-//                @Override
-//                public boolean run() throws SQLException {
-//                    String jsons = getPara("result");//前端传数组过来
-//                    String task_id = getPara("id");
-//                    List<Map> temp = Jackson.getJson().parse(jsons, List.class);
-//                    Boolean result = true;
-//                    for (int i = 0; i < temp.size(); i++) {
-//                        Map entry = temp.get(i);
-//                        int item_id = (int) entry.get("id");
-//                        List<Integer> belongs = (ArrayList) entry.get("belongs");
-//                        for (int j = 0; j < belongs.size(); j++) {
-//                            int user = belongs.get(j);
-//                            ItemJoin itemJoin = new ItemJoin();
-//                            itemJoin.set("contract_item_id", item_id);
-//                            itemJoin.set("join_id", user);
-//                            result = result && itemJoin.save();
-//                            if (!result) break;
-//                        }
-//                    }
-//                    if (!result) return false;
-//                    Task task = Task.taskDao.findById(task_id);
-//                    result = result && task.set("process", ProcessKit.TaskMap.get("dispatch")).update();
-//                    LoggerKit.addTaskLog(task.getInt("id"), "派遣任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
-//                    return result;
-//                }
-//            });
-//            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-//        } catch (Exception e) {
-//            renderError(500);
-//        }
-//    }
+
 
     public void countProcess() {
-//        try {
-//            Map temp = ProcessKit.TaskMap;
-//            Map result = new HashMap();
-//            for (Object key : temp.keySet()) {
-//                int count = Task.taskDao.find("select * from `db_task` where process =" + temp.get(key) +  "'and  sample_type=1'" ).size();
-//                result.put(count, key);
-//            }
-//            result.put("total", Task.taskDao.find("select * from `db_task` where sample_type=1").size());
-//            renderJson(result);
-//        } catch (Exception e) {
-//            renderError(500);
-//        }
+
         try {
             int count = Task.taskDao.find("SELECT * FROM `db_task` WHERE process =" + ProcessKit.TaskMap.get("create") + " AND sample_type=1").size();
             Map temp = new HashMap();
@@ -408,15 +391,6 @@ public class TaskController extends Controller {
             int id = getParaToInt("id");
             List temp = new ArrayList();
             List<ItemProject> projectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + id);
-//            List<Map> mapList = new ArrayList<>();
-//            for (ItemProject project : projectList) {
-//                Map t = new HashMap();
-//                t.put("id", project.get("id"));
-//                t.put("project", MonitorProject.monitorProjectdao.findById(project.get("project_id")));
-//                t.put("item_id", project.get("item_id"));
-//                mapList.add(t);
-//            }
-//            result.put("project", mapList);
             for (ItemProject itemProject : projectList) {
                 temp.add(itemProject.toJsonSingle());
             }
@@ -638,10 +612,11 @@ public class TaskController extends Controller {
                             "WHERE p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND p.id=" + item_project_id);
                     if (task != null) {
                         Inspect inspect = new Inspect();
-                        if (Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + item_project_id).size()!=0){
+                        if (Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + item_project_id).size() != 0) {
                             renderJson(RenderUtils.CODE_REPEAT);
-                        }else
-                        { result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", task.get("sample_creater")).set("receive_time", task.get("receive_time")).set("receiver", task.get("sample_receiver")).set("sample_time", task.get("sample_time")).set("process", 0).save();}
+                        } else {
+                            result = inspect.set("item_project_id", item_project_id).set("type", getPara("type")).set("sender", task.get("sample_creater")).set("receive_time", task.get("receive_time")).set("receiver", task.get("sample_receiver")).set("sample_time", task.get("sample_time")).set("process", 0).save();
+                        }
                         if (getPara("type") != null) {
                             List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT p.* FROM `db_sample_project` p WHERE p.item_project_id=" + item_project_id);
                             for (SampleProject sampleProject : sampleProjectList) {
