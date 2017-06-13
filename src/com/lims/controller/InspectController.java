@@ -801,33 +801,37 @@ public class InspectController extends Controller {
      */
     public void firstReview() {
         try {
-            Db.tx(new IAtom() {
+            Boolean result = Db.tx(new IAtom() {
                 @Override
                 public boolean run() throws SQLException {
                     Task task = Task.taskDao.findById(getPara("task_id"));
                     if (task != null) {
                         RecordFirstReview recordFirstReview = new RecordFirstReview();
-                        Map paraMap = getParaMap();
-                        Boolean flag = true;
-                        for (Object key : paraMap.keySet()) {
-                            if (key.toString().trim().matches("^condition.*")) {
-                                flag = flag && paraMap.get(key) == 1;
-                            }
-                            recordFirstReview.set(key.toString(), getPara(key.toString()));
-                        }
-                        Boolean result = recordFirstReview
+
+                        int condition1 = getParaToInt("condition1");
+                        int condition2 = getParaToInt("condition2");
+                        int condition3 = getParaToInt("condition3");
+                        int condition4 = getParaToInt("condition4");
+                        int condition5 = getParaToInt("condition5");
+                        int condition6 = getParaToInt("condition6");
+                        Boolean result = recordFirstReview.set("condition1", condition1).set("condition2", condition2)
+                                .set("condition3", condition3).set("condition4", condition4)
+                                .set("condition5", condition5).set("condition6", condition6)
+                                .set("remark", getPara("remark"))
+                                .set("task_id", getPara("task_id"))
                                 .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                                 .set("create_time", ParaUtils.sdf.format(new Date()))
-                                .set("flag",1)
+                                .set("flag", 1)
                                 .save();
                         if (!result) return false;
-                        if (flag) {
+
+                        if ((condition1 == 1) && (condition2 == 1) && (condition3 == 1) && (condition4 == 1) && (condition5 == 1) && (condition6 == 1)) {
                             //审核通过,进入二审
-                            task.set("process", ProcessKit.getTaskProcess("secondReview"));
+                            result = result && task.set("process", ProcessKit.getTaskProcess("secondReview")).update();
                             LoggerKit.addTaskLog(task.getInt("id"), "一审通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                         } else {
                             //审核拒绝，回到编辑状态,并将所有的process变成1（修改）状态
-                            task.set("process", ProcessKit.getTaskProcess("lab"));
+                            result = result && task.set("process", ProcessKit.getTaskProcess("lab")).update();
                             LoggerKit.addTaskLog(task.getInt("id"), "一审拒绝", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                             List<InspectAir> airList = InspectAir.inspectAir.find("SELECT DISTINCT t.* FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
                                     "`db_inspect_air` a\n" +
@@ -844,29 +848,30 @@ public class InspectController extends Controller {
                             List<InspectSoild> soildList = InspectSoild.inspectSoildDao.find("SELECT DISTINCT t.* FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
                                     "`db_inspect_solid` a\n" +
                                     "WHERE t.id=" + task.get("id") + " AND c.task_id=t.id AND s.company_id=c.id AND a.sample_id=s.id");
-                            for (InspectAir obj : airList) {
-                                result = result && obj.set("process", 1).update();
+                            for (InspectAir inspectAir : airList) {
+                                    result = result && inspectAir.set("process", 1).update();
                             }
-                            for (InspectDysodia obj : dysodiaList) {
-                                result = result && obj.set("process", 1).update();
+                            for (InspectDysodia inspectDysodia : dysodiaList) {
+                                result = result && inspectDysodia.set("process", 1).update();
                             }
-                            for (InspectWater obj : waterList) {
-                                result = result && obj.set("process", 1).update();
+                            for (InspectWater inspectWater : waterList) {
+                                result = result && inspectWater.set("process", 1).update();
                             }
-                            for (InspectSoil obj : soilList) {
-                                result = result && obj.set("process", 1).update();
+                            for (InspectSoil inspectSoil : soilList) {
+                                result = result && inspectSoil.set("process", 1).update();
                             }
-                            for (InspectSoild obj : soildList) {
-                                result = result && obj.set("process", 1).update();
+                            for (InspectSoild inspectSoild : soildList) {
+                                result = result && inspectSoild.set("process", 1).update();
                             }
                         }
-                        task.set("record_first_review_id", recordFirstReview.get("id"));
+                        result = result && task.set("record_first_review_id", recordFirstReview.get("id")).update();
                         return result;
+                    } else {
+                        return false;
                     }
-                    return false;
                 }
             });
-
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
@@ -880,7 +885,7 @@ public class InspectController extends Controller {
             int task_id = getParaToInt("task_id");
             Task task = Task.taskDao.findById(task_id);
             if (task != null) {
-                RecordFirstReview recordFirstReview =new RecordFirstReview();
+                RecordFirstReview recordFirstReview = new RecordFirstReview();
                 Map paraMap = getParaMap();
                 Boolean flag = true;
                 for (Object key : paraMap.keySet()) {
@@ -892,7 +897,7 @@ public class InspectController extends Controller {
                 Boolean result = true;
                 result = result && recordFirstReview.set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                         .set("create_time", ParaUtils.sdf.format(new Date()))
-                        .set("flag",2)
+                        .set("flag", 2)
                         .save();
                 if (!result) return;
                 if (flag) {
