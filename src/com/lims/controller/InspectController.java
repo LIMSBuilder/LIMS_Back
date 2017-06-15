@@ -234,6 +234,9 @@ public class InspectController extends Controller {
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                                 }
+                                else {
+                                    renderJson(RenderUtils.CODE_SUCCESS);
+                                }
                                 break;
                             case "soil":
                                 List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
@@ -244,6 +247,9 @@ public class InspectController extends Controller {
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
                                 }
+                                else {
+                                    renderJson(RenderUtils.CODE_SUCCESS);
+                                }
                                 break;
                             case "solid":
                                 List<InspectSoild> inspectSoildList = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
@@ -252,6 +258,9 @@ public class InspectController extends Controller {
                                         result = result && inspectSoild.set("process", 1).update();
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                else {
+                                    renderJson(RenderUtils.CODE_SUCCESS);
                                 }
                                 break;
                             case "air":
@@ -262,6 +271,9 @@ public class InspectController extends Controller {
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                                 }
+                                else {
+                                    renderJson(RenderUtils.CODE_SUCCESS);
+                                }
                                 break;
 
                             case "dysodia":
@@ -271,6 +283,9 @@ public class InspectController extends Controller {
                                         result = result && inspectDysodia.set("process", 1).update();
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                else {
+                                    renderJson(RenderUtils.CODE_SUCCESS);
                                 }
                                 break;
                         }
