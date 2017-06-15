@@ -211,6 +211,79 @@ public class InspectController extends Controller {
     }
 
     /**
+     * 复核流转
+     **/
+    public void reviewFlow() {
+        try {
+            int task_id = getParaToInt("task_id");
+            int project_id = getParaToInt("project_id");
+            Task task = Task.taskDao.findById(task_id);
+            Boolean result = true;
+            if (task != null) {
+                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_item_project` p,`db_item` i,`db_company` c,`db_task` t \n" +
+                        "WHERE p.project_id='" + project_id + "' AND p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND task_id=" + task.get("id"));
+                for (ItemProject itemProject : itemProjectList) {
+                    List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id =" + itemProject.get("id"));
+                    for (Inspect inspect : inspectList) {
+                        switch (inspect.getStr("type")) {
+                            case "water":
+                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
+                                if (inspectWaterList.size() != 0) {
+                                    for (InspectWater inspectWater : inspectWaterList) {
+                                        result = result && inspectWater.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                break;
+                            case "soil":
+                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
+                                if (inspectSoilList.size() != 0) {
+                                    for (InspectSoil inspectSoil : inspectSoilList) {
+                                        result = result && inspectSoil.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+                                }
+                                break;
+                            case "solid":
+                                List<InspectSoild> inspectSoildList = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
+                                if (inspectSoildList.size() != 0) {
+                                    for (InspectSoild inspectSoild : inspectSoildList) {
+                                        result = result && inspectSoild.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                break;
+                            case "air":
+                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
+                                if (inspectAirList.size() != 0) {
+                                    for (InspectAir inspectAir : inspectAirList) {
+                                        result = result && inspectAir.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                break;
+
+                            case "dysodia":
+                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "'AND process =0");
+                                if (inspectDysodiaList.size() != 0) {
+                                    for (InspectDysodia inspectDysodia : inspectDysodiaList) {
+                                        result = result && inspectDysodia.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                break;
+                        }
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
      * 复合任务显示 taskList
      **/
     public void taskList() {
@@ -379,7 +452,7 @@ public class InspectController extends Controller {
                                 if (getParaToInt("result") == 1) {
                                     result = result && inspectWater.set("review_id", inspectWaterReview.get("id")).set("process", 3).update();
                                 } else {
-                                    result = result && inspectWater.set("review_id", inspectWaterReview.get("id")).set("process", 0).update();
+                                    result = result && inspectWater.set("review_id", inspectWaterReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
 
@@ -395,7 +468,7 @@ public class InspectController extends Controller {
                                 if (getParaToInt("result") == 1) {
                                     result = result && inspectSoil.set("review_id", inspectSoilReview.get("id")).set("process", 3).update();
                                 } else {
-                                    result = result && inspectSoil.set("review_id", inspectSoilReview.get("id")).set("process", 0).update();
+                                    result = result && inspectSoil.set("review_id", inspectSoilReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
                             break;
@@ -410,7 +483,7 @@ public class InspectController extends Controller {
                                 if (getParaToInt("result") == 1) {
                                     result = result && inspectSoild.set("review_id", inspectSoildReview.get("id")).set("process", 3).update();
                                 } else {
-                                    result = result && inspectSoild.set("review_id", inspectSoildReview.get("id")).set("process", 0).update();
+                                    result = result && inspectSoild.set("review_id", inspectSoildReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
                             break;
@@ -425,7 +498,7 @@ public class InspectController extends Controller {
                                 if (getParaToInt("result") == 1) {
                                     result = result && inspectAir.set("review_id", inspectAirReview.get("id")).set("process", 3).update();
                                 } else {
-                                    result = result && inspectAir.set("review_id", inspectAirReview.get("id")).set("process", 0).update();
+                                    result = result && inspectAir.set("review_id", inspectAirReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
                             break;
@@ -440,7 +513,7 @@ public class InspectController extends Controller {
                                 if (getParaToInt("result") == 1) {
                                     result = result && inspectDysodia.set("review_id", inspectDysodiaReview.get("id")).set("process", 3).update();
                                 } else {
-                                    result = result && inspectDysodia.set("review_id", inspectDysodiaReview.get("id")).set("process", 0).update();
+                                    result = result && inspectDysodia.set("review_id", inspectDysodiaReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
                             break;
@@ -673,7 +746,7 @@ public class InspectController extends Controller {
                                     }
                                     result = result && inspectSoil.set("check_id", inspectSoilReview.get("id")).set("process", 4).update();
                                 } else {
-                                    result = result && inspectSoil.set("check_id", inspectSoilReview.get("id")).set("process", 0).update();
+                                    result = result && inspectSoil.set("check_id", inspectSoilReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
                             break;
@@ -708,7 +781,7 @@ public class InspectController extends Controller {
                                     }
                                     result = result && inspectSoild.set("check_id", inspectSoildReview.get("id")).set("process", 4).update();
                                 } else {
-                                    result = result && inspectSoild.set("check_id", inspectSoildReview.get("id")).set("process", 0).update();
+                                    result = result && inspectSoild.set("check_id", inspectSoildReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
                             break;
@@ -743,7 +816,7 @@ public class InspectController extends Controller {
                                     }
                                     result = result && inspectAir.set("check_id", inspectAirReview.get("id")).set("process", 4).update();
                                 } else {
-                                    result = result && inspectAir.set("check_id", inspectAirReview.get("id")).set("process", 0).update();
+                                    result = result && inspectAir.set("check_id", inspectAirReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
                             break;
@@ -778,7 +851,7 @@ public class InspectController extends Controller {
                                     }
                                     result = result && inspectDysodia.set("check_id", inspectDysodiaReview.get("id")).set("process", 4).update();
                                 } else {
-                                    result = result && inspectDysodia.set("check_id", inspectDysodiaReview.get("id")).set("process", 0).update();
+                                    result = result && inspectDysodia.set("check_id", inspectDysodiaReview.get("id")).set("process", 1).update();
                                 }
                             } else return false;
                             break;
@@ -849,7 +922,7 @@ public class InspectController extends Controller {
                                     "`db_inspect_solid` a\n" +
                                     "WHERE t.id=" + task.get("id") + " AND c.task_id=t.id AND s.company_id=c.id AND a.sample_id=s.id");
                             for (InspectAir inspectAir : airList) {
-                                    result = result && inspectAir.set("process", 1).update();
+                                result = result && inspectAir.set("process", 1).update();
                             }
                             for (InspectDysodia inspectDysodia : dysodiaList) {
                                 result = result && inspectDysodia.set("process", 1).update();
