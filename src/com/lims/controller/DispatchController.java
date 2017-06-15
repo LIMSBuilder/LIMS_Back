@@ -183,7 +183,6 @@ public class DispatchController extends Controller {
                         switch (inspect.getStr("type")) {
                             case "water":
                                 List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id=" + inspect.get("id"));
-
                                 for (InspectWater inspectWater : inspectWaterList) {
                                     inspectJson.add(inspectWater.toJSON());
                                 }
