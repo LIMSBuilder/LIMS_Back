@@ -258,7 +258,7 @@ public class LabController extends Controller {
                     result = result && itemProject.set("labFlag", 1).update();
                     List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id=" + itemProject.get("id"));
                     for (Inspect inspect : inspectList) {
-                        result = result && inspect.set("analyst", getPara("user_id")).set("process", 1).set("checker", getPara("user_id")).set("reviewer", getPara("user_id")).update();
+                        result = result && inspect.set("analyst", getPara("user_id")).set("process", 1).set("checker", getPara("checker_id")).set("reviewer", getPara("reviewer_id")).update();
                     }
 
                 }
