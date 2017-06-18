@@ -974,21 +974,23 @@ public class InspectController extends Controller {
             Task task = Task.taskDao.findById(task_id);
             if (task != null) {
                 RecordFirstReview recordFirstReview = new RecordFirstReview();
-                Map paraMap = getParaMap();
-                Boolean flag = true;
-                for (Object key : paraMap.keySet()) {
-                    if (key.toString().trim().matches("^condition.*")) {
-                        flag = flag && paraMap.get(key) == 1;
-                    }
-                    recordFirstReview.set(key.toString(), getPara(key.toString()));
-                }
-                Boolean result = true;
-                result = result && recordFirstReview.set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                int condition1 = getParaToInt("condition1");
+                int condition2 = getParaToInt("condition2");
+                int condition3 = getParaToInt("condition3");
+                int condition4 = getParaToInt("condition4");
+                int condition5 = getParaToInt("condition5");
+                int condition6 = getParaToInt("condition6");
+                Boolean result = recordFirstReview.set("condition1", condition1).set("condition2", condition2)
+                        .set("condition3", condition3).set("condition4", condition4)
+                        .set("condition5", condition5).set("condition6", condition6)
+                        .set("remark", getPara("remark"))
+                        .set("task_id", getPara("task_id"))
+                        .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
                         .set("create_time", ParaUtils.sdf.format(new Date()))
                         .set("flag", 2)
                         .save();
                 if (!result) return;
-                if (flag) {
+                if ((condition1 == 1) && (condition2 == 1) && (condition3 == 1) && (condition4 == 1) && (condition5 == 1) && (condition6 == 1)) {
                     result = result && task.set("process", ProcessKit.getTaskProcess("report")).update();
                     LoggerKit.addTaskLog(task.getInt("id"), "二审通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                 } else {

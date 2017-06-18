@@ -57,5 +57,46 @@ public class Contract extends Model<Contract> {
         }
         return mapList;
     }
+    public Map Json() {
+        Map temp = new HashMap();
+        temp.put("id", this.get("id"));
+        temp.put("identify", this.get("identify"));
+        temp.put("client_unit", this.get("client_unit"));
+        temp.put("client_code", this.get("client_code"));
+        temp.put("client_tel", this.get("client_tel"));
+        temp.put("client", this.get("client"));
+        temp.put("client_fax", this.get("client_fax"));
+        temp.put("client_address", this.get("client_address"));
+        temp.put("trustee_unit", this.get("trustee_unit"));
+        temp.put("trustee_code", this.get("trustee_code"));
+        temp.put("trustee_tel", this.get("trustee_tel"));
+        temp.put("trustee", User.userDao.findById(this.get("trustee")).get("name"));
+        temp.put("trustee_fax", this.get("trustee_fax"));
+        temp.put("trustee_address", this.get("trustee_address"));
+        temp.put("name", this.get("name"));
+        temp.put("aim", this.get("aim"));
+        temp.put("type", Type.typeDao.findById(this.get("type")).get("name"));
+        temp.put("way", this.get("way"));
+        temp.put("wayDesp", this.get("wayDesp"));
+        temp.put("isPackage", this.get("isPackage"));
+        temp.put("in_room", this.get("in_room"));
+        temp.put("secret", this.get("secret"));
+        temp.put("paymentWay", this.get("paymentWay"));
+        temp.put("finish_time", this.get("finish_time"));
+        temp.put("payment", this.get("payment"));
+        temp.put("other", this.get("other"));
+        temp.put("process", this.get("process"));
+        temp.put("review_id", this.get("review_id") == null ? null : User.userDao.findById(this.get("review_id")).get("name"));
+        temp.put("review_time", this.get("review_time"));
+        temp.put("create_time", this.get("create_time"));
+        temp.put("creater", this.get("creater") == null ? null : User.userDao.findById(this.get("creater")).get("name"));
+        temp.put("reviewer", this.get("reviewer") == null ? null : User.userDao.findById(this.get("reviewer")).get("name"));
+        temp.put("update_time", this.get("update_time"));
+        temp.put("package_id", this.get("package_id"));
+        temp.put("importWrite", this.get("importWrite"));
+
+        return temp;
+    }
+
 
 }
