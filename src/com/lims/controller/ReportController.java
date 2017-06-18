@@ -2,11 +2,10 @@ package com.lims.controller;
 
 import com.jfinal.core.Controller;
 import com.lims.model.*;
+import com.lims.utils.ParaUtils;
+import com.lims.utils.RenderUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenyangyang on 2017/6/16.
@@ -125,16 +124,16 @@ public class ReportController extends Controller {
             Map total = new HashMap();
             if (company != null) {
                 List<Sample> sampleList = Sample.sampleDao.find("SELECT * FROM `db_sample` WHERE company_id=" + conmpany_id + " ORDER BY s.identify");
-                total.put("count",sampleList.size());
-                if(sampleList.size()!=0){
+                total.put("count", sampleList.size());
+                if (sampleList.size() != 0) {
                     String first = sampleList.get(0).getStr("identify");
                     String last = sampleList.get(sampleList.size() - 1).getStr("identify");
                     total.put("firstIdentify", first);
                     total.put("lastIdentify", last);
                 }
                 Map<List, List> back = new HashMap<>();
-                for (Sample sample:sampleList){
-                    List<MonitorProject> monitorProjectList=MonitorProject.monitorProjectdao.find("SELECT m.* FROM `db_sample` s,`db_sample_project` p,`db_item_project` i,`db_monitor_project` m\n" +
+                for (Sample sample : sampleList) {
+                    List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT m.* FROM `db_sample` s,`db_sample_project` p,`db_item_project` i,`db_monitor_project` m\n" +
                             "WHERE s.id=" + sample.get("id") + " AND p.sample_id=s.id AND p.item_project_id=i.id AND i.project_id=m.id");
                     List<Map> b = new ArrayList<>();
                     for (MonitorProject monitorProject : monitorProjectList) {
@@ -238,6 +237,74 @@ public class ReportController extends Controller {
         } catch (Exception e) {
             renderError(500);
 
+        }
+    }
+
+
+    /***
+     * 保存报告类型
+     * */
+    public void create() {
+        try {
+            boolean result = true;
+            Report report = new Report();
+            String name = getPara("type");
+            String path = getPara("path");
+            int flag =getParaToInt("flag");
+            result = result && report.set("type", name).set("path", path).set("singer", ParaUtils.getCurrentUser(getRequest()).get("id")).set("sign_time", ParaUtils.sdf.format(new Date())).set("flag",flag).save();
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 删除报告
+     **/
+    public void delete() {
+        try {
+            int id = getParaToInt("id");
+            Boolean result = Report.report.deleteById(id);
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 以公司为单位，显示报告
+     **/
+    public void List() {
+        try {
+            int company_id = getParaToInt("company_id");
+            Company company = Company.companydao.findById(company_id);
+            if (company != null) {
+                List<Report> reportList = Report.report.find("SELECT * FROM `db_report` WHERE company_id=" + company_id);
+                List<Map> result = new ArrayList<>();
+                for (Report report : reportList) {
+                    result.add(report.Json());
+                }
+                renderJson(result);
+            } else {
+                renderNull();
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 报告在线查看
+     * **/
+    public void check(){
+        try {
+            int id =getParaToInt("id");
+            Report report = Report.report.findById(id);
+            getRequest().setAttribute("report", report);
+            render("/template/report.jsp");
+
+        }catch (Exception e){
+            renderError(500);
         }
     }
 }

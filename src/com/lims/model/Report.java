@@ -17,6 +17,9 @@ public class Report extends Model<Report> {
         temp.put("company_id",this.get("company_id"));
         temp.put("type",this.get("type"));
         temp.put("report_path",this.get("report_path"));
+        temp.put("creater",this.get("signer")==null?null:User.userDao.findById(this.get("signer")).get("name"));
+        temp.put("create_time",this.get("sign_time"));
+        temp.put("flag",this.get("flag"));
         return temp;
     }
 }

@@ -113,6 +113,7 @@ public class CommonConfig extends JFinalConfig {
         arp.addMapping("db_report_first_review",ReportFirstReview.class);
         arp.addMapping("db_report_second_review",ReportSecondReview.class);
         arp.addMapping("db_report_third_review",ReportThirdReview.class);
+        arp.addMapping("db_report_manage",ReportManage.class);
 
         //addMap增加数据库树形
 
