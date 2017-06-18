@@ -128,10 +128,10 @@ public class ReportReviewController extends Controller {
                         if (!result) return false;
                         if ((condition1 == 1) && (condition2 == 1) && (condition3 == 1)) {
                             User user = ParaUtils.getCurrentUser(getRequest());
-                            result = result && report.set("process", 5).set("thirdReview", reportThirdReview.get("id")).set("singer",user.get("id")).set("sign_time",ParaUtils.sdf.format(new Date())).update();
+                            result = result && report.set("process", 5).set("thirdReview", reportThirdReview.get("id")).update();
                         } else {
                             User user = ParaUtils.getCurrentUser(getRequest());
-                            result = result && report.set("process", 1).set("thirdReview", reportThirdReview.get("id")).set("singer",user.get("id")).set("sign_time",ParaUtils.sdf.format(new Date())).update();
+                            result = result && report.set("process", 1).set("thirdReview", reportThirdReview.get("id")).update();
                         }
                         return result;
                     } else {
