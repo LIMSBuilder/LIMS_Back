@@ -40,6 +40,8 @@ public class CommonRouter extends Routes {
         add("/api/lab",LabController.class);
         add("/api/certificate",CertificateController.class);
         add("/api/inspect",InspectController.class);
+        add("/api/report",ReportController.class);
+        add("/api/reportReview",ReportReviewController.class);
     }
 }
 

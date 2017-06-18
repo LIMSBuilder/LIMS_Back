@@ -296,6 +296,7 @@ public class LabController extends Controller {
             List<Map> inspcct = new ArrayList<>();
             for (Inspect inspect : inspectList) {
                 List inspectJson = new ArrayList();
+                List itemJson = new ArrayList();
                 inspcct.add(inspect.toSingleJson());
                 total.put("inspect", inspcct);
                 switch (inspect.getStr("type")) {
@@ -303,39 +304,39 @@ public class LabController extends Controller {
                         List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id=" + inspect.get("id"));
                         for (InspectWater inspectWater : inspectWaterList) {
                             inspectJson.add(inspectWater.toJSON());
-                            List waterReview = new ArrayList();
+//                            List waterReview = new ArrayList();
                             List<InspectWaterReview> inspectWaterReviewList = InspectWaterReview.inspectWaterReviewDao.find("SELECT * FROM `db_inspect_water_review` WHERE water_id=" + inspectWater.get("id"));
                             for (InspectWaterReview inspectWaterReview : inspectWaterReviewList) {
-                                waterReview.add(inspectWaterReview.toJSON());
+                                itemJson.add(inspectWaterReview.toJSON());
 
                             }
-                            total.put("waterReview", waterReview);
+//                            total.put("waterReview", waterReview);
                         }
                         break;
                     case "soil":
                         List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id=" + inspect.get("id"));
                         for (InspectSoil inspectSoil : inspectSoilList) {
                             inspectJson.add(inspectSoil.toJSON());
-                            List soilReview = new ArrayList();
+//                            List soilReview = new ArrayList();
                             List<InspectSoilReview> inspectSoilReviewList = InspectSoilReview.inspectSoilReviewDao.find("SELECT * FROM `db_inspect_soil_review` WHERE soil_id=" + inspectSoil.get("id"));
                             for (InspectSoilReview inspectSoilReview : inspectSoilReviewList) {
-                                soilReview.add(inspectSoilReview.toJSON());
+                                itemJson.add(inspectSoilReview.toJSON());
 
                             }
-                            total.put("soilReview",soilReview);
+//                            total.put("soilReview",soilReview);
                         }
                         break;
                     case "solid":
                         List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id=" + inspect.get("id"));
                         for (InspectSoild inspectSoild : inspectSoilds) {
                             inspectJson.add(inspectSoild.toJSON());
-                            List soildReview = new ArrayList();
+//                            List soildReview = new ArrayList();
                             List<InspectSoildReview> inspectSoildReviewList = InspectSoildReview.inspectSoildReviewdao.find("SELECT * FROM `db_inspect_solid_review` WHERE soild_id=" + inspectSoild.get("id"));
                             for (InspectSoildReview inspectSoildReview : inspectSoildReviewList) {
-                                soildReview.add(inspectSoildReview.toJSON());
+                                itemJson.add(inspectSoildReview.toJSON());
 
                             }
-                            total.put("soildReview",soildReview);
+//                            total.put("soildReview",soildReview);
                         }
                         break;
 
@@ -343,29 +344,30 @@ public class LabController extends Controller {
                         List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id=" + inspect.get("id"));
                         for (InspectAir inspectAir : inspectAirList) {
                             inspectJson.add(inspectAir.toJSON());
-                            List airReview = new ArrayList();
+//                            List airReview = new ArrayList();
                             List<InspectAirReview> inspectAirReviewList = InspectAirReview.inspectAirReview.find("SELECT * FROM `db_inspect_air_review` WHERE air_id=" + inspectAir.get("id"));
-                            for (InspectAirReview inspectAirReview:inspectAirReviewList) {
-                                airReview.add(inspectAirReview.toJSON());
+                            for (InspectAirReview inspectAirReview : inspectAirReviewList) {
+                                itemJson.add(inspectAirReview.toJSON());
 
                             }
-                            total.put("airReview",airReview);
+//                            total.put("airReview",airReview);
                         }
                         break;
                     case "dysodia":
                         List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id=" + inspect.get("id"));
                         for (InspectDysodia inspectDysodia : inspectDysodiaList) {
                             inspectJson.add(inspectDysodia.toJSON());
-                            List dysodiaReview = new ArrayList();
+//                            List dysodiaReview = new ArrayList();
                             List<InspectDysodiaReview> inspectDysodiaReviewList = InspectDysodiaReview.inspectDysodiaReviewdao.find("SELECT * FROM `db_inspect_dysodia_review` WHERE dysodia_id=" + inspectDysodia.get("id"));
-                            for (InspectDysodiaReview inspectDysodiaReview:inspectDysodiaReviewList) {
-                                dysodiaReview.add(inspectDysodiaReview.toJSON());
+                            for (InspectDysodiaReview inspectDysodiaReview : inspectDysodiaReviewList) {
+                                itemJson.add(inspectDysodiaReview.toJSON());
 
                             }
-                            total.put("dysodiaReview",dysodiaReview);
+//                            total.put("dysodiaReview",dysodiaReview);
                         }
                         break;
                 }
+                total.put("item", itemJson);
                 total.put("items", inspectJson);
 
             }

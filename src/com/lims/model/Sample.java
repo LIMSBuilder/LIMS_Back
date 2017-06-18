@@ -32,7 +32,20 @@ public class Sample extends Model<Sample> {
             projectList.add(t);
         }
         temp.put("project", projectList);
+        temp.put("id",this.get("id"));
+        temp.put("identify", this.get("identify"));
+        temp.put("category", this.get("category"));
+        temp.put("name", this.get("name"));
+        temp.put("character", this.get("character"));
+        temp.put("condition", this.get("condition"));
+        temp.put("isbalance", Sample.sampleDao.findById(this.get("balance")));
+        temp.put("create_time", this.get("create_time"));
+        temp.put("creater", this.get("creater"));
+        temp.put("process", this.get("process"));
+        temp.put("other", this.get("other"));
+        temp.put("point", this.get("point"));
         return temp;
 
     }
+
 }

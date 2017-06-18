@@ -3,9 +3,11 @@ package com.lims.controller;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import com.lims.model.Customer;
 import com.lims.model.FileRecord;
+import com.lims.model.Report;
 import com.lims.utils.RenderUtils;
 
 import java.sql.SQLException;
@@ -67,7 +69,7 @@ public class FileController extends Controller {
         temp.put("id", entry.get("id"));
         temp.put("name", entry.get("name"));
         temp.put("company_id", entry.get("company_id"));
-        temp.put("file_path",entry.get("file_path"));
+        temp.put("file_path", entry.get("file_path"));
         return temp;
     }
 
@@ -165,4 +167,36 @@ public class FileController extends Controller {
         }
     }
 
+    /**
+     * 上传报告功能
+     **/
+    public void saveReport() {
+        try {
+            int company_id = getParaToInt("company_id");
+            String type = getPara("type");
+            String report_path = getPara("report_path");
+            Report report = new Report();
+            Boolean result = report.set("company_id", company_id).set("type", type).set("report_path", report_path).set("process", 1).save();
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 显示当前公司的所有报告
+     **/
+    public void reportList() {
+        try {
+            int company_id = getParaToInt("company_id");
+            List<Report> reportList = Report.report.find("SELECT * FROM `db_report` WHERE company_id=" + company_id);
+            List<Map> result = new ArrayList<>();
+            for (Report report : reportList) {
+                result.add(report.Json());
+            }
+            renderJson(result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }
