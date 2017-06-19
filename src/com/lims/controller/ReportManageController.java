@@ -134,7 +134,7 @@ public class ReportManageController extends Controller {
             Boolean result = true;
             for (int i = 0; i < selected.length; i++) {
                 int id = selected[i];
-                result = result && Element.elementDao.deleteById(id);
+                result = result && ReportManage.reportManage.deleteById(id);
                 if (!result) break;
             }
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
