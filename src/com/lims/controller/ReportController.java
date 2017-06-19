@@ -250,8 +250,8 @@ public class ReportController extends Controller {
             Report report = new Report();
             String name = getPara("type");
             String path = getPara("path");
-            int flag =getParaToInt("flag");
-            result = result && report.set("type", name).set("path", path).set("singer", ParaUtils.getCurrentUser(getRequest()).get("id")).set("sign_time", ParaUtils.sdf.format(new Date())).set("flag",flag).save();
+            int flag = getParaToInt("flag");
+            result = result && report.set("type", name).set("path", path).set("singer", ParaUtils.getCurrentUser(getRequest()).get("id")).set("sign_time", ParaUtils.sdf.format(new Date())).set("flag", flag).save();
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
@@ -266,6 +266,25 @@ public class ReportController extends Controller {
             int id = getParaToInt("id");
             Boolean result = Report.report.deleteById(id);
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /***
+     * 批量删除报告
+     * **/
+    public void deleteAll() {
+        try {
+            Integer[] selected = getParaValuesToInt("selected[]");
+            Boolean result = true;
+            for (int i = 0; i < selected.length; i++) {
+                int id = selected[i];
+                result = result && Report.report.deleteById(id);
+                if (!result) break;
+            }
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
         } catch (Exception e) {
             renderError(500);
         }
@@ -295,16 +314,52 @@ public class ReportController extends Controller {
 
     /**
      * 报告在线查看
-     * **/
-    public void check(){
+     **/
+    public void check() {
         try {
-            int id =getParaToInt("id");
+            int id = getParaToInt("id");
             Report report = Report.report.findById(id);
             getRequest().setAttribute("report", report);
             render("/template/report.jsp");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             renderError(500);
         }
+    }
+
+    /**
+     * 报告审核意见
+     **/
+    public void reviewMessage() {
+        try {
+            int id = getParaToInt("id");
+            Report report = Report.report.findById(id);
+            Map total =new HashMap();
+            if (report != null) {
+                List<ReportFirstReview> reportFirstReviewList=ReportFirstReview.reportFirstReview.find("SELECT * FROM `db_report_first_review` WHERE report_id="+id);
+                List<Map> result =new ArrayList<>();
+                for (ReportFirstReview reportFirstReview:reportFirstReviewList){
+                    result.add(reportFirstReview.Json());
+                }
+                total.put("firstReview",result);
+                List<ReportSecondReview> reportSecondReviewList = ReportSecondReview.reportSecondReview.find("SELECT * FROM `db_report_second_review` WHERE report_id=" + id);
+                List<Map> result2=new ArrayList<>();
+                for (ReportSecondReview reportSecondReview:reportSecondReviewList){
+                   result2.add(reportSecondReview.Json());
+                }
+                total.put("secondReview",result2);
+                List<ReportThirdReview> reportThirdReviewList = ReportThirdReview.reportThirdReview.find("SELECT * FROM `db_report_third_review` WHERE report_id=" + id);
+                List<Map> result3=new ArrayList<>();
+                for (ReportThirdReview reportThirdReview:reportThirdReviewList){
+                    result3.add(reportThirdReview.Json());
+                }
+                total.put("thirdReview",result3);
+                renderJson(total);
+            }
+           else {renderNull();}
+        } catch (Exception e) {
+            renderError(500);
+        }
+
     }
 }
