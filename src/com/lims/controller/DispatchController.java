@@ -209,7 +209,7 @@ public class DispatchController extends Controller {
                                 List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id=" + inspect.get("id"));
                                 for (InspectSoild inspectSoild : inspectSoilds) {
                                     inspectJson.add(inspectSoild.toJSON());
-                                    List<InspectSoildReview> inspectSoildReviewList = InspectSoildReview.inspectSoildReviewdao.find("SELECT * FROM `db_inspect_solid_review` WHERE soild_id=" + inspectSoild.get("id"));
+                                    List<InspectSoildReview> inspectSoildReviewList = InspectSoildReview.inspectSoildReviewdao.find("SELECT * FROM `db_inspect_solid_review` WHERE solid_id=" + inspectSoild.get("id"));
                                     for (InspectSoildReview inspectSoildReview : inspectSoildReviewList) {
                                         item.add(inspectSoildReview.toJSON());
 
@@ -382,9 +382,9 @@ public class DispatchController extends Controller {
                     renderJson(RenderUtils.CODE_UNIQUE);
                 } else {
                     result = result && task.set("process", ProcessKit.getTaskProcess("lab")).update();
-
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                 }
-                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
             } else {
                 renderJson(RenderUtils.CODE_EMPTY);
             }

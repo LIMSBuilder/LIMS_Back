@@ -9,6 +9,7 @@ import com.lims.utils.LoggerKit;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -18,7 +19,7 @@ import java.util.*;
  */
 public class InspectController extends Controller {
     /**
-     * 保存送检单数据
+     * 保存送检单数据  1表示保存
      **/
     public void save() {
         try {
@@ -31,31 +32,31 @@ public class InspectController extends Controller {
                         case "water":
                             InspectWater inspectWater = InspectWater.inspectWaterDao.findById(getPara("id"));
                             if (inspectWater != null) {
-                                result = result && inspectWater.set("result", getPara("result")).set("process", 1).update();
+                                result = result && inspectWater.set("result", getPara("result")).set("process", 1).set("flag", 1).update();
                             } else return false;
                             break;
                         case "soil":
                             InspectSoil inspectSoil = InspectSoil.inspectSoilDao.findById(getPara("id"));
                             if (inspectSoil != null) {
-                                result = result && inspectSoil.set("result", getPara("result")).set("point", getPara("point")).set("remark", getPara("remark")).set("process", 1).update();
+                                result = result && inspectSoil.set("result", getPara("result")).set("point", getPara("point")).set("remark", getPara("remark")).set("process", 1).set("flag", 1).update();
                             } else return false;
                             break;
                         case "solid":
                             InspectSoild inspectSoild = InspectSoild.inspectSoildDao.findById(getPara("id"));
                             if (inspectSoild != null) {
-                                result = result && inspectSoild.set("result", getPara("result")).set("volume", getPara("volume")).set("flow", getPara("flow")).set("concentration", getPara("concentration")).set("discharge", getPara("discharge")).set("process", 1).update();
+                                result = result && inspectSoild.set("result", getPara("result")).set("volume", getPara("volume")).set("flow", getPara("flow")).set("concentration", getPara("concentration")).set("discharge", getPara("discharge")).set("process", 1).set("flag", 1).update();
                             } else return false;
                             break;
                         case "air":
                             InspectAir inspectAir = InspectAir.inspectAir.findById(getPara("id"));
                             if (inspectAir != null) {
-                                result = result && inspectAir.set("result", getPara("result")).set("volume", getPara("volume")).set("concentration", getPara("concentration")).set("process", 1).update();
+                                result = result && inspectAir.set("result", getPara("result")).set("volume", getPara("volume")).set("concentration", getPara("concentration")).set("process", 1).set("flag", 1).update();
                             } else return false;
                             break;
                         case "dysodia":
                             InspectDysodia inspectDysodia = InspectDysodia.inspectDysodiaDao.findById(getPara("id"));
                             if (inspectDysodia != null) {
-                                result = result && inspectDysodia.set("result", getPara("result")).set("concentration", getPara("concentration")).set("process", 1).update();
+                                result = result && inspectDysodia.set("concentration", getPara("concentration")).set("process", 1).set("flag", 1).update();
                             } else return false;
                             break;
                     }
@@ -133,7 +134,7 @@ public class InspectController extends Controller {
                     for (Inspect inspect : inspectList) {
                         switch (inspect.getStr("type")) {
                             case "water":
-                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "'AND process =0");
+                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "'AND flag is Null");
                                 if (inspectWaterList.size() != 0) {
                                     renderJson(RenderUtils.CODE_UNIQUE);
                                 } else {
@@ -146,7 +147,7 @@ public class InspectController extends Controller {
                                 }
                                 break;
                             case "soil":
-                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "'AND process =0");
+                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "'AND flag is Null");
                                 if (inspectSoilList.size() != 0) {
                                     renderJson(RenderUtils.CODE_UNIQUE);
                                 } else {
@@ -160,7 +161,7 @@ public class InspectController extends Controller {
                                 }
                                 break;
                             case "solid":
-                                List<InspectSoild> inspectSoildList = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "'AND process =0");
+                                List<InspectSoild> inspectSoildList = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "'AND flag is Null");
                                 if (inspectSoildList.size() != 0) {
                                     renderJson(RenderUtils.CODE_UNIQUE);
                                 } else {
@@ -173,7 +174,7 @@ public class InspectController extends Controller {
                                 }
                                 break;
                             case "air":
-                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "'AND process =0");
+                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "'AND flag is Null");
                                 if (inspectAirList.size() != 0) {
                                     renderJson(RenderUtils.CODE_UNIQUE);
                                 } else {
@@ -187,7 +188,7 @@ public class InspectController extends Controller {
                                 break;
 
                             case "dysodia":
-                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "'AND process =0");
+                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "'AND flag is Null");
                                 if (inspectDysodiaList.size() != 0) {
                                     renderJson(RenderUtils.CODE_UNIQUE);
                                 } else {
@@ -227,65 +228,76 @@ public class InspectController extends Controller {
                     for (Inspect inspect : inspectList) {
                         switch (inspect.getStr("type")) {
                             case "water":
-                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
+                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "'AND flag2 <1");
                                 if (inspectWaterList.size() != 0) {
                                     for (InspectWater inspectWater : inspectWaterList) {
                                         result = result && inspectWater.set("process", 1).update();
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-                                }
-                                else {
-                                    renderJson(RenderUtils.CODE_SUCCESS);
+                                } else {
+                                    for (InspectWater inspectWater : inspectWaterList) {
+                                        result = result && inspectWater.set("process", 3).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                                 }
                                 break;
                             case "soil":
-                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
+                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "'AND flag2 <1");
                                 if (inspectSoilList.size() != 0) {
                                     for (InspectSoil inspectSoil : inspectSoilList) {
                                         result = result && inspectSoil.set("process", 1).update();
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
 
-                                }
-                                else {
-                                    renderJson(RenderUtils.CODE_SUCCESS);
+                                } else {
+                                    for (InspectSoil inspectSoil : inspectSoilList) {
+                                        result = result && inspectSoil.set("process", 3).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
                                 }
                                 break;
                             case "solid":
-                                List<InspectSoild> inspectSoildList = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
+                                List<InspectSoild> inspectSoildList = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "'AND flag2 <1");
                                 if (inspectSoildList.size() != 0) {
                                     for (InspectSoild inspectSoild : inspectSoildList) {
                                         result = result && inspectSoild.set("process", 1).update();
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-                                }
-                                else {
-                                    renderJson(RenderUtils.CODE_SUCCESS);
+                                } else {
+                                    for (InspectSoild inspectSoild : inspectSoildList) {
+                                        result = result && inspectSoild.set("process", 3).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                                 }
                                 break;
                             case "air":
-                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "'AND process <3");
+                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "'AND flag2 <1");
                                 if (inspectAirList.size() != 0) {
                                     for (InspectAir inspectAir : inspectAirList) {
                                         result = result && inspectAir.set("process", 1).update();
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-                                }
-                                else {
-                                    renderJson(RenderUtils.CODE_SUCCESS);
+                                } else {
+                                    for (InspectAir inspectAir : inspectAirList) {
+                                        result = result && inspectAir.set("process", 3).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                                 }
                                 break;
 
                             case "dysodia":
-                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "'AND process =0");
+                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "'AND flag2 <1");
                                 if (inspectDysodiaList.size() != 0) {
                                     for (InspectDysodia inspectDysodia : inspectDysodiaList) {
                                         result = result && inspectDysodia.set("process", 1).update();
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
-                                }
-                                else {
-                                    renderJson(RenderUtils.CODE_SUCCESS);
+                                } else {
+                                    for (InspectDysodia inspectDysodia : inspectDysodiaList) {
+                                        result = result && inspectDysodia.set("process", 3).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                                 }
                                 break;
                         }
@@ -299,7 +311,7 @@ public class InspectController extends Controller {
     }
 
     /**
-     * 复合任务显示 taskList
+     * 复核任务显示 taskList
      **/
     public void taskList() {
         try {
@@ -446,7 +458,7 @@ public class InspectController extends Controller {
     }
 
     /**
-     * f复核
+     * f复核 flag2 1-代表复核通过 0-代表复核不通过
      **/
     public void review() {
         try {
@@ -465,9 +477,9 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("water_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    result = result && inspectWater.set("review_id", inspectWaterReview.get("id")).set("process", 3).update();
+                                    result = result && inspectWater.set("review_id", inspectWaterReview.get("id")).set("flag2", 1).update();
                                 } else {
-                                    result = result && inspectWater.set("review_id", inspectWaterReview.get("id")).set("process", 1).update();
+                                    result = result && inspectWater.set("review_id", inspectWaterReview.get("id")).set("flag2", 0).update();
                                 }
                             } else return false;
 
@@ -481,9 +493,9 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("soil_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    result = result && inspectSoil.set("review_id", inspectSoilReview.get("id")).set("process", 3).update();
+                                    result = result && inspectSoil.set("review_id", inspectSoilReview.get("id")).set("flag2", 1).update();
                                 } else {
-                                    result = result && inspectSoil.set("review_id", inspectSoilReview.get("id")).set("process", 1).update();
+                                    result = result && inspectSoil.set("review_id", inspectSoilReview.get("id")).set("flag2", 0).update();
                                 }
                             } else return false;
                             break;
@@ -496,9 +508,9 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("solid_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    result = result && inspectSoild.set("review_id", inspectSoildReview.get("id")).set("process", 3).update();
+                                    result = result && inspectSoild.set("review_id", inspectSoildReview.get("id")).set("flag2", 1).update();
                                 } else {
-                                    result = result && inspectSoild.set("review_id", inspectSoildReview.get("id")).set("process", 1).update();
+                                    result = result && inspectSoild.set("review_id", inspectSoildReview.get("id")).set("flag2", 0).update();
                                 }
                             } else return false;
                             break;
@@ -511,9 +523,9 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("air_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    result = result && inspectAir.set("review_id", inspectAirReview.get("id")).set("process", 3).update();
+                                    result = result && inspectAir.set("review_id", inspectAirReview.get("id")).set("flag2", 1).update();
                                 } else {
-                                    result = result && inspectAir.set("review_id", inspectAirReview.get("id")).set("process", 1).update();
+                                    result = result && inspectAir.set("review_id", inspectAirReview.get("id")).set("flag2", 0).update();
                                 }
                             } else return false;
                             break;
@@ -526,9 +538,9 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("solid_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    result = result && inspectDysodia.set("review_id", inspectDysodiaReview.get("id")).set("process", 3).update();
+                                    result = result && inspectDysodia.set("review_id", inspectDysodiaReview.get("id")).set("flag", 1).update();
                                 } else {
-                                    result = result && inspectDysodia.set("review_id", inspectDysodiaReview.get("id")).set("process", 1).update();
+                                    result = result && inspectDysodia.set("review_id", inspectDysodiaReview.get("id")).set("flag", 0).update();
                                 }
                             } else return false;
                             break;
@@ -683,7 +695,141 @@ public class InspectController extends Controller {
     }
 
     /**
-     * 审核结果
+     * 审核流转
+     ***/
+    public void checkFlow() {
+        try {
+            int task_id = getParaToInt("task_id");
+            int project_id = getParaToInt("project_id");
+            Task task = Task.taskDao.findById(task_id);
+            Boolean result = true;
+            if (task != null) {
+                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_item_project` p,`db_item` i,`db_company` c,`db_task` t \n" +
+                        "WHERE p.project_id='" + project_id + "' AND p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND task_id=" + task.get("id"));
+                for (ItemProject itemProject : itemProjectList) {
+                    List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id =" + itemProject.get("id"));
+                    for (Inspect inspect : inspectList) {
+                        switch (inspect.getStr("type")) {
+                            case "water":
+                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "'AND flag3 <1");
+                                if (inspectWaterList.size() != 0) {
+                                    for (InspectWater inspectWater : inspectWaterList) {
+                                        result = result && inspectWater.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                } else {
+                                    for (InspectWater inspectWater : inspectWaterList) {
+                                        result = result && inspectWater.set("process", 4).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                break;
+                            case "soil":
+                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "'AND flag3 <1");
+                                if (inspectSoilList.size() != 0) {
+                                    for (InspectSoil inspectSoil : inspectSoilList) {
+                                        result = result && inspectSoil.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+                                } else {
+                                    for (InspectSoil inspectSoil : inspectSoilList) {
+                                        result = result && inspectSoil.set("process", 4).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+
+                                }
+                                break;
+                            case "solid":
+                                List<InspectSoild> inspectSoildList = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "'AND flag3 <1");
+                                if (inspectSoildList.size() != 0) {
+                                    for (InspectSoild inspectSoild : inspectSoildList) {
+                                        result = result && inspectSoild.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                } else {
+                                    for (InspectSoild inspectSoild : inspectSoildList) {
+                                        result = result && inspectSoild.set("process", 4).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                break;
+                            case "air":
+                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "'AND flag3 <1");
+                                if (inspectAirList.size() != 0) {
+                                    for (InspectAir inspectAir : inspectAirList) {
+                                        result = result && inspectAir.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                } else {
+                                    for (InspectAir inspectAir : inspectAirList) {
+                                        result = result && inspectAir.set("process", 4).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                break;
+
+                            case "dysodia":
+                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "'AND flag3 <1");
+                                if (inspectDysodiaList.size() != 0) {
+                                    for (InspectDysodia inspectDysodia : inspectDysodiaList) {
+                                        result = result && inspectDysodia.set("process", 1).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                } else {
+                                    for (InspectDysodia inspectDysodia : inspectDysodiaList) {
+                                        result = result && inspectDysodia.set("process", 4).update();
+                                    }
+                                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                                }
+                                break;
+                        }
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 审核后，任务流转
+     **/
+    public void taskFlow() {
+        int task_id = getParaToInt("task_id");
+        Task task = Task.taskDao.findById(task_id);
+        Boolean result = true;
+        if (task != null) {
+            int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
+                    "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
+                    "`db_inspect_air` a,\n" +
+                    "`db_inspect_dysodia` dy,\n" +
+                    "`db_inspect_soil` so,\n" +
+                    "`db_inspect_solid` sd,\n" +
+                    "`db_inspect_water` wt\n" +
+                    "WHERE t.id=" + task_id +
+                    " AND c.task_id=t.id AND s.company_id=c.id\n" +
+                    "AND (\n" +
+                    "(a.sample_id=s.id AND a.process<4) OR\n" +
+                    "(dy.sample_id=s.id AND dy.process<4) OR\n" +
+                    "(so.sample_id=s.id AND so.process<4) OR\n" +
+                    "(sd.sample_id=s.id AND sd.process<4) OR\n" +
+                    "(wt.sample_id=s.id AND wt.process<4)\n" +
+                    ")").size();
+            if (size == 0) {
+                result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else {
+                renderJson(RenderUtils.CODE_NOTEMPTY);
+            }
+        } else {
+            renderJson(RenderUtils.CODE_EMPTY);
+        }
+    }
+
+    /**
+     * 审核结果  flag3 0-拒绝 1-通过
      **/
     public void reviewList() {
         try {
@@ -691,7 +837,7 @@ public class InspectController extends Controller {
                 @Override
                 public boolean run() throws SQLException {
                     String type = getPara("type");
-                    int task_id = getParaToInt("task_id");
+//                    int task_id = getParaToInt("task_id");
                     Boolean result = true;
                     switch (type) {
                         case "water":
@@ -703,30 +849,31 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("water_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
-                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
-                                            "`db_inspect_air` a,\n" +
-                                            "`db_inspect_dysodia` dy,\n" +
-                                            "`db_inspect_soil` so,\n" +
-                                            "`db_inspect_solid` sd,\n" +
-                                            "`db_inspect_water` wt\n" +
-                                            "WHERE t.id=" + task_id +
-                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
-                                            "AND (\n" +
-                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
-                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
-                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
-                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
-                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
-                                            ")").size();
-                                    if (size == 0) {
-                                        Task task = Task.taskDao.findById(task_id);
-                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
-                                    }
-                                    result = result && inspectWater.set("check_id", inspectWaterReview.get("id")).set("process", 4).update();
+//                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
+//                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
+//                                            "`db_inspect_air` a,\n" +
+//                                            "`db_inspect_dysodia` dy,\n" +
+//                                            "`db_inspect_soil` so,\n" +
+//                                            "`db_inspect_solid` sd,\n" +
+//                                            "`db_inspect_water` wt\n" +
+//                                            "WHERE t.id=" + task_id +
+//                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
+//                                            "AND (\n" +
+//                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
+//                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
+//                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
+//                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
+//                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
+//                                            ")").size();
+//                                    if (size == 0) {
+//                                        Task task = Task.taskDao.findById(task_id);
+//                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
+//                                    }
+                                    result = result && inspectWater.set("check_id", inspectWaterReview.get("id")).set("flag3", 1).update();
                                 } else {
-                                    result = result && inspectWater.set("check_id", inspectWaterReview.get("id")).set("process", 0).update();
+                                    result = result && inspectWater.set("check_id", inspectWaterReview.get("id")).set("flag3", 0).update();
                                 }
+
                             } else return false;
 
                             break;
@@ -739,29 +886,29 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("soil_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
-                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
-                                            "`db_inspect_air` a,\n" +
-                                            "`db_inspect_dysodia` dy,\n" +
-                                            "`db_inspect_soil` so,\n" +
-                                            "`db_inspect_solid` sd,\n" +
-                                            "`db_inspect_water` wt\n" +
-                                            "WHERE t.id=" + task_id +
-                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
-                                            "AND (\n" +
-                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
-                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
-                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
-                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
-                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
-                                            ")").size();
-                                    if (size == 0) {
-                                        Task task = Task.taskDao.findById(task_id);
-                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
-                                    }
-                                    result = result && inspectSoil.set("check_id", inspectSoilReview.get("id")).set("process", 4).update();
+//                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
+//                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
+//                                            "`db_inspect_air` a,\n" +
+//                                            "`db_inspect_dysodia` dy,\n" +
+//                                            "`db_inspect_soil` so,\n" +
+//                                            "`db_inspect_solid` sd,\n" +
+//                                            "`db_inspect_water` wt\n" +
+//                                            "WHERE t.id=" + task_id +
+//                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
+//                                            "AND (\n" +
+//                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
+//                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
+//                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
+//                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
+//                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
+//                                            ")").size();
+//                                    if (size == 0) {
+//                                        Task task = Task.taskDao.findById(task_id);
+//                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
+//                                    }
+                                    result = result && inspectSoil.set("check_id", inspectSoilReview.get("id")).set("flag3", 1).update();
                                 } else {
-                                    result = result && inspectSoil.set("check_id", inspectSoilReview.get("id")).set("process", 1).update();
+                                    result = result && inspectSoil.set("check_id", inspectSoilReview.get("id")).set("flag3", 0).update();
                                 }
                             } else return false;
                             break;
@@ -774,29 +921,29 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("soil_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
-                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
-                                            "`db_inspect_air` a,\n" +
-                                            "`db_inspect_dysodia` dy,\n" +
-                                            "`db_inspect_soil` so,\n" +
-                                            "`db_inspect_solid` sd,\n" +
-                                            "`db_inspect_water` wt\n" +
-                                            "WHERE t.id=" + task_id +
-                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
-                                            "AND (\n" +
-                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
-                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
-                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
-                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
-                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
-                                            ")").size();
-                                    if (size == 0) {
-                                        Task task = Task.taskDao.findById(task_id);
-                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
-                                    }
-                                    result = result && inspectSoild.set("check_id", inspectSoildReview.get("id")).set("process", 4).update();
+//                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
+//                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
+//                                            "`db_inspect_air` a,\n" +
+//                                            "`db_inspect_dysodia` dy,\n" +
+//                                            "`db_inspect_soil` so,\n" +
+//                                            "`db_inspect_solid` sd,\n" +
+//                                            "`db_inspect_water` wt\n" +
+//                                            "WHERE t.id=" + task_id +
+//                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
+//                                            "AND (\n" +
+//                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
+//                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
+//                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
+//                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
+//                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
+//                                            ")").size();
+//                                    if (size == 0) {
+//                                        Task task = Task.taskDao.findById(task_id);
+//                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
+//                                    }
+                                    result = result && inspectSoild.set("check_id", inspectSoildReview.get("id")).set("flag3", 1).update();
                                 } else {
-                                    result = result && inspectSoild.set("check_id", inspectSoildReview.get("id")).set("process", 1).update();
+                                    result = result && inspectSoild.set("check_id", inspectSoildReview.get("id")).set("flag3", 0).update();
                                 }
                             } else return false;
                             break;
@@ -809,29 +956,29 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("air_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
-                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
-                                            "`db_inspect_air` a,\n" +
-                                            "`db_inspect_dysodia` dy,\n" +
-                                            "`db_inspect_soil` so,\n" +
-                                            "`db_inspect_solid` sd,\n" +
-                                            "`db_inspect_water` wt\n" +
-                                            "WHERE t.id=" + task_id +
-                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
-                                            "AND (\n" +
-                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
-                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
-                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
-                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
-                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
-                                            ")").size();
-                                    if (size == 0) {
-                                        Task task = Task.taskDao.findById(task_id);
-                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
-                                    }
-                                    result = result && inspectAir.set("check_id", inspectAirReview.get("id")).set("process", 4).update();
+//                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
+//                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
+//                                            "`db_inspect_air` a,\n" +
+//                                            "`db_inspect_dysodia` dy,\n" +
+//                                            "`db_inspect_soil` so,\n" +
+//                                            "`db_inspect_solid` sd,\n" +
+//                                            "`db_inspect_water` wt\n" +
+//                                            "WHERE t.id=" + task_id +
+//                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
+//                                            "AND (\n" +
+//                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
+//                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
+//                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
+//                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
+//                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
+//                                            ")").size();
+//                                    if (size == 0) {
+//                                        Task task = Task.taskDao.findById(task_id);
+//                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
+//                                    }
+                                    result = result && inspectAir.set("check_id", inspectAirReview.get("id")).set("flag3", 1).update();
                                 } else {
-                                    result = result && inspectAir.set("check_id", inspectAirReview.get("id")).set("process", 1).update();
+                                    result = result && inspectAir.set("check_id", inspectAirReview.get("id")).set("flag3", 0).update();
                                 }
                             } else return false;
                             break;
@@ -844,30 +991,31 @@ public class InspectController extends Controller {
                                         .set("result", getPara("result")).set("type", getPara("type"))
                                         .set("solid_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
-                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
-                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
-                                            "`db_inspect_air` a,\n" +
-                                            "`db_inspect_dysodia` dy,\n" +
-                                            "`db_inspect_soil` so,\n" +
-                                            "`db_inspect_solid` sd,\n" +
-                                            "`db_inspect_water` wt\n" +
-                                            "WHERE t.id=" + task_id +
-                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
-                                            "AND (\n" +
-                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
-                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
-                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
-                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
-                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
-                                            ")").size();
-                                    if (size == 0) {
-                                        Task task = Task.taskDao.findById(task_id);
-                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
-                                    }
-                                    result = result && inspectDysodia.set("check_id", inspectDysodiaReview.get("id")).set("process", 4).update();
+//                                    int size = Task.taskDao.find("SELECT DISTINCT t.*\n" +
+//                                            "FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
+//                                            "`db_inspect_air` a,\n" +
+//                                            "`db_inspect_dysodia` dy,\n" +
+//                                            "`db_inspect_soil` so,\n" +
+//                                            "`db_inspect_solid` sd,\n" +
+//                                            "`db_inspect_water` wt\n" +
+//                                            "WHERE t.id=" + task_id +
+//                                            " AND c.task_id=t.id AND s.company_id=c.id\n" +
+//                                            "AND (\n" +
+//                                            "(a.sample_id=s.id AND a.process<4) OR\n" +
+//                                            "(dy.sample_id=s.id AND dy.process<4) OR\n" +
+//                                            "(so.sample_id=s.id AND so.process<4) OR\n" +
+//                                            "(sd.sample_id=s.id AND sd.process<4) OR\n" +
+//                                            "(wt.sample_id=s.id AND wt.process<4)\n" +
+//                                            ")").size();
+//                                    if (size == 0) {
+//                                        Task task = Task.taskDao.findById(task_id);
+//                                        result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
+//                                    }
+                                    result = result && inspectDysodia.set("check_id", inspectDysodiaReview.get("id")).set("flag3", 1).update();
                                 } else {
-                                    result = result && inspectDysodia.set("check_id", inspectDysodiaReview.get("id")).set("process", 1).update();
+                                    result = result && inspectDysodia.set("check_id", inspectDysodiaReview.get("id")).set("flag3", 0).update();
                                 }
+
                             } else return false;
                             break;
                     }

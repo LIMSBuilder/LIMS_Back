@@ -44,6 +44,7 @@ public class CommonRouter extends Routes {
         add("/api/reportReview",ReportReviewController.class);
         add("/api/reportmanage",ReportManageController.class);
         add("/api/count",CountProcess.class);
+
     }
 }
 
