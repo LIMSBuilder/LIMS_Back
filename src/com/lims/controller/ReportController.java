@@ -242,16 +242,21 @@ public class ReportController extends Controller {
 
 
     /***
-     * 保存报告类型
+     * 保存报告
+     * 0-上传的报告 1- 生成的报告
      * */
     public void create() {
         try {
-            boolean result = true;
             Report report = new Report();
-            String name = getPara("type");
-            String path = getPara("path");
-            int flag = getParaToInt("flag");
-            result = result && report.set("type", name).set("path", path).set("singer", ParaUtils.getCurrentUser(getRequest()).get("id")).set("sign_time", ParaUtils.sdf.format(new Date())).set("flag", flag).save();
+            Boolean result = report
+                    .set("type", getPara("type"))
+                    .set("flag", 0)
+                    .set("report_path", getPara("report_path"))
+                    .set("process", 0)
+                    .set("company_id", getPara("company_id"))
+                    .set("creater", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                    .set("create_time", ParaUtils.sdf.format(new Date()))
+                    .save();
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
@@ -261,9 +266,9 @@ public class ReportController extends Controller {
     /**
      * 删除报告
      **/
-    public void delete() {
+    public void deleteReport() {
         try {
-            int id = getParaToInt("id");
+            int id = getParaToInt("report_id");
             Boolean result = Report.report.deleteById(id);
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
@@ -293,9 +298,9 @@ public class ReportController extends Controller {
     /**
      * 以公司为单位，显示报告
      **/
-    public void List() {
+    public void list() {
         try {
-            int company_id = getParaToInt("company_id");
+            int company_id = getParaToInt("id");
             Company company = Company.companydao.findById(company_id);
             if (company != null) {
                 List<Report> reportList = Report.report.find("SELECT * FROM `db_report` WHERE company_id=" + company_id);
@@ -334,29 +339,30 @@ public class ReportController extends Controller {
         try {
             int id = getParaToInt("id");
             Report report = Report.report.findById(id);
-            Map total =new HashMap();
+            Map total = new HashMap();
             if (report != null) {
-                List<ReportFirstReview> reportFirstReviewList=ReportFirstReview.reportFirstReview.find("SELECT * FROM `db_report_first_review` WHERE report_id="+id);
-                List<Map> result =new ArrayList<>();
-                for (ReportFirstReview reportFirstReview:reportFirstReviewList){
+                List<ReportFirstReview> reportFirstReviewList = ReportFirstReview.reportFirstReview.find("SELECT * FROM `db_report_first_review` WHERE report_id=" + id);
+                List<Map> result = new ArrayList<>();
+                for (ReportFirstReview reportFirstReview : reportFirstReviewList) {
                     result.add(reportFirstReview.Json());
                 }
-                total.put("firstReview",result);
+                total.put("firstReview", result);
                 List<ReportSecondReview> reportSecondReviewList = ReportSecondReview.reportSecondReview.find("SELECT * FROM `db_report_second_review` WHERE report_id=" + id);
-                List<Map> result2=new ArrayList<>();
-                for (ReportSecondReview reportSecondReview:reportSecondReviewList){
-                   result2.add(reportSecondReview.Json());
+                List<Map> result2 = new ArrayList<>();
+                for (ReportSecondReview reportSecondReview : reportSecondReviewList) {
+                    result2.add(reportSecondReview.Json());
                 }
-                total.put("secondReview",result2);
+                total.put("secondReview", result2);
                 List<ReportThirdReview> reportThirdReviewList = ReportThirdReview.reportThirdReview.find("SELECT * FROM `db_report_third_review` WHERE report_id=" + id);
-                List<Map> result3=new ArrayList<>();
-                for (ReportThirdReview reportThirdReview:reportThirdReviewList){
+                List<Map> result3 = new ArrayList<>();
+                for (ReportThirdReview reportThirdReview : reportThirdReviewList) {
                     result3.add(reportThirdReview.Json());
                 }
-                total.put("thirdReview",result3);
+                total.put("thirdReview", result3);
                 renderJson(total);
+            } else {
+                renderNull();
             }
-           else {renderNull();}
         } catch (Exception e) {
             renderError(500);
         }
