@@ -166,7 +166,7 @@ public class ServiceController extends Controller {
             ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
             if (serviceContract != null) {
                 if (getParaToInt("review") == 1) {
-                    result = result && serviceContract.set("id",id).set("state", ProcessKit.getServiceProcess("create")).set("path", path)
+                    result = result && serviceContract.set("id", id).set("state", ProcessKit.getServiceProcess("create")).set("path", path)
                             .set("name", name)
                             .set("review", review)
                             .set("path", path)
@@ -174,7 +174,7 @@ public class ServiceController extends Controller {
                             .set("update_time", ParaUtils.sdf.format(new Date()))
                             .update();
                 } else {
-                    result = result && serviceContract.set("id",id).set("state", ProcessKit.getServiceProcess("review")).set("path", path)
+                    result = result && serviceContract.set("id", id).set("state", ProcessKit.getServiceProcess("review")).set("path", path)
                             .set("name", name)
                             .set("review", review)
                             .set("path", path)
@@ -193,22 +193,24 @@ public class ServiceController extends Controller {
             renderError(500);
         }
     }
+
     /**
      * 根据Id 获取数据
-     * **/
-    public  void findDetailsList(){
+     **/
+    public void findDetailsList() {
         try {
-            int id =getParaToInt("id");
-            ServiceContract serviceContract =ServiceContract.serviceContractDao.findById(id);
-            if (serviceContract !=null){
-                List<ServiceContract> serviceContractList =ServiceContract.serviceContractDao.find("SELECT * FROM `db_service_contract` where id = "+id);
-                renderJson( toJsonSingle1(serviceContract));
+            int id = getParaToInt("id");
+            ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(id);
+            if (serviceContract != null) {
+                List<ServiceContract> serviceContractList = ServiceContract.serviceContractDao.find("SELECT * FROM `db_service_contract` where id = " + id);
+                renderJson(toJsonSingle1(serviceContract));
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             renderError(500);
         }
     }
+
     public Map toJsonSingle1(ServiceContract entry) {
         Map temp = new HashMap();
         temp.put("id", entry.get("id"));
@@ -464,5 +466,20 @@ public class ServiceController extends Controller {
         return temp;
     }
 
-
+    /**
+     * 下载合同
+     **/
+    public void downLoadServiceContract() {
+        try {
+            int service_id = getParaToInt("service_id");
+            ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(service_id);
+            if (serviceContract != null) {
+                renderJson(serviceContract.Json());
+            } else {
+                renderNull();
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
 }
