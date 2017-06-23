@@ -407,8 +407,28 @@ public class ReportController extends Controller {
 
     public void firstReview() {
         try {
-            ReportFirstReview firstReview = new ReportFirstReview();
-            
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    ReportFirstReview firstReview = new ReportFirstReview();
+                    Boolean result = firstReview.set("condition1", getPara("condition1"))
+                            .set("condition2", getPara("condition2"))
+                            .set("condition3", getPara("condition3"))
+                            .set("condition4", getPara("condition4"))
+                            .set("condition5", getPara("condition5"))
+                            .set("condition6", getPara("condition6"))
+                            .set("condition7", getPara("condition7"))
+                            .set("other", getPara("other"))
+                            .set("reviewer", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                            .set("review_time", ParaUtils.sdf.format(new Date()))
+                            .set("report_id", getPara("report_id"))
+                            .save();
+                    Report report = Report.report.findById(getPara("report_id"));
+                    result = result && report.set("firstReview", firstReview.get("id")).update();
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
         } catch (Exception e) {
             renderError(500);
         }
