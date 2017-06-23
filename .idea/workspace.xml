@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7adb65de-9683-469f-b0c3-f3c1cc41e101" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/ReportController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/ReportController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" afterPath="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -45,8 +44,8 @@
       <file leaf-file-name="ReportController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
-              <caret line="410" column="12" lean-forward="false" selection-start-line="410" selection-start-column="12" selection-end-line="410" selection-end-column="12" />
+            <state relative-caret-position="282">
+              <caret line="422" column="40" lean-forward="false" selection-start-line="422" selection-start-column="40" selection-end-line="422" selection-end-column="40" />
               <folding>
                 <element signature="method#company#0;class#ReportController#0" expanded="false" />
                 <element signature="method#contract#0;class#ReportController#0" expanded="false" />
@@ -56,6 +55,8 @@
                 <element signature="method#inspect#0;class#ReportController#0" expanded="false" />
                 <element signature="e#14980#16098#0" expanded="true" />
                 <element signature="e#16097#16098#0" expanded="true" />
+                <element signature="e#16345#17619#0" expanded="true" />
+                <element signature="e#17618#17619#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -116,7 +117,9 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="931">
               <caret line="61" column="66" lean-forward="false" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1008,7 +1011,7 @@
       <workItem from="1497918677655" duration="6403000" />
       <workItem from="1497946431937" duration="12036000" />
       <workItem from="1498050731933" duration="432000" />
-      <workItem from="1498133350287" duration="4693000" />
+      <workItem from="1498133350287" duration="5174000" />
     </task>
     <servers />
   </component>
@@ -1024,7 +1027,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="574681000" />
+    <option name="totallyTimeSpent" value="575162000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -1106,7 +1109,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="481" />
+      <option name="time" value="482" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1418,7 +1421,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="931">
           <caret line="61" column="66" lean-forward="false" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1488,8 +1493,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="410" column="12" lean-forward="false" selection-start-line="410" selection-start-column="12" selection-end-line="410" selection-end-column="12" />
+        <state relative-caret-position="282">
+          <caret line="422" column="40" lean-forward="false" selection-start-line="422" selection-start-column="40" selection-end-line="422" selection-end-column="40" />
           <folding>
             <element signature="method#company#0;class#ReportController#0" expanded="false" />
             <element signature="method#contract#0;class#ReportController#0" expanded="false" />
@@ -1499,6 +1504,8 @@
             <element signature="method#inspect#0;class#ReportController#0" expanded="false" />
             <element signature="e#14980#16098#0" expanded="true" />
             <element signature="e#16097#16098#0" expanded="true" />
+            <element signature="e#16345#17619#0" expanded="true" />
+            <element signature="e#17618#17619#0" expanded="true" />
           </folding>
         </state>
       </provider>
