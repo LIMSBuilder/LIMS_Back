@@ -1,10 +1,14 @@
 package com.lims.controller;
 
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.lims.model.*;
 import com.lims.utils.ParaUtils;
+import com.lims.utils.ProcessKit;
 import com.lims.utils.RenderUtils;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -367,5 +371,46 @@ public class ReportController extends Controller {
             renderError(500);
         }
 
+    }
+
+
+    /**
+     * 报告编制流转
+     */
+    public void editFlow() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    Boolean result = true;
+                    List<Company> companyList = Company.companydao.find("SELECT c.* FROM `db_task` t,`db_company` c WHERE c.task_id=t.id AND t.id=" + getPara("task_id"));
+                    for (Company company : companyList) {
+                        List<Report> reportList = Report.report.find("SELECT r.* FROM `db_report` r WHERE company_id=" + company.get("id"));
+                        if (reportList.size() == 0) {
+                            result = false;
+                            break;
+                        }
+                        for (Report report : reportList) {
+                            result = result && report.set("process", 1).update();
+                        }
+                    }
+                    Task task = Task.taskDao.findById(getPara("task_id"));
+                    result = result && task.set("process", ProcessKit.getTaskProcess("reportFirstReview")).update();
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void firstReview() {
+        try {
+            ReportFirstReview firstReview = new ReportFirstReview();
+            
+        } catch (Exception e) {
+            renderError(500);
+        }
     }
 }

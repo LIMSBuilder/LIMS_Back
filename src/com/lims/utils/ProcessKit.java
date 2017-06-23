@@ -37,8 +37,9 @@ public class ProcessKit {
         this.put("quality", 5);//质控 质控表
         this.put("lab", 6);//质控完成，重新流转到实验室
         this.put("firstReview", 7);//实验分析一审
-        this.put("secondReview",8);//实验分析二审
-        this.put("report",9);//报告
+        this.put("secondReview", 8);//实验分析二审
+        this.put("report", 9);//报告
+        this.put("reportFirstReview", 10);//报告一审
 
 
     }};
