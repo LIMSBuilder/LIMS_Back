@@ -221,39 +221,63 @@ public class MonitorProjectController extends Controller {
 
     public void details() {
         try {
+            Map maps = new HashMap();
             Integer[] projectIds = getParaValuesToInt("project[]");
             Element element = Element.elementDao.findById(getPara("element"));
             Frequency frequency = Frequency.frequencyDao.findById(getPara("frequency"));
-            if (frequency != null && element != null && projectIds.length != 0) {
-                List<Map> projectList = new ArrayList<>();
-                for (int id : projectIds) {
-                    projectList.add(toJsonSingle(MonitorProject.monitorProjectdao.findById(id)));
-                }
-                String value = "";
-                if (frequency.get("unit").equals("one")) {
-                    value = "仅" + frequency.get("count") + "次";
-                } else {
-                    String unit = Frequency.UnitMap.get(frequency.get("unit")).toString();
-                    value = frequency.get("count") + "次/" + frequency.get("times") + unit;
-
-                }
-                Map fre = new HashMap();
-                fre.put("id", frequency.get("id"));
-                fre.put("total", value);
-                Map maps = new HashMap();
-                maps.put("point", getParaValues("point[]"));
-                maps.put("company", getPara("company"));
-                maps.put("project", projectList);
-                maps.put("element", element);
-                maps.put("is_package", getPara("is_package"));
-                maps.put("other", getPara("other"));
-                maps.put("frequency", fre);
-                maps.put("code", 200);
-                renderJson(maps);
-            } else {
-                renderJson(RenderUtils.CODE_ERROR);
+            maps.put("company", "");
+            maps.put("flag", 0);
+            List items = new ArrayList<>();
+            Map item = new HashMap();
+            item.put("element", element);
+            item.put("frequency", frequency.toJsonSingle());
+            item.put("point", getPara("point"));
+            item.put("other", getPara("other"));
+            List temp = new ArrayList();
+            for (int id : projectIds) {
+                MonitorProject monitorProject = MonitorProject.monitorProjectdao.findById(id);
+                temp.add(monitorProject.toJsonSingle());
             }
-        } catch (Exception e) {
+            item.put("project", temp);
+            items.add(item);
+            maps.put("items", items);
+            renderJson(maps);
+
+//            Integer[] projectIds = getParaValuesToInt("project[]");
+//            Element element = Element.elementDao.findById(getPara("element"));
+//            Frequency frequency = Frequency.frequencyDao.findById(getPara("frequency"));
+//            if (frequency != null && element != null && projectIds.length != 0) {
+//                List<Map> projectList = new ArrayList<>();
+//                for (int id : projectIds) {
+//                    projectList.add(toJsonSingle(MonitorProject.monitorProjectdao.findById(id)));
+//                }
+//                String value = "";
+//                if (frequency.get("unit").equals("one")) {
+//                    value = "仅" + frequency.get("count") + "次";
+//                } else {
+//                    String unit = Frequency.UnitMap.get(frequency.get("unit")).toString();
+//                    value = frequency.get("count") + "次/" + frequency.get("times") + unit;
+//                }
+//                Map fre = new HashMap();
+//                fre.put("id", frequency.get("id"));
+//                fre.put("total", value);
+
+//                maps.put("point", getParaToInt("point"));
+////                maps.put("company", getPara("company"));
+//                maps.put("project", projectList);
+//                maps.put("element", element);
+////                maps.put("is_package", getPara("is_package"));
+//                maps.put("other", getPara("other"));
+//                maps.put("frequency", fre);
+//                maps.put("code", 200);
+//            renderJson(maps);
+//        } else{
+//            renderJson(RenderUtils.CODE_ERROR);
+//        }
+        } catch (
+                Exception e)
+
+        {
             renderError(500);
         }
     }

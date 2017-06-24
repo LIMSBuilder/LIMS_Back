@@ -30,7 +30,7 @@ public class Mail extends Model<Mail> {
         Map temp = new HashMap();
         temp.put("id", get("id"));
         temp.put("title", get("title"));
-        temp.put("sender", User.userDao.findById(get("send_id")).toSimpleJson());
+        temp.put("sender", get("send_id") == null ? null : User.userDao.findById(get("send_id")).toSimpleJson());
         temp.put("create_desp", ParaUtils.getPrettyTime(get("create_time").toString()));
         return temp;
     }

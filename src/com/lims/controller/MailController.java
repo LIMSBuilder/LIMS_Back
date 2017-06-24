@@ -140,7 +140,7 @@ public class MailController extends Controller {
         map.put("state", receiver.get("state"));
         map.put("read_time", receiver.get("read_time"));
         map.put("type", receiver.get("type"));
-        map.put("mail", Mail.mailDao.findById(receiver.get("mail_id")).getSimpleMapInfo());
+        map.put("mail", receiver.get("mail_id") == null ? null : Mail.mailDao.findById(receiver.get("mail_id")).getSimpleMapInfo());
         return map;
     }
 
@@ -329,6 +329,7 @@ public class MailController extends Controller {
             renderError(500);
         }
     }
+
 
 
     public void getReceiverList() {

@@ -17,10 +17,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by qulongjun on 2016/10/26.
@@ -28,6 +25,7 @@ import java.util.Map;
 public class ParaUtils extends Controller {
 
     public final static DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public final static DateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 
     public final static Map flows = new HashMap() {{
         put("stop_task", -2);//中止任务书
@@ -222,6 +220,8 @@ public class ParaUtils extends Controller {
             if (user.get("roleId") != null) {
                 Map role = Role.roledao.findById(user.get("roleId")).toJSON();
                 temp.put("role", role);
+                temp.put("roleId", user.get("roleId"));
+                temp.put("departmentId", role.get("departmentId"));
             }
             temp.put("mail", user.get("mail"));
             temp.put("address", user.get("address"));
@@ -231,6 +231,10 @@ public class ParaUtils extends Controller {
             temp.put("rowCount", user.get("rowCount"));
             temp.put("showWelcome", user.get("showWelcome"));
             temp.put("isNotice", user.get("isNotice"));
+            temp.put("cardId", user.get("cardId"));
+            temp.put("password", user.get("password"));
+            temp.put("isInit", user.get("isInit"));
+
         }
         return temp;
     }
@@ -263,4 +267,21 @@ public class ParaUtils extends Controller {
         }
     }
 
+
+    /**
+     * 获取前端比数据库中多的id，则第一个参数传前端数组，第二个参数传数据库数组
+     * 获取数据库中比前端多的id，则第一个参数传数据库数组，第二个参数传前端数组
+     *
+     * @param first  第一个数组
+     * @param second 第二个数组
+     */
+    public static List<Integer> CheckMore(Integer[] first, Integer[] second) {
+        List<Integer> result = new ArrayList<>();
+        for (int i : first) {
+            if (!Arrays.asList(second).contains(i)) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
 }

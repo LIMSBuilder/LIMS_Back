@@ -76,6 +76,7 @@ public class ItemProjectController extends Controller {
             } else {
                 ItemProject itemProject = new ItemProject();
                 Boolean result = itemProject.set("item_id", item_id).set("project_id", project_id).save();
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             }
 
         } catch (Exception e) {
@@ -121,19 +122,21 @@ public class ItemProjectController extends Controller {
         }
     }
 
-    public  void findByProject(){
+    public void findByProject() {
         try {
-            int project_id=getParaToInt("project_id");
-            if(project_id!=0){
-                List<ItemProject> itemProjectList=ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` where project_id =" + project_id);
-            }
-            else {
+            int project_id = getParaToInt("project_id");
+            if (project_id != 0) {
+                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` where project_id =" + project_id);
+                renderJson(toJson(itemProjectList));
+            } else {
                 renderJson(RenderUtils.CODE_REPEAT);
             }
-        }catch (Exception e)
-        {renderError(500);}
+        } catch (Exception e) {
+            renderError(500);
+        }
 
     }
+
     public void total() {
         try {
             renderJson(toJson(ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project`")));

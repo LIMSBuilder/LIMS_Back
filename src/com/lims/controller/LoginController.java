@@ -2,12 +2,18 @@ package com.lims.controller;
 
 import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.LogKit;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.lims.config.CommonConfig;
+import com.lims.model.Power;
 import com.lims.model.User;
 import com.lims.utils.ParaUtils;
 import com.lims.utils.RenderUtils;
+import com.jfinal.aop.Invocation;
+
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.servlet.http.HttpSession;
@@ -20,13 +26,14 @@ public class LoginController extends Controller {
      */
     public void check() {
         try {
+            LogKit.info("测试log功能看看实现");
             String username = getPara("username");
             String password = getPara("password");
             List<User> userList = User.userDao.find("SELECT * FROM `db_user` WHERE nick='" + username + "'");
             if (userList.size() != 0) {
                 if (userList.get(0).get("password").equals(ParaUtils.EncoderByMd5(password))) {
                     getSession().setAttribute("user", userList.get(0).get("id"));
-
+//                    List<Record> powerList = Db.find("SELECT p.path FROM `db_power` p,`db_power_role` r,`db_user` u WHERE u.user_id=" + userList.get(0).get("id") + " AND r.id =u.role_id  AND r.power_id=p.id");
                     Boolean result = userList.get(0).set("lastLogin", ParaUtils.sdf.format(new Date())).update();
                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                 } else {
@@ -37,6 +44,10 @@ public class LoginController extends Controller {
             renderError(500);
         }
     }
+
+    /**
+     * 忘记密码
+     **/
 
     public void forget() {
         try {
@@ -73,7 +84,8 @@ public class LoginController extends Controller {
                         .set("nick", getPara("nick"))
                         .set("name", getPara("name"))
                         .set("password", ParaUtils.EncoderByMd5(getPara("password")))
-                        .set("cardId", getPara("cardId"));
+                        .set("cardId", getPara("cardId"))
+                        .set("isInit", 0);
                 renderJson(user.save() ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             }
         } catch (Exception e) {
@@ -87,6 +99,7 @@ public class LoginController extends Controller {
      */
     public void getLogin() {
         try {
+
             renderJson(ParaUtils.getCurrentUserMap(getRequest()));
         } catch (Exception e) {
             renderError(500);
@@ -131,4 +144,5 @@ public class LoginController extends Controller {
             renderError(500);
         }
     }
+
 }
