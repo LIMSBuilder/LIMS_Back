@@ -20,6 +20,7 @@ public class Report extends Model<Report> {
         temp.put("creater", User.userDao.findById(this.getInt("creater")).toSimpleJson());
         temp.put("create_time", this.get("create_time"));
         temp.put("flag", this.get("flag"));
+        temp.put("process", this.get("process"));
         return temp;
     }
 }
