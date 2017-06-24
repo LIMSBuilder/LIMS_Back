@@ -321,6 +321,7 @@ public class ReportController extends Controller {
         }
     }
 
+
     /**
      * 报告在线查看
      **/
@@ -391,7 +392,8 @@ public class ReportController extends Controller {
                             break;
                         }
                         for (Report report : reportList) {
-                            result = result && report.set("process", 1).update();
+                            if (report.getInt("process") < 1)
+                                result = result && report.set("process", 1).set("firstReview", null).set("secondReview", null).set("thirdReview", null).update();
                         }
                     }
                     Task task = Task.taskDao.findById(getPara("task_id"));
@@ -424,11 +426,213 @@ public class ReportController extends Controller {
                             .set("report_id", getPara("report_id"))
                             .save();
                     Report report = Report.report.findById(getPara("report_id"));
-                    result = result && report.set("firstReview", firstReview.get("id")).update();
+                    report.set("firstReview", firstReview.get("id"));
+//                    result = result && report.set("firstReview", firstReview.get("id")).update();
+                    if (getParaToInt("condition1") + getParaToInt("condition2") + getParaToInt("condition3") + getParaToInt("condition4") + getParaToInt("condition5") + getParaToInt("condition6") + getParaToInt("condition7") != 7) {
+                        //审核拒绝
+                        report.set("process", -1);
+                    } else {
+                        //审核通过
+                        report.set("process", 2);
+                    }
+                    result = result && report.update();
                     return result;
                 }
             });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void secondReview() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    ReportSecondReview secondReview = new ReportSecondReview();
+                    Boolean result = secondReview.set("condition1", getPara("condition1"))
+                            .set("condition2", getPara("condition2"))
+                            .set("condition3", getPara("condition3"))
+                            .set("condition4", getPara("condition4"))
+                            .set("condition5", getPara("condition5"))
+                            .set("condition6", getPara("condition6"))
+                            .set("other", getPara("other"))
+                            .set("reviewer", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                            .set("review_time", ParaUtils.sdf.format(new Date()))
+                            .set("report_id", getPara("report_id"))
+                            .save();
+                    Report report = Report.report.findById(getPara("report_id"));
+                    report.set("secondReview", secondReview.get("id"));
+                    if (getParaToInt("condition1") + getParaToInt("condition2") + getParaToInt("condition3") + getParaToInt("condition4") + getParaToInt("condition5") + getParaToInt("condition6") != 6) {
+                        //审核拒绝
+                        report.set("process", -2);
+                    } else {
+                        //审核通过
+                        report.set("process", 3);
+                    }
+                    result = result && report.update();
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void thirdReview() {
+        try {
+            Boolean result = Db.tx(new IAtom() {
+                @Override
+                public boolean run() throws SQLException {
+                    ReportThirdReview thirdReview = new ReportThirdReview();
+                    Boolean result = thirdReview.set("condition1", getPara("condition1"))
+                            .set("condition2", getPara("condition2"))
+                            .set("condition3", getPara("condition3"))
+                            .set("other", getPara("other"))
+                            .set("reviewer", ParaUtils.getCurrentUser(getRequest()).get("id"))
+                            .set("review_time", ParaUtils.sdf.format(new Date()))
+                            .set("report_id", getPara("report_id"))
+                            .save();
+                    Report report = Report.report.findById(getPara("report_id"));
+                    report.set("thirdReview", thirdReview.get("id"));
+                    if (getParaToInt("condition1") + getParaToInt("condition2") + getParaToInt("condition3") != 3) {
+                        //审核拒绝
+                        report.set("process", -3);
+                    } else {
+                        //审核通过
+                        report.set("process", 4);
+                    }
+                    result = result && report.update();
+                    return result;
+                }
+            });
+            renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void firstReviewFlow() {
+        try {
+            Boolean result = true;
+            Task task = Task.taskDao.findById(getPara("task_id"));
+            if (task != null) {
+                List<Report> reportList = Report.report.find("SELECT r.* FROM `db_task` t,`db_company` c ,`db_report` r\n" +
+                        "WHERE t.id=" + getPara("task_id") + " AND c.task_id=t.id AND r.company_id=c.id AND r.process=1");
+                if (reportList.size() != 0) {
+                    //还有未处理的报告审核
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                } else {
+                    List<Report> rejectReport = Report.report.find("SELECT r.* FROM `db_task` t,`db_company` c ,`db_report` r\n" +
+                            "WHERE t.id=" + getPara("task_id") + " AND c.task_id=t.id AND r.company_id=c.id AND r.process=-1");
+                    if (rejectReport.size() != 0) {
+                        //存在审核拒绝的记录
+                        result = result && task.set("process", ProcessKit.getTaskProcess("report")).update();
+                    } else {
+                        //全部审核通过
+                        result = result && task.set("process", ProcessKit.getTaskProcess("reportSecondReview")).update();
+                    }
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                }
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void secondReviewFlow() {
+        try {
+            Boolean result = true;
+            Task task = Task.taskDao.findById(getPara("task_id"));
+            if (task != null) {
+                List<Report> reportList = Report.report.find("SELECT r.* FROM `db_task` t,`db_company` c ,`db_report` r\n" +
+                        "WHERE t.id=" + getPara("task_id") + " AND c.task_id=t.id AND r.company_id=c.id AND r.process=2");
+                if (reportList.size() != 0) {
+                    //还有未处理的报告审核
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                } else {
+                    List<Report> rejectReport = Report.report.find("SELECT r.* FROM `db_task` t,`db_company` c ,`db_report` r\n" +
+                            "WHERE t.id=" + getPara("task_id") + " AND c.task_id=t.id AND r.company_id=c.id AND r.process=-2");
+                    if (rejectReport.size() != 0) {
+                        //存在审核拒绝的记录
+                        result = result && task.set("process", ProcessKit.getTaskProcess("report")).update();
+                    } else {
+                        //全部审核通过
+                        result = result && task.set("process", ProcessKit.getTaskProcess("reportThirdReview")).update();
+                    }
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                }
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void thirdReviewFlow() {
+        try {
+            Boolean result = true;
+            Task task = Task.taskDao.findById(getPara("task_id"));
+            if (task != null) {
+                List<Report> reportList = Report.report.find("SELECT r.* FROM `db_task` t,`db_company` c ,`db_report` r\n" +
+                        "WHERE t.id=" + getPara("task_id") + " AND c.task_id=t.id AND r.company_id=c.id AND r.process=3");
+                if (reportList.size() != 0) {
+                    //还有未处理的报告审核
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                } else {
+                    List<Report> rejectReport = Report.report.find("SELECT r.* FROM `db_task` t,`db_company` c ,`db_report` r\n" +
+                            "WHERE t.id=" + getPara("task_id") + " AND c.task_id=t.id AND r.company_id=c.id AND r.process=-3");
+                    if (rejectReport.size() != 0) {
+                        //存在审核拒绝的记录
+                        result = result && task.set("process", ProcessKit.getTaskProcess("report")).update();
+                    } else {
+                        //全部审核通过
+                        result = result && task.set("process", ProcessKit.getTaskProcess("reportReceive")).update();
+                    }
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                }
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
+    public void receive() {
+        try {
+            Report report = Report.report.findById(getPara("report_id"));
+            if (report != null) {
+                Boolean result = report.set("process", 5).update();
+                renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+            } else
+                renderJson(RenderUtils.CODE_EMPTY);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public void receiveFlow() {
+        try {
+            Boolean result = true;
+            Task task = Task.taskDao.findById(getPara("task_id"));
+            if (task != null) {
+                List<Report> reportList = Report.report.find("SELECT r.* FROM `db_task` t,`db_company` c ,`db_report` r\n" +
+                        "WHERE t.id=" + getPara("task_id") + " AND c.task_id=t.id AND r.company_id=c.id AND r.process=4");
+                if (reportList.size() != 0) {
+                    //还有未处理的报告接收
+                    renderJson(RenderUtils.CODE_NOTEMPTY);
+                } else {
+                    result = result && task.set("process", ProcessKit.getTaskProcess("finish")).update();
+                    renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
+                }
+            }
         } catch (Exception e) {
             renderError(500);
         }

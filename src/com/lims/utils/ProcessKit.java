@@ -40,6 +40,10 @@ public class ProcessKit {
         this.put("secondReview", 8);//实验分析二审
         this.put("report", 9);//报告
         this.put("reportFirstReview", 10);//报告一审
+        this.put("reportSecondReview", 11);//报告二审
+        this.put("reportThirdReview", 12);//报告三审
+        this.put("reportReceive", 13);//报告签收
+        this.put("finish",14);//任务结束
 
 
     }};

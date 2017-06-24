@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7adb65de-9683-469f-b0c3-f3c1cc41e101" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/ReportController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/ReportController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Report.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Report.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" afterPath="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,7 +26,7 @@
       <file leaf-file-name="ReportReviewController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportReviewController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1802">
+            <state relative-caret-position="2375">
               <caret line="133" column="119" lean-forward="false" selection-start-line="133" selection-start-column="119" selection-end-line="133" selection-end-column="119" />
               <folding />
             </state>
@@ -34,7 +36,7 @@
       <file leaf-file-name="ReportManageController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportManageController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2416">
+            <state relative-caret-position="19">
               <caret line="22" column="22" lean-forward="false" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="22" />
               <folding />
             </state>
@@ -44,8 +46,8 @@
       <file leaf-file-name="ReportController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="422" column="40" lean-forward="false" selection-start-line="422" selection-start-column="40" selection-end-line="422" selection-end-column="40" />
+            <state relative-caret-position="149">
+              <caret line="620" column="27" lean-forward="false" selection-start-line="620" selection-start-column="16" selection-end-line="620" selection-end-column="27" />
               <folding>
                 <element signature="method#company#0;class#ReportController#0" expanded="false" />
                 <element signature="method#contract#0;class#ReportController#0" expanded="false" />
@@ -53,10 +55,14 @@
                 <element signature="method#sample#0;class#ReportController#0" expanded="false" />
                 <element signature="method#receipt#0;class#ReportController#0" expanded="false" />
                 <element signature="method#inspect#0;class#ReportController#0" expanded="false" />
-                <element signature="e#14980#16098#0" expanded="true" />
-                <element signature="e#16097#16098#0" expanded="true" />
-                <element signature="e#16345#17619#0" expanded="true" />
-                <element signature="e#17618#17619#0" expanded="true" />
+                <element signature="e#14981#16241#0" expanded="true" />
+                <element signature="e#16240#16241#0" expanded="true" />
+                <element signature="e#16488#18337#0" expanded="true" />
+                <element signature="e#18336#18337#0" expanded="true" />
+                <element signature="e#18585#20241#0" expanded="true" />
+                <element signature="e#20240#20241#0" expanded="true" />
+                <element signature="e#20488#21841#0" expanded="true" />
+                <element signature="e#21840#21841#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -65,8 +71,8 @@
       <file leaf-file-name="ProcessKit.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="41" column="35" lean-forward="false" selection-start-line="41" selection-start-column="18" selection-end-line="41" selection-end-column="35" />
+            <state relative-caret-position="323">
+              <caret line="45" column="24" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -75,8 +81,8 @@
       <file leaf-file-name="Report.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/model/Report.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="17" column="70" lean-forward="false" selection-start-line="17" selection-start-column="70" selection-end-line="17" selection-end-column="70" />
+            <state relative-caret-position="399">
+              <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -85,7 +91,7 @@
       <file leaf-file-name="Invocation.class" pinned="false" current-in-tab="false">
         <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/com/jfinal/aop/Invocation.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
+            <state relative-caret-position="931">
               <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
               <folding />
             </state>
@@ -95,7 +101,7 @@
       <file leaf-file-name="TypeController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TypeController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2549">
+            <state relative-caret-position="133">
               <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
               <folding />
             </state>
@@ -105,9 +111,11 @@
       <file leaf-file-name="ElementController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ElementController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1102">
-              <caret line="33" column="13" lean-forward="true" selection-start-line="156" selection-start-column="4" selection-end-line="171" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="437">
+              <caret line="33" column="13" lean-forward="false" selection-start-line="156" selection-start-column="4" selection-end-line="171" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -117,9 +125,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="931">
               <caret line="61" column="66" lean-forward="false" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -146,8 +152,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>change</find>
-      <find>Para</find>
       <find>ParaM</find>
       <find>getItems</find>
       <find>尚未</find>
@@ -166,7 +170,6 @@
       <find>selfCr</find>
       <find>getSelfSam</find>
       <find>list(</find>
-      <find>list</find>
       <find>checkFlow</find>
       <find>addCom</find>
       <find>createByService</find>
@@ -176,6 +179,9 @@
       <find>labFlag</find>
       <find>inspe</find>
       <find>toJson</find>
+      <find>list</find>
+      <find>list(</find>
+      <find>thirdReview</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/com</dir>
@@ -438,8 +444,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1012,6 +1018,7 @@
       <workItem from="1497946431937" duration="12036000" />
       <workItem from="1498050731933" duration="432000" />
       <workItem from="1498133350287" duration="5174000" />
+      <workItem from="1498277830222" duration="5603000" />
     </task>
     <servers />
   </component>
@@ -1027,7 +1034,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="575162000" />
+    <option name="totallyTimeSpent" value="580765000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -1044,7 +1051,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20714286" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.49518073" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23504274" sideWeight="0.49518073" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23748474" sideWeight="0.49518073" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26180258" sideWeight="0.5048193" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1109,7 +1116,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="482" />
+      <option name="time" value="484" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1389,7 +1396,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1712">
           <caret line="258" column="0" lean-forward="false" selection-start-line="258" selection-start-column="0" selection-end-line="258" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1421,9 +1427,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="931">
           <caret line="61" column="66" lean-forward="false" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1435,17 +1439,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportManageController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2416">
-          <caret line="22" column="22" lean-forward="false" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TypeController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2549">
+        <state relative-caret-position="133">
           <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
           <folding />
         </state>
@@ -1453,15 +1449,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ElementController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1102">
-          <caret line="33" column="13" lean-forward="true" selection-start-line="156" selection-start-column="4" selection-end-line="171" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="437">
+          <caret line="33" column="13" lean-forward="false" selection-start-line="156" selection-start-column="4" selection-end-line="171" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportReviewController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1802">
+        <state relative-caret-position="2375">
           <caret line="133" column="119" lean-forward="false" selection-start-line="133" selection-start-column="119" selection-end-line="133" selection-end-column="119" />
           <folding />
         </state>
@@ -1469,32 +1467,40 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/com/jfinal/aop/Invocation.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
+        <state relative-caret-position="931">
           <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportManageController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="22" column="22" lean-forward="false" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/model/Report.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="17" column="70" lean-forward="false" selection-start-line="17" selection-start-column="70" selection-end-line="17" selection-end-column="70" />
+        <state relative-caret-position="399">
+          <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="41" column="35" lean-forward="false" selection-start-line="41" selection-start-column="18" selection-end-line="41" selection-end-column="35" />
+        <state relative-caret-position="323">
+          <caret line="45" column="24" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="422" column="40" lean-forward="false" selection-start-line="422" selection-start-column="40" selection-end-line="422" selection-end-column="40" />
+        <state relative-caret-position="149">
+          <caret line="620" column="27" lean-forward="false" selection-start-line="620" selection-start-column="16" selection-end-line="620" selection-end-column="27" />
           <folding>
             <element signature="method#company#0;class#ReportController#0" expanded="false" />
             <element signature="method#contract#0;class#ReportController#0" expanded="false" />
@@ -1502,10 +1508,14 @@
             <element signature="method#sample#0;class#ReportController#0" expanded="false" />
             <element signature="method#receipt#0;class#ReportController#0" expanded="false" />
             <element signature="method#inspect#0;class#ReportController#0" expanded="false" />
-            <element signature="e#14980#16098#0" expanded="true" />
-            <element signature="e#16097#16098#0" expanded="true" />
-            <element signature="e#16345#17619#0" expanded="true" />
-            <element signature="e#17618#17619#0" expanded="true" />
+            <element signature="e#14981#16241#0" expanded="true" />
+            <element signature="e#16240#16241#0" expanded="true" />
+            <element signature="e#16488#18337#0" expanded="true" />
+            <element signature="e#18336#18337#0" expanded="true" />
+            <element signature="e#18585#20241#0" expanded="true" />
+            <element signature="e#20240#20241#0" expanded="true" />
+            <element signature="e#20488#21841#0" expanded="true" />
+            <element signature="e#21840#21841#0" expanded="true" />
           </folding>
         </state>
       </provider>
