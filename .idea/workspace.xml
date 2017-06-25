@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7adb65de-9683-469f-b0c3-f3c1cc41e101" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/ReportController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/ReportController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/model/Report.java" afterPath="$PROJECT_DIR$/src/com/lims/model/Report.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" afterPath="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/InspectController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/InspectController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" afterPath="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,109 +23,56 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ReportReviewController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportReviewController.java">
+      <file leaf-file-name="QualityController.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/QualityController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2375">
-              <caret line="133" column="119" lean-forward="false" selection-start-line="133" selection-start-column="119" selection-end-line="133" selection-end-column="119" />
+            <state relative-caret-position="377">
+              <caret line="356" column="29" lean-forward="true" selection-start-line="356" selection-start-column="29" selection-end-line="356" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReportManageController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportManageController.java">
+      <file leaf-file-name="InspectSoildReview.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/model/InspectSoildReview.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="22" column="22" lean-forward="false" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="22" />
+            <state relative-caret-position="247">
+              <caret line="16" column="29" lean-forward="false" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReportController.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportController.java">
+      <file leaf-file-name="InspectAirReview.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/model/InspectAirReview.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="620" column="27" lean-forward="false" selection-start-line="620" selection-start-column="16" selection-end-line="620" selection-end-column="27" />
+            <state relative-caret-position="228">
+              <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DispatchController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/DispatchController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="319">
+              <caret line="178" column="39" lean-forward="true" selection-start-line="178" selection-start-column="39" selection-end-line="178" selection-end-column="39" />
               <folding>
-                <element signature="method#company#0;class#ReportController#0" expanded="false" />
-                <element signature="method#contract#0;class#ReportController#0" expanded="false" />
-                <element signature="method#task#0;class#ReportController#0" expanded="false" />
-                <element signature="method#sample#0;class#ReportController#0" expanded="false" />
-                <element signature="method#receipt#0;class#ReportController#0" expanded="false" />
-                <element signature="method#inspect#0;class#ReportController#0" expanded="false" />
-                <element signature="e#14981#16241#0" expanded="true" />
-                <element signature="e#16240#16241#0" expanded="true" />
-                <element signature="e#16488#18337#0" expanded="true" />
-                <element signature="e#18336#18337#0" expanded="true" />
-                <element signature="e#18585#20241#0" expanded="true" />
-                <element signature="e#20240#20241#0" expanded="true" />
-                <element signature="e#20488#21841#0" expanded="true" />
-                <element signature="e#21840#21841#0" expanded="true" />
+                <element signature="method#create#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#UserDispatchList#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#toJson1#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#taskList#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#toJsonTask#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#item#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#inspectInfo#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#inspectAttachment#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#toJson#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#toJsonSingle#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#checkFlowLab#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#checkFlow#0;class#DispatchController#0" expanded="false" />
+                <element signature="method#checkFlowLabtorary#0;class#DispatchController#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProcessKit.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="45" column="24" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Report.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/model/Report.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Invocation.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/web/WEB-INF/lib/jfinal-2.2-bin-with-src.jar!/com/jfinal/aop/Invocation.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="931">
-              <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TypeController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TypeController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ElementController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ElementController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="33" column="13" lean-forward="false" selection-start-line="156" selection-start-column="4" selection-end-line="171" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ServiceController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ServiceController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="931">
-              <caret line="61" column="66" lean-forward="false" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -133,9 +80,29 @@
       <file leaf-file-name="TaskController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-              <folding />
+            <state relative-caret-position="472">
+              <caret line="683" column="28" lean-forward="false" selection-start-line="683" selection-start-column="28" selection-end-line="683" selection-end-column="28" />
+              <folding>
+                <element signature="method#create#0;class#TaskController#0" expanded="false" />
+                <element signature="method#createByContract#0;class#TaskController#0" expanded="false" />
+                <element signature="method#createByService#0;class#TaskController#0" expanded="false" />
+                <element signature="method#list#0;class#TaskController#0" expanded="false" />
+                <element signature="method#firstReviewList#0;class#TaskController#0" expanded="false" />
+                <element signature="method#toJson#0;class#TaskController#0" expanded="false" />
+                <element signature="method#toJsonSingle#0;class#TaskController#0" expanded="false" />
+                <element signature="method#getItems#0;class#TaskController#0" expanded="false" />
+                <element signature="method#countProcess#0;class#TaskController#0" expanded="false" />
+                <element signature="method#countTotal#0;class#TaskController#0" expanded="false" />
+                <element signature="method#monitorItem#0;class#TaskController#0" expanded="false" />
+                <element signature="method#stopTask#0;class#TaskController#0" expanded="false" />
+                <element signature="method#deleteTask#0;class#TaskController#0" expanded="false" />
+                <element signature="method#createIdentify#0;class#TaskController#0" expanded="false" />
+                <element signature="method#check#0;class#TaskController#0" expanded="false" />
+                <element signature="method#createTask#0;class#TaskController#0" expanded="false" />
+                <element signature="method#taskGetItems#0;class#TaskController#0" expanded="false" />
+                <element signature="method#getInspectList#0;class#TaskController#0" expanded="false" />
+                <element signature="method#createInspect#0;class#TaskController#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -152,9 +119,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ParaM</find>
-      <find>getItems</find>
-      <find>尚未</find>
       <find>items</find>
       <find>getIt</find>
       <find>Deta</find>
@@ -180,8 +144,11 @@
       <find>inspe</find>
       <find>toJson</find>
       <find>list</find>
-      <find>list(</find>
       <find>thirdReview</find>
+      <find>detail</find>
+      <find>flag</find>
+      <find>taskDetails</find>
+      <find>monitor_id</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/com</dir>
@@ -199,7 +166,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/web/template/create_quality.jsp" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/EquipmentController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Certificate.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/ItemProjectController.java" />
@@ -209,14 +175,12 @@
         <option value="$PROJECT_DIR$/src/com/lims/controller/CertificateController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Description.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Blind.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/QualityController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/ItemProject.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/InspectAttachment.java" />
         <option value="$PROJECT_DIR$/web/template/labOrigin.jsp" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/ReviewController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/RecordSecondReview.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/RecordFirstReview.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/InspectWaterReview.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/InspectSoildReview.java" />
@@ -242,7 +206,6 @@
         <option value="$PROJECT_DIR$/src/com/lims/model/InspectWater.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/InspectAir.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/DispatchController.java" />
-        <option value="$PROJECT_DIR$/src/com/lims/controller/InspectController.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Task.java" />
         <option value="$PROJECT_DIR$/src/com/lims/model/Contract.java" />
         <option value="$PROJECT_DIR$/src/com/lims/config/CommonRouter.java" />
@@ -250,6 +213,10 @@
         <option value="$PROJECT_DIR$/src/com/lims/model/Report.java" />
         <option value="$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java" />
         <option value="$PROJECT_DIR$/src/com/lims/controller/ReportController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/ServiceController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/ContractController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/TaskController.java" />
+        <option value="$PROJECT_DIR$/src/com/lims/controller/InspectController.java" />
       </list>
     </option>
   </component>
@@ -444,8 +411,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -457,7 +424,7 @@
     <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
-    <property name="SearchEverywhereHistoryKey" value="Dis&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/DispatchController.java&#10;Ins&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/InspectController.java&#10;TaskC&#9;PSI&#9;JAVA://com.lims.controller.TaskController&#10;Para&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/utils/ParaUtils.java&#10;Qua&#9;PSI&#9;JAVA://com.lims.controller.QualityController&#10;Sample&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/SampleController.java&#10;Sampl&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/SampleController.java&#10;Task&#9;PSI&#9;JAVA://com.lims.controller.TaskController&#10;SampleC&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/SampleController.java&#10;Process&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/utils/ProcessKit.java&#10;User&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/UserController.java&#10;Deli&#9;PSI&#9;JAVA://com.lims.controller.DeliveryController&#10;Sam&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/SampleController.java&#10;Contra&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/ContractitemController.java" />
+    <property name="SearchEverywhereHistoryKey" value="TaskC&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/TaskController.java&#10;InspectC&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/InspectController.java&#10;Qua&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/QualityController.java&#10;Contract&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/ContractController.java&#10;Task&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/TaskController.java&#10;Dis&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/DispatchController.java&#10;Ins&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/InspectController.java&#10;Para&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/utils/ParaUtils.java&#10;Sample&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/SampleController.java&#10;Sampl&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/SampleController.java&#10;SampleC&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/SampleController.java&#10;Process&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/utils/ProcessKit.java&#10;User&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/UserController.java&#10;Deli&#9;PSI&#9;JAVA://com.lims.controller.DeliveryController&#10;Sam&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/SampleController.java&#10;Contra&#9;FILE&#9;file:///Users/qulongjun/Project/LIMS_Back/src/com/lims/controller/ContractitemController.java" />
     <property name="FullScreen" value="true" />
   </component>
   <component name="RecentsManager">
@@ -1018,7 +985,8 @@
       <workItem from="1497946431937" duration="12036000" />
       <workItem from="1498050731933" duration="432000" />
       <workItem from="1498133350287" duration="5174000" />
-      <workItem from="1498277830222" duration="5603000" />
+      <workItem from="1498277830222" duration="7911000" />
+      <workItem from="1498317116133" duration="3588000" />
     </task>
     <servers />
   </component>
@@ -1034,7 +1002,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="580765000" />
+    <option name="totallyTimeSpent" value="586661000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -1051,7 +1019,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20714286" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.49518073" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23748474" sideWeight="0.49518073" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23992674" sideWeight="0.49518073" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26180258" sideWeight="0.5048193" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24964234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1116,7 +1084,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="484" />
+      <option name="time" value="490" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1140,24 +1108,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/model/InspectSoildReview.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="43" lean-forward="false" selection-start-line="19" selection-start-column="43" selection-end-line="19" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/model/InspectSoilReview.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="41" lean-forward="false" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/model/InspectAirReview.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="20" column="22" lean-forward="false" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -1329,13 +1283,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/DispatchController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="628">
-          <caret line="384" column="91" lean-forward="false" selection-start-line="384" selection-start-column="91" selection-end-line="384" selection-end-column="91" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/model/InspectDysodia.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1361,27 +1308,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1935">
           <caret line="280" column="37" lean-forward="true" selection-start-line="280" selection-start-column="37" selection-end-line="280" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/InspectController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="327" column="58" lean-forward="false" selection-start-line="327" selection-start-column="24" selection-end-line="327" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/QualityController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="38" column="16" lean-forward="false" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="582" column="46" lean-forward="false" selection-start-line="582" selection-start-column="46" selection-end-line="582" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -1423,34 +1349,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ServiceController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="931">
-          <caret line="61" column="66" lean-forward="false" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TypeController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ElementController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="33" column="13" lean-forward="false" selection-start-line="156" selection-start-column="4" selection-end-line="171" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
@@ -1475,7 +1377,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportManageController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
+        <state relative-caret-position="209">
           <caret line="22" column="22" lean-forward="false" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="22" />
           <folding />
         </state>
@@ -1489,18 +1391,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="45" column="24" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ReportController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="620" column="27" lean-forward="false" selection-start-line="620" selection-start-column="16" selection-end-line="620" selection-end-column="27" />
+        <state relative-caret-position="152">
+          <caret line="17" column="7" lean-forward="false" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="7" />
           <folding>
             <element signature="method#company#0;class#ReportController#0" expanded="false" />
             <element signature="method#contract#0;class#ReportController#0" expanded="false" />
@@ -1508,15 +1402,156 @@
             <element signature="method#sample#0;class#ReportController#0" expanded="false" />
             <element signature="method#receipt#0;class#ReportController#0" expanded="false" />
             <element signature="method#inspect#0;class#ReportController#0" expanded="false" />
-            <element signature="e#14981#16241#0" expanded="true" />
-            <element signature="e#16240#16241#0" expanded="true" />
-            <element signature="e#16488#18337#0" expanded="true" />
-            <element signature="e#18336#18337#0" expanded="true" />
-            <element signature="e#18585#20241#0" expanded="true" />
-            <element signature="e#20240#20241#0" expanded="true" />
-            <element signature="e#20488#21841#0" expanded="true" />
-            <element signature="e#21840#21841#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ElementController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="33" column="13" lean-forward="false" selection-start-line="156" selection-start-column="4" selection-end-line="171" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/utils/ProcessKit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="798">
+          <caret line="45" column="24" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ContractController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12958">
+          <caret line="848" column="63" lean-forward="false" selection-start-line="848" selection-start-column="63" selection-end-line="848" selection-end-column="63" />
+          <folding>
+            <element signature="method#finishContract#0;class#ContractController#0" expanded="false" />
+            <element signature="method#createContract#0;class#ContractController#0" expanded="false" />
+            <element signature="method#createReview#0;class#ContractController#0" expanded="false" />
+            <element signature="method#readItemFile#0;class#ContractController#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/ServiceController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="103" column="22" lean-forward="false" selection-start-line="103" selection-start-column="18" selection-end-line="103" selection-end-column="22" />
+          <folding>
+            <element signature="method#list#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#toJson#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#createService#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#change#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#findDetailsList#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#toJsonSingle1#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#createIdentify#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#review#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#stopContract#0;class#ServiceController#0" expanded="false" />
+            <element signature="method#finishContract#0;class#ServiceController#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/DispatchController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="178" column="39" lean-forward="true" selection-start-line="178" selection-start-column="39" selection-end-line="178" selection-end-column="39" />
+          <folding>
+            <element signature="method#create#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#UserDispatchList#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#toJson1#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#taskList#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#toJsonTask#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#item#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#inspectInfo#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#inspectAttachment#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#toJson#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#toJsonSingle#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#checkFlowLab#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#checkFlow#0;class#DispatchController#0" expanded="false" />
+            <element signature="method#checkFlowLabtorary#0;class#DispatchController#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/TaskController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="472">
+          <caret line="683" column="28" lean-forward="false" selection-start-line="683" selection-start-column="28" selection-end-line="683" selection-end-column="28" />
+          <folding>
+            <element signature="method#create#0;class#TaskController#0" expanded="false" />
+            <element signature="method#createByContract#0;class#TaskController#0" expanded="false" />
+            <element signature="method#createByService#0;class#TaskController#0" expanded="false" />
+            <element signature="method#list#0;class#TaskController#0" expanded="false" />
+            <element signature="method#firstReviewList#0;class#TaskController#0" expanded="false" />
+            <element signature="method#toJson#0;class#TaskController#0" expanded="false" />
+            <element signature="method#toJsonSingle#0;class#TaskController#0" expanded="false" />
+            <element signature="method#getItems#0;class#TaskController#0" expanded="false" />
+            <element signature="method#countProcess#0;class#TaskController#0" expanded="false" />
+            <element signature="method#countTotal#0;class#TaskController#0" expanded="false" />
+            <element signature="method#monitorItem#0;class#TaskController#0" expanded="false" />
+            <element signature="method#stopTask#0;class#TaskController#0" expanded="false" />
+            <element signature="method#deleteTask#0;class#TaskController#0" expanded="false" />
+            <element signature="method#createIdentify#0;class#TaskController#0" expanded="false" />
+            <element signature="method#check#0;class#TaskController#0" expanded="false" />
+            <element signature="method#createTask#0;class#TaskController#0" expanded="false" />
+            <element signature="method#taskGetItems#0;class#TaskController#0" expanded="false" />
+            <element signature="method#getInspectList#0;class#TaskController#0" expanded="false" />
+            <element signature="method#createInspect#0;class#TaskController#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/model/InspectAirReview.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/model/InspectSoildReview.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="16" column="29" lean-forward="false" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/InspectController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="500" column="34" lean-forward="true" selection-start-line="500" selection-start-column="34" selection-end-line="500" selection-end-column="34" />
+          <folding>
+            <element signature="method#save#0;class#InspectController#0" expanded="false" />
+            <element signature="method#saveAttachment#0;class#InspectController#0" expanded="false" />
+            <element signature="method#deleteAttachment#0;class#InspectController#0" expanded="false" />
+            <element signature="method#download#0;class#InspectController#0" expanded="false" />
+            <element signature="method#flowWork#0;class#InspectController#0" expanded="false" />
+            <element signature="method#reviewFlow#0;class#InspectController#0" expanded="false" />
+            <element signature="method#taskList#0;class#InspectController#0" expanded="false" />
+            <element signature="method#toJsonTask#0;class#InspectController#0" expanded="false" />
+            <element signature="method#itemList#0;class#InspectController#0" expanded="false" />
+            <element signature="method#detail#0;class#InspectController#0" expanded="false" />
+            <element signature="method#reviewTaskList#0;class#InspectController#0" expanded="false" />
+            <element signature="method#reviewItem#0;class#InspectController#0" expanded="false" />
+            <element signature="method#reviewItemList#0;class#InspectController#0" expanded="false" />
+            <element signature="method#checkFlow#0;class#InspectController#0" expanded="false" />
+            <element signature="method#taskFlow#0;class#InspectController#0" expanded="false" />
+            <element signature="method#reviewList#0;class#InspectController#0" expanded="false" />
+            <element signature="method#firstReview#0;class#InspectController#0" expanded="false" />
+            <element signature="method#secondReview#0;class#InspectController#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/lims/controller/QualityController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="356" column="29" lean-forward="true" selection-start-line="356" selection-start-column="29" selection-end-line="356" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
