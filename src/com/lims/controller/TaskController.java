@@ -362,7 +362,6 @@ public class TaskController extends Controller {
     }
 
 
-
     public void countProcess() {
 
         try {
@@ -666,6 +665,23 @@ public class TaskController extends Controller {
             Inspect inspect = Inspect.inspectDao.findById(inspect_id);
             getRequest().setAttribute("inspect", inspect);
             render("/template/create_inspect.jsp");
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 获取当前任务书的所有MonitorProject
+     */
+    public void getProjects() {
+        try {
+            int task_id = getParaToInt("task_id");
+            List<Map> temp = new ArrayList<>();
+            List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT DISTINCT mp.* FROM `db_task` t,`db_company` c,`db_item` it,`db_item_project` ip,`db_monitor_project` mp WHERE t.id=" + task_id + " AND c.task_id=t.id AND it.company_id=c.id AND ip.item_id=it.id AND ip.project_id=mp.id");
+            for (MonitorProject mp : monitorProjectList) {
+                temp.add(mp.toJsonSingle());
+            }
+            renderJson(temp);
         } catch (Exception e) {
             renderError(500);
         }

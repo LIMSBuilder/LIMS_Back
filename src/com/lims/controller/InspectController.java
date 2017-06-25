@@ -1154,4 +1154,51 @@ public class InspectController extends Controller {
         }
     }
 
+
+    /**
+     * 审核和复核记录组成的List
+     */
+    public void getReviewList() {
+        try {
+            int inspect_id = getParaToInt("inspect_id");
+            String type = getPara("type");
+            List<Map> temp = new ArrayList<>();
+            switch (type) {
+                case "air":
+                    List<InspectAirReview> airReviewList = InspectAirReview.inspectAirReview.find("SELECT * FROM `db_inspect_air_review` WHERE air_id=" + inspect_id);
+                    for (InspectAirReview airReview : airReviewList) {
+                        temp.add(airReview.toJSON());
+                    }
+                    break;
+                case "solid":
+                    List<InspectSoildReview> soildReviewList = InspectSoildReview.inspectSoildReviewdao.find("SELECT * FROM `db_inspect_solid_review` WHERE solid_id=" + inspect_id);
+                    for (InspectSoildReview soildReview : soildReviewList) {
+                        temp.add(soildReview.toJSON());
+                    }
+                    break;
+                case "water":
+                    List<InspectWaterReview> waterReviewList = InspectWaterReview.inspectWaterReviewDao.find("SELECT * FROM `db_inspect_water_review` WHERE water_id=" + inspect_id);
+                    for (InspectWaterReview waterReview : waterReviewList) {
+                        temp.add(waterReview.toJSON());
+                    }
+                    break;
+                case "soil":
+                    List<InspectSoilReview> soilReviewList = InspectSoilReview.inspectSoilReviewDao.find("SELECT * FROM `db_inspect_soil_review` WHERE soil_id=" + inspect_id);
+                    for (InspectSoilReview soilReview : soilReviewList) {
+                        temp.add(soilReview.toJSON());
+                    }
+                    break;
+                case "dysodia":
+                    List<InspectDysodiaReview> dysodiaReviewList = InspectDysodiaReview.inspectDysodiaReviewdao.find("SELECT * FROM `db_inspect_dysodia_review` WHERE dysodia_id=" + inspect_id);
+                    for (InspectDysodiaReview dysodiaReview : dysodiaReviewList) {
+                        temp.add(dysodiaReview.toJSON());
+                    }
+                    break;
+            }
+            renderJson(temp);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
 }
