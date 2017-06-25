@@ -833,4 +833,30 @@ public class ContractController extends Controller {
     }
 
 
+    public void findByTaskId() {
+        try {
+            int task_id = getParaToInt("id");
+            Contract contract = Contract.contractDao.findFirst("SELECT c.* FROM `db_contract` c,`db_task` t \n" +
+                    "WHERE t.contract_id=c.id AND t.id=" + task_id);
+            if (contract != null) {
+                Map contractMap = toContractDetailJSON(contract);
+                contractMap.put("code", 200);
+                renderJson(contractMap);
+            } else {
+                ServiceContract serviceContract = ServiceContract.serviceContractDao.findFirst("SELECT c.* FROM `db_service_contract` c,`db_task` t \n" +
+                        "WHERE t.service_id=c.id AND t.id=" + task_id);
+                if (serviceContract != null) {
+                    Map contractMap = ServiceController.toJsonSingle(serviceContract);
+                    contractMap.put("code", 201);
+                    renderJson(contractMap);
+                } else
+                    renderJson(RenderUtils.CODE_EMPTY);
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+
 }

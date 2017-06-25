@@ -98,7 +98,7 @@ public class ServiceController extends Controller {
     }
 
 
-    public Map toJsonSingle(ServiceContract entry) {
+    public static Map toJsonSingle(ServiceContract entry) {
         Map temp = new HashMap();
         temp.put("id", entry.get("id"));
         temp.put("path", entry.get("path"));
