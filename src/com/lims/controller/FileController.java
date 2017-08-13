@@ -10,11 +10,9 @@ import com.lims.model.FileRecord;
 import com.lims.model.Report;
 import com.lims.utils.RenderUtils;
 
+import java.io.File;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by caiwenhong on 2017/2/25.
@@ -25,16 +23,29 @@ public class FileController extends Controller {
      */
     public void upload() {
         try {
+            String extName = "";
+            String filePath = "";
+            String fileName = "";
             UploadFile uploadFile = getFile();
+            extName = this.getFileExt(uploadFile.getFileName());
+            filePath = uploadFile.getUploadPath();
+            fileName = System.currentTimeMillis() + extName;
+            uploadFile.getFile().renameTo(new File(filePath + "/" + fileName));
             Map result = RenderUtils.codeFactory(200);
-            String path = " /upload\\" + uploadFile.getFileName();
-            System.out.println(path);
+            String path = " /upload\\" + fileName;
             result.put("path", path);
             result.put("fileName", uploadFile.getOriginalFileName());
             renderJson(result);
         } catch (Exception e) {
             renderError(500);
         }
+    }
+
+    /**
+     * 获取文件后缀
+     **/
+    public String getFileExt(String fileName) {
+        return fileName.substring(fileName.lastIndexOf('.'), fileName.length());
     }
 
     /**
