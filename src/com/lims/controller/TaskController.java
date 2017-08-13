@@ -136,32 +136,37 @@ public class TaskController extends Controller {
 
 
                         List<Company> companyList = Company.companydao.find("SELECT * FROM `db_company` WHERE contract_id=" + contract.get("id"));
-                        for (Company company : companyList) {
-                            if (isFirst) {
-                                int company_id = company.get("id");
-                                //非第一次创建
-                                result = result && company.set("id", null).set("task_id", task.get("id")).set("contract_id", null).set("process", 0).save();
-                                if (!result) return false;
-                                List<Contractitem> itemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + company_id);
-                                for (Contractitem item : itemList) {
-                                    int item_id = item.get("id");
-                                    result = result && item.set("id", null).set("company_id", company.get("id")).save();
+                        if (companyList != null) {
+                            for (Company company : companyList) {
+                                if (isFirst) {
+                                    int company_id = company.get("id");
+                                    //非第一次创建
+                                    result = result && company.set("id", null).set("task_id", task.get("id")).set("contract_id", null).set("process", 0).save();
                                     if (!result) return false;
-                                    List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item_id);
-                                    for (ItemProject itemProject : itemProjectList) {
-                                        result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process", null).set("flag", null).set("labFlag", null).save();
+                                    List<Contractitem> itemList = Contractitem.contractitemdao.find("SELECT * FROM `db_item` WHERE company_id=" + company_id);
+                                    for (Contractitem item : itemList) {
+                                        int item_id = item.get("id");
+                                        result = result && item.set("id", null).set("company_id", company.get("id")).save();
                                         if (!result) return false;
+                                        List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT * FROM `db_item_project` WHERE item_id=" + item_id);
+                                        for (ItemProject itemProject : itemProjectList) {
+                                            result = result && itemProject.set("id", null).set("item_id", item.get("id")).set("process", null).set("flag", null).set("labFlag", null).save();
+                                            if (!result) return false;
+                                        }
+
                                     }
 
+                                } else {
+                                    result = result && company.set("task_id", task.get("id")).update();
                                 }
-
-                            } else {
-                                result = result && company.set("task_id", task.get("id")).update();
+                                if (!result) return false;
                             }
-                            if (!result) return false;
+                            LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                            return result;
+                        } else {
+                            LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                            return result;
                         }
-                        LoggerKit.addTaskLog(task.getInt("id"), "下达任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
-                        return result;
                     } else
                         return false;
                 }
@@ -206,6 +211,7 @@ public class TaskController extends Controller {
                     task.set("sample_type", getPara("sample_type")).set("create_time", ParaUtils.sdf.format(new Date())).set("creater", user.get("id")).set("process", ProcessKit.getTaskProcess("create"));
                     result = result && task.save();
                     String[] items = getParaValues("project_items[]");
+                    if(items!=null){
                     for (String item : items) {
                         Map temp = Jackson.getJson().parse(item, Map.class);
                         Company company = new Company();
@@ -226,7 +232,11 @@ public class TaskController extends Controller {
 
                     }
                     LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
-                    return result;
+                    return result;}
+                    else {
+                        LoggerKit.addTaskLog(task.getInt("id"), "创建了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                        return result;
+                    }
                 }
             });
             renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
@@ -444,25 +454,11 @@ public class TaskController extends Controller {
             boolean result = Db.tx(new IAtom() {
                 public boolean run() throws SQLException {
                     int id = getParaToInt("id");
-//                    int Result = getParaToInt("contract_result");
                     Task task = Task.taskDao.findById(id);
                     Boolean result = true;
-//                    Boolean contractResult = true;
+
                     if (task != null) {
                         result = task.set("process", -2).update();
-//                        Contract contract = Contract.contractDao.findFirst("select * from `db_contrat` where  id=" + task.get("contract_id"));
-//                        if (contract != null) {
-//                            switch (Result) {
-//                                case 0:
-//                                    contractResult = contract.set("process", ProcessKit.ContractMap.get("review")).update();
-//                                    break;
-//                                case 1:
-//                                    contractResult = contract.set("process", ProcessKit.ContractMap.get("stop")).update();
-//                                    break;
-//                                case 2:
-//                                    break;
-//                            }
-//                        }
                     }
                     LoggerKit.addTaskLog(task.getInt("id"), "中止了任务", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                     return result;

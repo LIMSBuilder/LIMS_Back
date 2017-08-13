@@ -704,7 +704,7 @@ public class ContractController extends Controller {
             Contract contract = Contract.contractDao.findFirst("SELECT * FROM `db_contract` WHERE id=" + id);
             if (contract != null) {
                 getRequest().setAttribute("contract", contract);
-                render("/template/create_contract.jsp");
+                renderJsp("/template/createContract.jsp");
             } else renderNull();
         } catch (Exception e) {
             renderError(500);
