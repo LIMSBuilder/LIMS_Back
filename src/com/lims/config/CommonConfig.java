@@ -51,7 +51,7 @@ public class CommonConfig extends JFinalConfig {
     @Override
     public void configPlugin(Plugins me) {
         //C3P0连接池
-        C3p0Plugin cp = new C3p0Plugin("jdbc:mysql://115.159.158.89:3306/bdc_lims", "root", "jun920221");
+        C3p0Plugin cp = new C3p0Plugin("jdbc:mysql://106.14.124.163:3306/bdc_lims", "root", "jun920221");
         me.add(cp);
         //数据库插件
         ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);

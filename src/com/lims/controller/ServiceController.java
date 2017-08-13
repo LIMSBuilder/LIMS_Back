@@ -466,20 +466,20 @@ public class ServiceController extends Controller {
         return temp;
     }
 
-    /**
-     * 下载合同
-     **/
-    public void downLoadServiceContract() {
+    /***
+     * 实现在线查看
+     * */
+    public void online() {
         try {
-            int service_id = getParaToInt("service_id");
-            ServiceContract serviceContract = ServiceContract.serviceContractDao.findById(service_id);
+            String id = getPara("id");
+            ServiceContract serviceContract = ServiceContract.serviceContractDao.findFirst("SELECT * FROM `db_service_contract` WHERE id=" + id);
             if (serviceContract != null) {
-                renderJson(serviceContract.Json());
-            } else {
-                renderNull();
-            }
+                getRequest().setAttribute("serviceContract", serviceContract);
+                render("/template/service_contract.jsp");
+            } else renderNull();
         } catch (Exception e) {
             renderError(500);
+
         }
     }
 }
