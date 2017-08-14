@@ -301,34 +301,6 @@ public class TaskController extends Controller {
         }
     }
 
-
-    /**
-     * 实验结果一审列表
-     */
-    public void firstReviewList() {
-        try {
-            int rowCount = getParaToInt("rowCount");
-            int currentPage = getParaToInt("currentPage");
-            String condition_temp = getPara("condition");
-            Map condition = ParaUtils.getSplitCondition(condition_temp);
-            if (rowCount == 0) {
-                rowCount = ParaUtils.getRowCount();
-            }
-            String param = " WHERE process=" + ProcessKit.getTaskProcess("firstReview");
-            Page<Task> taskPage = Task.taskDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_task` " + param + " ORDER BY create_time DESC");
-            List<Task> taskList = taskPage.getList();
-            Map results = toJson(taskList);
-            results.put("currentPage", currentPage);
-            results.put("totalPage", taskPage.getTotalPage());
-            results.put("rowCount", rowCount);
-            results.put("condition", condition_temp);
-            renderJson(results);
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
-
-
     public Map toJson(List<Task> entityList) {
         Map<String, Object> json = new HashMap<>();
         try {
@@ -689,4 +661,5 @@ public class TaskController extends Controller {
             renderError(500);
         }
     }
+
 }

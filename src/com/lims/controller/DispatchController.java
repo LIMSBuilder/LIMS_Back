@@ -182,10 +182,10 @@ public class DispatchController extends Controller {
                         List inspectJson = new ArrayList();
                         switch (inspect.getStr("type")) {
                             case "water":
-                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id=" + inspect.get("id"));
+                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE  inspect_id=" + inspect.get("id"));
                                 for (InspectWater inspectWater : inspectWaterList) {
                                     inspectJson.add(inspectWater.toJSON());
-                                    List<InspectWaterReview> inspectWaterReviewList = InspectWaterReview.inspectWaterReviewDao.find("SELECT * FROM `db_inspect_water_review` WHERE water_id=" + inspectWater.get("id"));
+                                    List<InspectWaterReview> inspectWaterReviewList = InspectWaterReview.inspectWaterReviewDao.find("SELECT * FROM `db_inspect_water_review` WHERE  water_id=" + inspectWater.get("id"));
                                     for (InspectWaterReview inspectWaterReview : inspectWaterReviewList) {
                                         item.add(inspectWaterReview.toJSON());
 
@@ -194,10 +194,10 @@ public class DispatchController extends Controller {
 
                                 break;
                             case "soil":
-                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id=" + inspect.get("id"));
+                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE  inspect_id=" + inspect.get("id"));
                                 for (InspectSoil inspectSoil : inspectSoilList) {
                                     inspectJson.add(inspectSoil.toJSON());
-                                    List<InspectSoilReview> inspectSoilReviewList = InspectSoilReview.inspectSoilReviewDao.find("SELECT * FROM `db_inspect_soil_review` WHERE soil_id=" + inspectSoil.get("id"));
+                                    List<InspectSoilReview> inspectSoilReviewList = InspectSoilReview.inspectSoilReviewDao.find("SELECT * FROM `db_inspect_soil_review` WHERE  soil_id=" + inspectSoil.get("id"));
                                     for (InspectSoilReview inspectSoilReview : inspectSoilReviewList) {
                                         item.add(inspectSoilReview.toJSON());
 
@@ -205,10 +205,10 @@ public class DispatchController extends Controller {
                                 }
                                 break;
                             case "solid":
-                                List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id=" + inspect.get("id"));
+                                List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE  inspect_id=" + inspect.get("id"));
                                 for (InspectSoild inspectSoild : inspectSoilds) {
                                     inspectJson.add(inspectSoild.toJSON());
-                                    List<InspectSoildReview> inspectSoildReviewList = InspectSoildReview.inspectSoildReviewdao.find("SELECT * FROM `db_inspect_solid_review` WHERE solid_id=" + inspectSoild.get("id"));
+                                    List<InspectSoildReview> inspectSoildReviewList = InspectSoildReview.inspectSoildReviewdao.find("SELECT * FROM `db_inspect_solid_review` WHERE  solid_id=" + inspectSoild.get("id"));
                                     for (InspectSoildReview inspectSoildReview : inspectSoildReviewList) {
                                         item.add(inspectSoildReview.toJSON());
 
@@ -217,10 +217,10 @@ public class DispatchController extends Controller {
                                 break;
 
                             case "air":
-                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id=" + inspect.get("id"));
+                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE  inspect_id=" + inspect.get("id"));
                                 for (InspectAir inspectAir : inspectAirList) {
                                     inspectJson.add(inspectAir.toJSON());
-                                    List<InspectAirReview> inspectAirReviewList = InspectAirReview.inspectAirReview.find("SELECT * FROM `db_inspect_air_review` WHERE air_id=" + inspectAir.get("id"));
+                                    List<InspectAirReview> inspectAirReviewList = InspectAirReview.inspectAirReview.find("SELECT * FROM `db_inspect_air_review` WHERE   air_id=" + inspectAir.get("id"));
                                     for (InspectAirReview inspectAirReview:inspectAirReviewList) {
                                         item.add(inspectAirReview.toJSON());
 
@@ -228,7 +228,7 @@ public class DispatchController extends Controller {
                                 }
                                 break;
                             case "dysodia":
-                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id=" + inspect.get("id"));
+                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE    inspect_id=" + inspect.get("id"));
                                 for (InspectDysodia inspectDysodia : inspectDysodiaList) {
                                     inspectJson.add(inspectDysodia.toJSON());
                                     List<InspectDysodiaReview> inspectDysodiaReviewList = InspectDysodiaReview.inspectDysodiaReviewdao.find("SELECT * FROM `db_inspect_dysodia_review` WHERE dysodia_id=" + inspectDysodia.get("id"));
@@ -303,19 +303,6 @@ public class DispatchController extends Controller {
         types.put("id", sample.getInt("id"));
         types.put("identify", sample.get("identify"));
         types.put("result", sample.get("result"));
-        //        List<SampleProject> sampleProjectList = SampleProject.sampleprojrctDao.find("SELECT * FROM `db_sample_project` WHERE sample_id=" + sample.get("id"));
-//        List project = new ArrayList();
-//        List temp = new ArrayList();
-//        for (SampleProject sp : sampleProjectList) {
-//            Map m = new HashMap();
-//            m.put("id", sp.get("item_project_id"));
-//            m.put("name", MonitorProject.monitorProjectdao.findById(ItemProject.itemprojectDao.findById(sp.get("item_project_id")).get("project_id")).get("name"));
-//            project.add(sp.get("item_project_id"));
-//            temp.add(m);
-//
-//        }
-//        types.put("project", project);
-//        types.put("projectList", temp);
         return types;
     }
 

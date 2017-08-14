@@ -102,20 +102,6 @@ public class InspectController extends Controller {
         }
     }
 
-    /***
-     * 实验室原始记录表附件文件在线查看
-     * **/
-    public void download() {
-        try {
-            int id = getParaToInt("id");
-            InspectAttachment inspectAttachment = InspectAttachment.inspectAttachmentDao.findById(id);
-            getRequest().setAttribute("inspectAttachment", inspectAttachment);
-            render("/template/labOrigin.jsp");
-        } catch (Exception e) {
-            renderError(500);
-        }
-
-    }
 
     /**
      * 实验室分析任务流转
@@ -298,7 +284,7 @@ public class InspectController extends Controller {
                                     }
                                     renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
                                 } else {
-                                    List<InspectDysodia> inspectDysodia = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "'AND flag2 <1");
+                                    List<InspectDysodia> inspectDysodia = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "'AND flag2 =1");
                                     for (InspectDysodia inspectDy : inspectDysodia) {
                                         result = result && inspectDy.set("process", 3).update();
                                     }
@@ -345,6 +331,7 @@ public class InspectController extends Controller {
         }
     }
 
+
     public Map toJsonTask(List<Task> taskList) {
         Map result = new HashMap();
         List temp = new ArrayList();
@@ -374,11 +361,11 @@ public class InspectController extends Controller {
                         "WHERE t.id='" + task_id +
                         "' AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND isp.item_project_id=p.id AND p.project_id=m.id\n" +
                         "AND (\n" +
-                        "(w.inspect_id=isp.id AND w.process>=2) OR \n" +
-                        "(ai.inspect_id=isp.id AND ai.process>=2) OR\n" +
-                        "(so.inspect_id=isp.id AND so.process>=2) OR\n" +
-                        "(sl.inspect_id=isp.id AND sl.process>=2) OR\n" +
-                        "(dy.inspect_id=isp.id AND dy.process>=2)\n" +
+                        "(w.inspect_id=isp.id AND w.process=2) OR \n" +
+                        "(ai.inspect_id=isp.id AND ai.process=2) OR\n" +
+                        "(so.inspect_id=isp.id AND so.process=2) OR\n" +
+                        "(sl.inspect_id=isp.id AND sl.process=2) OR\n" +
+                        "(dy.inspect_id=isp.id AND dy.process=2)\n" +
                         ")");
                 List<Map> result = new ArrayList<>();
                 for (MonitorProject monitorProject : monitorProjectList) {
@@ -416,33 +403,33 @@ public class InspectController extends Controller {
                         List inspectJson = new ArrayList();
                         switch (inspect.getStr("type")) {
                             case "water":
-                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "' AND process>=2");
+                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "' AND process=2");
 
                                 for (InspectWater inspectWater : inspectWaterList) {
                                     inspectJson.add(inspectWater.toJSON());
                                 }
                                 break;
                             case "soil":
-                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "' AND process>=2");
+                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "' AND process=2");
                                 for (InspectSoil inspectSoil : inspectSoilList) {
                                     inspectJson.add(inspectSoil.toJSON());
                                 }
                                 break;
                             case "solid":
-                                List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "' AND process>=2");
+                                List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "' AND process=2");
                                 for (InspectSoild inspectSoild : inspectSoilds) {
                                     inspectJson.add(inspectSoild.toJSON());
                                 }
                                 break;
 
                             case "air":
-                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "' AND process>=2");
+                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "' AND process=2");
                                 for (InspectAir inspectAir : inspectAirList) {
                                     inspectJson.add(inspectAir.toJSON());
                                 }
                                 break;
                             case "dysodia":
-                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "' AND process>=2");
+                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "' AND process=2");
                                 for (InspectDysodia inspectDysodia : inspectDysodiaList) {
                                     inspectJson.add(inspectDysodia.toJSON());
                                 }
@@ -653,33 +640,33 @@ public class InspectController extends Controller {
                         List inspectJson = new ArrayList();
                         switch (inspect.getStr("type")) {
                             case "water":
-                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "' AND process>=3");
+                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "' AND process=3");
 
                                 for (InspectWater inspectWater : inspectWaterList) {
                                     inspectJson.add(inspectWater.toJSON());
                                 }
                                 break;
                             case "soil":
-                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "' AND process>=3");
+                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "' AND process=3");
                                 for (InspectSoil inspectSoil : inspectSoilList) {
                                     inspectJson.add(inspectSoil.toJSON());
                                 }
                                 break;
                             case "solid":
-                                List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "' AND process>=3");
+                                List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "' AND process=3");
                                 for (InspectSoild inspectSoild : inspectSoilds) {
                                     inspectJson.add(inspectSoild.toJSON());
                                 }
                                 break;
 
                             case "air":
-                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "' AND process>=3");
+                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "' AND process=3");
                                 for (InspectAir inspectAir : inspectAirList) {
                                     inspectJson.add(inspectAir.toJSON());
                                 }
                                 break;
                             case "dysodia":
-                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "' AND process>=3");
+                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "' AND process=3");
                                 for (InspectDysodia inspectDysodia : inspectDysodiaList) {
                                     inspectJson.add(inspectDysodia.toJSON());
                                 }
@@ -889,7 +876,7 @@ public class InspectController extends Controller {
                                 InspectSoildReview inspectSoildReview = new InspectSoildReview();
                                 result = result && inspectSoildReview.set("user_id", user.get("id")).set("create_time", ParaUtils.sdf2.format(new Date()))
                                         .set("result", getPara("result")).set("type", getPara("type"))
-                                        .set("soil_id", getPara("id")).set("remark", getPara("remark")).save();
+                                        .set("solid_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
                                     result = result && inspectSoild.set("check_id", inspectSoildReview.get("id")).set("flag3", 1).update();
                                 } else {
@@ -919,7 +906,7 @@ public class InspectController extends Controller {
                                 InspectDysodiaReview inspectDysodiaReview = new InspectDysodiaReview();
                                 result = result && inspectDysodiaReview.set("user_id", user.get("id")).set("create_time", ParaUtils.sdf2.format(new Date()))
                                         .set("result", getPara("result")).set("type", getPara("type"))
-                                        .set("solid_id", getPara("id")).set("remark", getPara("remark")).save();
+                                        .set("dysodia_id", getPara("id")).set("remark", getPara("remark")).save();
                                 if (getParaToInt("result") == 1) {
 
                                     result = result && inspectDysodia.set("check_id", inspectDysodiaReview.get("id")).set("flag3", 1).update();
@@ -975,11 +962,11 @@ public class InspectController extends Controller {
                         if ((condition1 == 1) && (condition2 == 1) && (condition3 == 1) && (condition4 == 1) && (condition5 == 1) && (condition6 == 1)) {
                             //审核通过,进入二审
                             result = result && task.set("process", ProcessKit.getTaskProcess("secondReview")).update();
-                            LoggerKit.addTaskLog(task.getInt("id"), "一审通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                            LoggerKit.addTaskLog(task.getInt("id"), "实验室数据一审通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                         } else {
                             //审核拒绝，回到编辑状态,并将所有的process变成1（修改）状态
                             result = result && task.set("process", ProcessKit.getTaskProcess("lab")).update();
-                            LoggerKit.addTaskLog(task.getInt("id"), "一审拒绝", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                            LoggerKit.addTaskLog(task.getInt("id"), "实验室数据一审拒绝", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                             List<InspectAir> airList = InspectAir.inspectAir.find("SELECT DISTINCT t.* FROM `db_task` t,`db_company` c,`db_sample` s,\n" +
                                     "`db_inspect_air` a\n" +
                                     "WHERE t.id=" + task.get("id") + " AND c.task_id=t.id AND s.company_id=c.id AND a.sample_id=s.id");
@@ -1024,6 +1011,62 @@ public class InspectController extends Controller {
         }
     }
 
+    /****
+     *
+     * 二审实验数据列表
+     * ****/
+
+    public void secondReviewList() {
+        try {
+            int rowCount = getParaToInt("rowCount");
+            int currentPage = getParaToInt("currentPage");
+            String condition_temp = getPara("condition");
+            Map condition = ParaUtils.getSplitCondition(condition_temp);
+            if (rowCount == 0) {
+                rowCount = ParaUtils.getRowCount();
+            }
+            String param = " WHERE process=" + ProcessKit.getTaskProcess("secondReview");
+            Page<Task> taskPage = Task.taskDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_task` " + param + " ORDER BY create_time DESC");
+            List<Task> taskList = taskPage.getList();
+            Map results = toJson(taskList);
+            results.put("currentPage", currentPage);
+            results.put("totalPage", taskPage.getTotalPage());
+            results.put("rowCount", rowCount);
+            results.put("condition", condition_temp);
+            renderJson(results);
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    public Map toJson(List<Task> entityList) {
+        Map<String, Object> json = new HashMap<>();
+        try {
+            List result = new ArrayList();
+            for (Task task : entityList) {
+                result.add(toJsonSingle(task));
+            }
+            json.put("results", result);
+        } catch (Exception e) {
+            renderError(500);
+        }
+        return json;
+    }
+
+
+    public Map toJsonSingle(Task entry) {
+        Map temp = new HashMap();
+        temp.put("id", entry.get("id"));
+        temp.put("name", entry.get("name"));
+        temp.put("create_time", entry.get("create_time"));
+        temp.put("client_unit", entry.get("client_unit"));
+        temp.put("identify", entry.get("identify"));
+        temp.put("process", entry.get("process"));
+        temp.put("sample_type", entry.get("sample_type"));
+        temp.put("flag", entry.get("flag"));
+        return temp;
+    }
+
     /**
      * 保存二审结果
      **/
@@ -1051,10 +1094,10 @@ public class InspectController extends Controller {
                 if (!result) return;
                 if ((condition1 == 1) && (condition2 == 1) && (condition3 == 1) && (condition4 == 1) && (condition5 == 1) && (condition6 == 1)) {
                     result = result && task.set("process", ProcessKit.getTaskProcess("report")).update();
-                    LoggerKit.addTaskLog(task.getInt("id"), "二审通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    LoggerKit.addTaskLog(task.getInt("id"), "实验室数据二审通过", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                 } else {
                     result = result && task.set("process", ProcessKit.getTaskProcess("firstReview")).update();
-                    LoggerKit.addTaskLog(task.getInt("id"), "二审拒绝", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
+                    LoggerKit.addTaskLog(task.getInt("id"), "实验室数据二审拒绝", ParaUtils.getCurrentUser(getRequest()).getInt("id"));
                 }
                 renderJson(result ? RenderUtils.CODE_SUCCESS : RenderUtils.CODE_ERROR);
             } else {
@@ -1111,5 +1154,179 @@ public class InspectController extends Controller {
             renderError(500);
         }
     }
+
+
+    /**
+     * 审核记录
+     **/
+    public void fetchInspectReview() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            Map total = new HashMap();
+            if (task != null) {
+                RecordFirstReview recordFirstReview = RecordFirstReview.recordFirstReviewDao.findFirst("SELECT * FROM `db_record_first_review` WHERE  flag=1 AND task_id =" + task_id);
+                total.put("firstReview", recordFirstReview.toJSON());
+                RecordFirstReview recordFirstReview1 = RecordFirstReview.recordFirstReviewDao.findFirst("SELECT * FROM `db_record_first_review` WHERE  flag=2 AND task_id =" + task_id);
+                total.put("secondReview", recordFirstReview1.toJSON());
+                renderJson(total);
+
+            } else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
+
+    /**
+     * 实验室数据一审 任务表
+     **/
+
+    public void taskFirstList() {
+        try {
+            int rowCount = getParaToInt("rowCount");
+            int currentPage = getParaToInt("currentPage");
+            String condition_temp = getPara("condition");
+            Map condition = ParaUtils.getSplitCondition(condition_temp);
+            Page<Task> taskPage = Task.taskDao.paginate(currentPage, rowCount, "SELECT *", "FROM `db_task` where process=7");
+            List<Task> taskList = taskPage.getList();
+            Map results = toJsonTask(taskList);
+            results.put("currentPage", currentPage);
+            results.put("totalPage", taskPage.getTotalPage());
+            results.put("rowCount", rowCount);
+            results.put("condition", condition_temp);
+            renderJson(results);
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 实验室数据审核显示
+     **/
+
+    public void itemLabList() {
+        try {
+            int task_id = getParaToInt("task_id");
+            Task task = Task.taskDao.findById(task_id);
+            if (task != null) {
+                Map total = new HashMap();
+                List<MonitorProject> monitorProjectList = MonitorProject.monitorProjectdao.find("SELECT DISTINCT m.* FROM `db_task` t,`db_company` c,`db_item` i,`db_item_project` p ,`db_inspect` isp,\n" +
+                        "`db_inspect_water` w,\n" +
+                        "`db_inspect_air` ai,\n" +
+                        "`db_inspect_soil` so ,\n" +
+                        "`db_inspect_solid` sl ,\n" +
+                        "`db_inspect_dysodia` dy ,\n" +
+                        "`db_monitor_project` m\n" +
+                        "WHERE t.id='" + task_id +
+                        "' AND c.task_id=t.id AND i.company_id=c.id AND p.item_id=i.id AND isp.item_project_id=p.id AND p.project_id=m.id\n" +
+                        "AND (\n" +
+                        "(w.inspect_id=isp.id AND w.process=4) OR \n" +
+                        "(ai.inspect_id=isp.id AND ai.process=4) OR\n" +
+                        "(so.inspect_id=isp.id AND so.process=4) OR\n" +
+                        "(sl.inspect_id=isp.id AND sl.process=4) OR\n" +
+                        "(dy.inspect_id=isp.id AND dy.process=4)\n" +
+                        ")");
+                List<Map> result = new ArrayList<>();
+                for (MonitorProject monitorProject : monitorProjectList) {
+                    Map temp = new HashMap();
+                    temp.put("project", monitorProject.toJsonSingle());
+                    result.add(temp);
+
+                }
+                total.put("items", result);
+                renderJson(total);
+            } else {
+                renderNull();
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 显示项目详情
+     **/
+    public void detailList() {
+        try {
+            int task_id = getParaToInt("task_id");
+            int monitor_id = getParaToInt("project_id");
+            Task task = Task.taskDao.findById(task_id);
+            List result = new ArrayList();
+            if (task != null) {
+                List<ItemProject> itemProjectList = ItemProject.itemprojectDao.find("SELECT p.* FROM `db_item_project` p,`db_item` i,`db_company` c,`db_task` t \n" +
+                        "WHERE p.project_id='" + monitor_id + "' AND p.item_id=i.id AND i.company_id=c.id AND c.task_id=t.id AND task_id=" + task.get("id"));
+                for (ItemProject itemProject : itemProjectList) {
+                    List<Inspect> inspectList = Inspect.inspectDao.find("SELECT * FROM `db_inspect` WHERE item_project_id =" + itemProject.get("id"));
+                    for (Inspect inspect : inspectList) {
+                        Map temp = new HashMap();
+                        List inspectJson = new ArrayList();
+                        switch (inspect.getStr("type")) {
+                            case "water":
+                                List<InspectWater> inspectWaterList = InspectWater.inspectWaterDao.find("SELECT * FROM `db_inspect_water` WHERE inspect_id='" + inspect.get("id") + "' AND process=4");
+
+                                for (InspectWater inspectWater : inspectWaterList) {
+                                    inspectJson.add(inspectWater.toJSON());
+                                }
+                                break;
+                            case "soil":
+                                List<InspectSoil> inspectSoilList = InspectSoil.inspectSoilDao.find("SELECT * FROM `db_inspect_soil` WHERE inspect_id='" + inspect.get("id") + "' AND process=4");
+                                for (InspectSoil inspectSoil : inspectSoilList) {
+                                    inspectJson.add(inspectSoil.toJSON());
+                                }
+                                break;
+                            case "solid":
+                                List<InspectSoild> inspectSoilds = InspectSoild.inspectSoildDao.find("SELECT * FROM `db_inspect_solid` WHERE inspect_id='" + inspect.get("id") + "' AND process=4");
+                                for (InspectSoild inspectSoild : inspectSoilds) {
+                                    inspectJson.add(inspectSoild.toJSON());
+                                }
+                                break;
+
+                            case "air":
+                                List<InspectAir> inspectAirList = InspectAir.inspectAir.find("SELECT * FROM `db_inspect_air` WHERE inspect_id='" + inspect.get("id") + "' AND process=4");
+                                for (InspectAir inspectAir : inspectAirList) {
+                                    inspectJson.add(inspectAir.toJSON());
+                                }
+                                break;
+                            case "dysodia":
+                                List<InspectDysodia> inspectDysodiaList = InspectDysodia.inspectDysodiaDao.find("SELECT * FROM `db_inspect_dysodia` WHERE inspect_id='" + inspect.get("id") + "' AND process=4");
+                                for (InspectDysodia inspectDysodia : inspectDysodiaList) {
+                                    inspectJson.add(inspectDysodia.toJSON());
+                                }
+                                break;
+                        }
+                        temp.put("items", inspectJson);
+                        temp.put("inspect", inspect.toSingleJson());
+                        result.add(temp);
+                    }
+                }
+                renderJson(result);
+            } else {
+                renderNull();
+            }
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /***
+     * 实验室原始记录表附件文件在线查看
+     * **/
+    public void download() {
+        try {
+            int id = getParaToInt("id");
+            InspectAttachment inspectAttachment = InspectAttachment.inspectAttachmentDao.findById(id);
+            getRequest().setAttribute("inspectAttachment", inspectAttachment);
+            render("/template/labOrigin.jsp");
+        } catch (Exception e) {
+            renderError(500);
+        }
+
+    }
+
 
 }

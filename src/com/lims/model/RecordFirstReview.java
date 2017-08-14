@@ -21,6 +21,7 @@ public class RecordFirstReview extends Model<RecordFirstReview> {
         temp.put("condition5", this.get("condition5"));
         temp.put("condition6", this.get("condition6"));
         temp.put("remark", this.get("remark") == null ? null : this.get("remark"));
+        temp.put("create_time",this.get("create_time"));
         temp.put("creater",User.userDao.findById(this.get("creater")).get("name"));
         temp.put("task_id",this.get("task_id"));
         temp.put("flag",this.get("flag"));
