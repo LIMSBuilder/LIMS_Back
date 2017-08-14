@@ -43,7 +43,7 @@ public class ProcessKit {
         this.put("reportSecondReview", 11);//报告二审
         this.put("reportThirdReview", 12);//报告三审
         this.put("reportReceive", 13);//报告签收
-        this.put("finish",14);//任务结束
+        this.put("finish",10);//任务结束
 
 
     }};

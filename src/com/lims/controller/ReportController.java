@@ -322,20 +322,7 @@ public class ReportController extends Controller {
     }
 
 
-    /**
-     * 报告在线查看
-     **/
-    public void check() {
-        try {
-            int id = getParaToInt("id");
-            Report report = Report.report.findById(id);
-            getRequest().setAttribute("report", report);
-            render("/template/report.jsp");
 
-        } catch (Exception e) {
-            renderError(500);
-        }
-    }
 
     /**
      * 报告审核意见
@@ -634,6 +621,40 @@ public class ReportController extends Controller {
                 }
             }
         } catch (Exception e) {
+            renderError(500);
+        }
+    }
+
+    /**
+     * 报告在线查看
+     **/
+    public void check() {
+        try {
+            int id = getParaToInt("id");
+            Report report = Report.report.findById(id);
+            getRequest().setAttribute("report", report);
+            render("/template/report.jsp");
+
+        } catch (Exception e) {
+            renderError(500);
+        }
+    }
+    /**
+     * 报告下载
+     * **/
+
+    public void download(){
+
+        try {
+            int report_id =getParaToInt("id");
+            Report report =Report.report.findById(report_id);
+            if (report!=null){
+                renderJson(report.Json());
+            }
+            else {
+                renderJson(RenderUtils.CODE_EMPTY);
+            }
+        }catch (Exception e){
             renderError(500);
         }
     }
